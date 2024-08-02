@@ -1,0 +1,12 @@
+node_modules
+migrations
+# Keep environment variables out of version control
+.env
+dist
+
+# Ignore the .sql files in the migrations folder
+migrations/*.sql
+```
+# Ignore the assets folder
+assets
+```

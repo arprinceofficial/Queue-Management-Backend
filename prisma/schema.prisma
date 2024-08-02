@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// prisma/schema.prisma
+
+model user {
+  id                       Int                  @id @default(autoincrement())
+  email                    String?              @db.VarChar(99)
+  first_name               String               @db.VarChar(99)
+  last_name                String               @db.VarChar(99)
+  mobile_number            String?              @db.VarChar(11)
+  gender                   String               @db.VarChar(10)
+  profile_image            String?              @db.VarChar(99)
+  passport_image           String?              @db.VarChar(99)
+  is_login                 Int                  @default(0)
+  reset_token              String?              @db.VarChar(99)
+  reset_token_expires_at   DateTime?            @db.DateTime
+  is_validated             Int?                 @db.Int
+  otp_verification_code    Int?                 @db.Int
+  email_verification_token String?              @db.VarChar(99)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+  password                 String               @db.VarChar(99)
+  role_id                  Int                  @db.Int
+  role                     role                 @relation(fields: [role_id], references: [id])
+  office_id                Int                  @db.Int
+  office                   office               @relation(fields: [office_id], references: [id])
+}
+
+model role {
+  id                       Int                  @id @default(autoincrement())
+  name                     String               @db.VarChar(99)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+  user                     user[]
+}
+
+model office {
+  id                       Int                  @id @default(autoincrement())
+  office_name              String               @db.VarChar(99)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+  user                     user[]
+}

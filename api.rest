@@ -1,0 +1,137 @@
+### POST
+// Login
+POST http://localhost:4000/api/login
+{
+  "loginInput":"ashiqurr04@gmail.com",
+  "password":"12345678",
+}
+
+### GET
+// Get Current User
+GET http://localhost:4000/api/current-user
+
+### GET
+// Get all the user
+GET http://localhost:4000/api/user
+
+### GET
+// Get single user by id
+GET http://localhost:4000/api/user/1
+
+### POST
+// Create a new user
+POST http://localhost:4000/api/user
+Content-Type: application/json
+
+{
+  "email":"ashiqurr04@gmail.com",
+  "first_name":"Ar",
+  "last_name":"Prince",
+  "gender":"Male",
+  "password":"1234",
+  "mobile_number":"01977879681",
+}
+
+### PATCH
+// Update a user
+PATCH http://localhost:4000/api/user/1
+Content-Type: application/json
+
+{
+  "email":"ashiqurr04@gmail.com",
+  "first_name":"Ar",
+  "last_name":"Prince",
+  "gender":"Male",
+  "password":"1234",
+  "mobile_number":"01977879681",
+}
+
+### DELETE
+// Delete a user
+DELETE http://localhost:4000/api/user/1
+
+### PUT
+# Otp Request Email
+PUT http://localhost:4000/api/otp-request
+{
+  "email": "john@gmail.com"
+}
+
+### PUT
+# Otp Verify
+PUT http://localhost:4000/api/otp-verify
+{
+  "userid": 1,
+  "otp": 123456
+}
+
+### GET
+# Menu by role_id
+GET http://localhost:4000/api/menu/1
+
+### POST
+# Logout (id is user id)
+POST http://localhost:4000/api/logout
+Content-Type: application/json
+{
+  "id": 1
+}
+
+### POST
+# Create a Menu (Single or Multiple)
+POST http://localhost:4000/api/menu
+Content-Type: application/json
+{
+  "title":"test sub 1",
+  "path":"/test-sub-1",
+  "parent_id":"6",
+  "role_ids":"[1,2]"
+}
+
+[
+    {
+        "title":"test sub 1",
+        "path":"/test-sub-1",
+        "parent_id":"6",
+        "role_ids":"[1,2]"
+    },
+    {
+        "title":"test sub 1",
+        "path":"/test-sub-1",
+        "parent_id":"6",
+        "role_ids":"[1,2]"
+    }
+]
+
+### PUT
+# Update a Menu
+PUT http://localhost:4000/api/menu/1
+Content-Type: application/json
+{
+  "title":"test sub 1",
+  "path":"/test-sub-1",
+  "parent_id":"6",
+  "role_ids":"[1,2]"
+}
+
+### DELETE
+# Delete a Menu
+DELETE http://localhost:4000/api/menu/1
+
+### POST (/user/:imagepath/:id)
+# Profile Picture or Passport Upload
+# body form-data and key is image, value is image file, type is file
+POST http://localhost:4000/api/user/profile/3
+POST http://localhost:4000/api/user/passport/3
+Content-Type: multipart/form-data
+{
+  "image": "image.jpg"
+}
+
+### POST
+# Chat Message
+POST http://localhost:4000/api/chat-gpt
+Content-Type: application/json
+{
+  "message": "Hello"
+}
