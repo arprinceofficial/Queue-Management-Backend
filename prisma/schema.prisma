@@ -12,32 +12,34 @@ datasource db {
 
 model user {
   id                       Int                  @id @default(autoincrement())
-  email                    String?              @db.VarChar(99)
-  first_name               String               @db.VarChar(99)
-  last_name                String               @db.VarChar(99)
+  email                    String?              @db.VarChar(255)
+  first_name               String               @db.VarChar(255)
+  last_name                String               @db.VarChar(255)
   mobile_number            String?              @db.VarChar(11)
-  profile_image            String?              @db.VarChar(99)
-  passport_image           String?              @db.VarChar(99)
+  profile_image            String?              @db.VarChar(255)
+  passport_image           String?              @db.VarChar(255)
   is_login                 Int                  @default(0)
-  reset_token              String?              @db.VarChar(99)
+  reset_token              String?              @db.VarChar(255)
   reset_token_expires_at   DateTime?            @db.DateTime
   is_validated             Int?                 @db.Int
   otp_verification_code    Int?                 @db.Int
-  email_verification_token String?              @db.VarChar(99)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
-  password                 String               @db.VarChar(99)
+  email_verification_token String?              @db.VarChar(255)
+  password                 String               @db.VarChar(255)
   role_id                  Int                  @db.Int
   role                     role                 @relation(fields: [role_id], references: [id])
   office_id                Int                  @db.Int
   office                   office               @relation(fields: [office_id], references: [id])
   gender_id                Int                  @db.Int
   gender                   gender               @relation(fields: [gender_id], references: [id])
+  status                   Int                  @default(1)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
 }
 
 model role {
   id                       Int                  @id @default(autoincrement())
-  name                     String               @db.VarChar(99)
+  name                     String               @db.VarChar(255)
+  status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
   user                     user[]
@@ -45,7 +47,8 @@ model role {
 
 model office {
   id                       Int                  @id @default(autoincrement())
-  office_name              String               @db.VarChar(99)
+  office_name              String               @db.VarChar(255)
+  status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
   user                     user[]
@@ -53,8 +56,35 @@ model office {
 
 model gender {
   id                       Int                  @id @default(autoincrement())
-  name                     String               @db.VarChar(99)
+  name                     String               @db.VarChar(255)
+  status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
   user                     user[]
+}
+
+model services {
+  id                       Int                  @id @default(autoincrement())
+  name                     String               @db.VarChar(255)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+}
+model queue_services {
+  id                       Int                  @id @default(autoincrement())
+  name                     String               @db.VarChar(255)
+  code                     String               @db.VarChar(255)
+  slug                     String?              @db.VarChar(255)
+  icon                     String?              @db.VarChar(255)
+  fields                   Json?                @db.Json
+  status                   Int                  @default(1)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+}
+
+model priority {
+  id                       Int                  @id @default(autoincrement())
+  name                     String               @db.VarChar(255)
+  status                   Int                  @default(1)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
 }

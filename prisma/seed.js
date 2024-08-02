@@ -59,7 +59,282 @@ async function main() {
             },
         ],
     });
-    
+
+    // Create Service multiple seed
+    await prisma.services.createMany({
+        data: [
+            {
+                name: 'Grievance Redress Service',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Certificate of Live Birth (COLB)',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Business Permit Registration and Renewal',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
+    });
+
+    // Create Services multiple seed
+    await prisma.queue_services.createMany({
+        data: [
+            {
+                name: 'Inquiry',
+                code: 'INQ',
+                slug: 'inquiry',
+                icon: 'fa-solid fa-messages-question',
+                fields: [
+                    {
+                        "label": "Name",
+                        "name": "name",
+                        "type": "text",
+                        "place_holder": "i.e John doe",
+                        "required": true
+                    },
+                    {
+                        "label": "Email",
+                        "name": "email",
+                        "type": "email",
+                        "place_holder": "i.e example@xyz.com",
+                        "required": true
+                    },
+                    {
+                        "label": "Mobile",
+                        "name": "mobile",
+                        "type": "number",
+                        "place_holder": "i.e +63-2-1234-5678",
+                        "required": true
+                    },
+                    {
+                        "label": "Gender",
+                        "name": "gender",
+                        "type": "radio",
+                        "data_type": "static",
+                        "options": [
+                            {
+                                "id": 1,
+                                "name": "Male"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Female"
+                            }
+                        ],
+                        "required": true
+                    },
+                    {
+                        "label": "Service",
+                        "name": "service",
+                        "type": "radio",
+                        "data_type": "static",
+                        "options": [
+                            {
+                                "id": 21,
+                                "name": "Grievance Redress Service"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Certificate of Live Birth (COLB)"
+                            },
+                            {
+                                "id": 1,
+                                "name": "Business Permit Registration and Renewal"
+                            }
+                        ],
+                        "required": true
+                    },
+                    {
+                        "label": "Priority lane",
+                        "name": "priority_lane",
+                        "type": "radio",
+                        "data_type": "dunamic",
+                        "options": [
+                            {
+                                "id": 1,
+                                "name": "Regular"
+                            },
+                            {
+                                "id": 2,
+                                "name": "PWD\/Pregnant\/IP"
+                            }
+                        ],
+                        "required": true
+                    }
+                ],
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Avail Service',
+                code: 'AVL',
+                slug: 'avail-service',
+                icon: 'fa-duotone fa-solid fa-gears',
+                fields: [
+                    {
+                        "label": "Name",
+                        "name": "name",
+                        "type": "text",
+                        "place_holder": "i.e John doe",
+                        "required": true
+                    },
+                    {
+                        "label": "Email",
+                        "name": "email",
+                        "type": "email",
+                        "place_holder": "i.e example@xyz.com",
+                        "required": true
+                    },
+                    {
+                        "label": "Mobile",
+                        "name": "mobile",
+                        "type": "number",
+                        "place_holder": "i.e +63-2-1234-5678",
+                        "required": true
+                    },
+                    {
+                        "label": "Gender",
+                        "name": "gender",
+                        "type": "radio",
+                        "data_type": "static",
+                        "options": [
+                            {
+                                "id": 1,
+                                "name": "Male"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Female"
+                            }
+                        ],
+                        "required": true
+                    },
+                    {
+                        "label": "Service",
+                        "name": "service",
+                        "type": "radio",
+                        "data_type": "static",
+                        "options": [
+                            {
+                                "id": 21,
+                                "name": "Grievance Redress Service"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Certificate of Live Birth (COLB)"
+                            },
+                            {
+                                "id": 1,
+                                "name": "Business Permit Registration and Renewal"
+                            }
+                        ],
+                        "required": true
+                    },
+                    {
+                        "label": "Priority lane",
+                        "name": "priority_lane",
+                        "type": "radio",
+                        "data_type": "dunamic",
+                        "options": [
+                            {
+                                "id": 1,
+                                "name": "Regular"
+                            },
+                            {
+                                "id": 2,
+                                "name": "PWD\/Pregnant\/IP"
+                            }
+                        ],
+                        "required": true
+                    }
+                ],
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Complaint',
+                code: 'CMP',
+                slug: 'complaint',
+                icon: 'fa-regular fa-memo-circle-info',
+                fields: [
+                    {
+                        "label": "Name",
+                        "name": "name",
+                        "type": "text",
+                        "place_holder": "i.e John doe",
+                        "required": true
+                    },
+                    {
+                        "label": "Priority lane",
+                        "name": "priority_lane",
+                        "type": "radio",
+                        "data_type": "dunamic",
+                        "options": [
+                            {
+                                "id": 1,
+                                "name": "Regular"
+                            },
+                            {
+                                "id": 2,
+                                "name": "PWD\/Pregnant\/IP"
+                            }
+                        ],
+                        "required": true
+                    },
+                    {
+                        "label": "Service",
+                        "name": "service",
+                        "type": "radio",
+                        "data_type": "static",
+                        "options": [
+                            {
+                                "id": 21,
+                                "name": "Grievance Redress Service"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Certificate of Live Birth (COLB)"
+                            },
+                            {
+                                "id": 1,
+                                "name": "Business Permit Registration and Renewal"
+                            }
+                        ],
+                        "required": true
+                    }
+                ],
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
+    });
+
+    // create priority multiple seed
+    await prisma.priority.createMany({
+        data: [
+            {
+                name: 'High',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Medium',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Low',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
+    });
+
     // Password hashing
     const hashPassword = async (password) => {
         const saltRounds = 10;
@@ -82,7 +357,7 @@ async function main() {
             office_id: dhakaOffice.id,
         },
     });
-    
+
     await prisma.user.create({
         data: {
             email: 'queueofficechittagong@email.com',

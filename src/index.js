@@ -15,10 +15,6 @@ const allowedOrigins = [
     'http://localhost:3002',
     'http://localhost:4010',
     'http://localhost:4011',
-    'https://curriculum-portal.arprince.me',
-    'https://arprince.me',
-    'https://workflow.arprince.me',
-    'http://workflow.arprince.me:4000/',
     'https://queue.arprince.me',
 ];
 
@@ -56,7 +52,7 @@ app.use((req, res, next) => {
 
 // Import routes
 const userRouter = require('./routes/userRoutes');
-const adminDashboardRouter = require('./routes/adminDashboardRoutes');
+const officeRouter = require('./routes/officeRoutes');
 
 // Images files path
 app.use('/images', express.static('assets/images'));
@@ -71,7 +67,7 @@ app.use(bodyParser.json());
 // Define routes
 app.use('/api/',
     userRouter,
-    adminDashboardRouter
+    officeRouter,
 );
 
 // Socket.IO logic
