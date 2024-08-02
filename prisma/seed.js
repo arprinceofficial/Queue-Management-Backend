@@ -38,6 +38,27 @@ async function main() {
             updated_at: new Date(),
         },
     });
+
+    // Create Gender multiple seed
+    await prisma.gender.createMany({
+        data: [
+            {
+                name: 'Male',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Female',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Other',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
+    });
     
     // Password hashing
     const hashPassword = async (password) => {
@@ -52,7 +73,7 @@ async function main() {
             first_name: 'queue office',
             last_name: 'dhaka',
             mobile_number: '01677879681',
-            gender: 'male',
+            gender_id: 1,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
@@ -68,7 +89,7 @@ async function main() {
             first_name: 'queue office',
             last_name: 'chittagong',
             mobile_number: '01677879681',
-            gender: 'male',
+            gender_id: 1,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
@@ -84,7 +105,7 @@ async function main() {
             first_name: 'Agent',
             last_name: '1',
             mobile_number: '01977879681',
-            gender: 'male',
+            gender_id: 1,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
@@ -100,7 +121,7 @@ async function main() {
             first_name: 'Agent',
             last_name: '2',
             mobile_number: '01877879681',
-            gender: 'male',
+            gender_id: 1,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
@@ -116,7 +137,7 @@ async function main() {
             first_name: 'Agent',
             last_name: '2',
             mobile_number: '01577879681',
-            gender: 'male',
+            gender_id: 1,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
@@ -131,7 +152,7 @@ async function main() {
             first_name: 'Agent',
             last_name: '2',
             mobile_number: '01277879681',
-            gender: 'male',
+            gender_id: 1,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),

@@ -38,8 +38,8 @@ module.exports = {
                 req.auth_user = {
                     access_token: token,
                     user: req.auth_user.user,
-                    iat: req.auth_user.iat,
-                    exp: req.auth_user.exp,
+                    role: req.auth_user.role,
+                    office: req.auth_user.office,
                 }
                 next();
             });

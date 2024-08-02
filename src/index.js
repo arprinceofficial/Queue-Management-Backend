@@ -23,7 +23,7 @@ const allowedOrigins = [
 ];
 
 const corsOptions = {
-    origin: function (origin: any, callback: any) {
+    origin: function (origin, callback) {
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
@@ -49,7 +49,7 @@ const io = socketIo(server, {
 });
 
 // Middleware to attach io instance to req object for socket.io
-app.use((req: any, res: any, next: any) => {
+app.use((req, res, next) => {
     req.io = io;
     next();
 });
@@ -75,7 +75,7 @@ app.use('/api/',
 );
 
 // Socket.IO logic
-io.on('connection', (socket: any) => {
+io.on('connection', (socket) => {
     console.log('A user connected id:', socket.id);
 
     // Handle events here... (emit for sending, on for receiving)

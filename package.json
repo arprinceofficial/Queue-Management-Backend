@@ -1,11 +1,11 @@
 {
     "name": "node-express-prisma-boilerplate",
     "version": "1.0.0",
-    "main": "index.ts",
+    "main": "index.js",
     "license": "Md. Ashiqur Rahman",
     "scripts": {
         "start": "node ./dist/index.js",
-        "dev": "nodemon ./src/index.ts",
+        "dev": "nodemon ./src/index.js",
         "build": "tsc && babel src --out-dir dist",
         "seed": "ts-node ./prisma/seed.js"
     },

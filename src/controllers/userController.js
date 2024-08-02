@@ -148,6 +148,7 @@ module.exports = {
                 include: {
                     role: true,
                     office: true,
+                    gender: true,
                 },
             };
             // check if login input is loginInput
@@ -208,7 +209,7 @@ module.exports = {
                     last_name: user.last_name,
                     email: user.email,
                     mobile_number: user.mobile_number,
-                    gender: user.gender,
+                    gender: user.gender.name,
                     profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/profile_images/${user.profile_image}` : null,
                     passport_image: user.passport_image ? `${req.protocol + '://' + req.get('host')}/passport_images/${user.passport_image}` : null,
                     is_validated: user.is_validated,
