@@ -2,6 +2,7 @@
 
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
+const e = require('cors');
 const prisma = new PrismaClient();
 
 async function main() {
@@ -86,8 +87,9 @@ async function main() {
         data: [
             {
                 name: 'Inquiry',
-                code: 'INQ',
+                color: '0083C4',
                 slug: 'inquiry',
+                route: 'inquiry',
                 icon: 'fa-solid fa-messages-question',
                 fields: [
                     {
@@ -172,8 +174,9 @@ async function main() {
             },
             {
                 name: 'Avail Service',
-                code: 'AVL',
+                color: '009966',
                 slug: 'avail-service',
+                route: 'avail-service',
                 icon: 'fa-duotone fa-solid fa-gears',
                 fields: [
                     {
@@ -258,8 +261,9 @@ async function main() {
             },
             {
                 name: 'Complaint',
-                code: 'CMP',
+                color: 'EC9C0E',
                 slug: 'complaint',
+                route: 'complaint',
                 icon: 'fa-regular fa-memo-circle-info',
                 fields: [
                     {
@@ -319,16 +323,111 @@ async function main() {
         data: [
             {
                 name: 'High',
+                short_name: 'H',
                 created_at: new Date(),
                 updated_at: new Date(),
             },
             {
                 name: 'Medium',
+                short_name: 'M',
                 created_at: new Date(),
                 updated_at: new Date(),
             },
             {
                 name: 'Low',
+                short_name: 'L',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
+    });
+
+    // create status multiple seed
+    await prisma.status.createMany({
+        data: [
+            {
+                name: 'Waiting',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Serving',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Completed',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Cancelled',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
+    });
+
+    // create token multiple seed
+    await prisma.token.createMany({
+        data: [
+            {
+                name: 'Md. Ashiqur Rahman',
+                email: 'example@email.com',
+                mobile_number: '01677879681',
+                gender_id: 1,
+                service_id: 1,
+                priority_id: 1,
+                office_id: 1,
+                token: 'A001',
+                // remarks: 'Remarks',
+                // duration: "10:00:11",
+                status_id: 1,
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Muin Ali',
+                email: 'muin@email.com',
+                mobile_number: '01987879681',
+                gender_id: 1,
+                service_id: 2,
+                priority_id: 2,
+                office_id: 2,
+                token: 'A002',
+                // remarks: 'Remarks',
+                // duration: "10:00:11",
+                status_id: 1,
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
+    });
+
+    // create counter multiple seed
+    await prisma.counter.createMany({
+        data: [
+            {
+                title: 'Counter 1',
+                counter_number: '01',
+                office_id: 1,
+                status: 1,
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                title: 'Counter 2',
+                office_id: 1,
+                counter_number: '02',
+                status: 1,
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                title: 'Counter 3',
+                office_id: 1,
+                counter_number: '03',
+                status: 1,
                 created_at: new Date(),
                 updated_at: new Date(),
             },

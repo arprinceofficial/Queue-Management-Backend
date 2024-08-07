@@ -2,8 +2,8 @@ const router = require('express').Router();
 const { authMiddleware } = require('../middleware/authMiddleware');
 const officeController = require('../controllers/officeController');
 
-router.get('/services', authMiddleware, officeController.services);
-router.get('/queue-services', authMiddleware, officeController.queueServices);
-router.get('/queue-services/:slug', authMiddleware, officeController.queueServicesByslug);
-
+router.post('/services', authMiddleware, officeController.services);
+router.post('/queue-services', authMiddleware, officeController.queueServices);
+router.post('/queue-services/:slug', authMiddleware, officeController.queueServicesByslug);
+router.post('/queue-services-create', authMiddleware, officeController.createQueueToken);
 module.exports = router;

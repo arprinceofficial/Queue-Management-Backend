@@ -52,6 +52,8 @@ model office {
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
   user                     user[]
+  token                    token[]
+  counter                  counter[]
 }
 
 model gender {
@@ -61,19 +63,23 @@ model gender {
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
   user                     user[]
+  token                    token[]
 }
 
 model services {
   id                       Int                  @id @default(autoincrement())
   name                     String               @db.VarChar(255)
+  status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
+  token                    token[]
 }
 model queue_services {
   id                       Int                  @id @default(autoincrement())
   name                     String               @db.VarChar(255)
-  code                     String               @db.VarChar(255)
+  color                    String               @db.VarChar(255)
   slug                     String?              @db.VarChar(255)
+  route                    String?              @db.VarChar(255)
   icon                     String?              @db.VarChar(255)
   fields                   Json?                @db.Json
   status                   Int                  @default(1)
@@ -84,7 +90,49 @@ model queue_services {
 model priority {
   id                       Int                  @id @default(autoincrement())
   name                     String               @db.VarChar(255)
+  short_name               String               @db.VarChar(255)
   status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
+  token                    token[]
+}
+
+model status {
+  id                       Int                  @id @default(autoincrement())
+  name                     String               @db.VarChar(255)
+  status                   Int                  @default(1)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+  token                    token[]
+}
+
+model counter {
+  id                       Int                  @id @default(autoincrement())
+  title                    String               @db.VarChar(255)
+  counter_number           String               @db.VarChar(255)
+  office_id                Int                  @db.Int
+  status                   Int                  @default(0)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+  office                   office               @relation(fields: [office_id], references: [id])
+}
+
+model token {
+  id                       Int                  @id @default(autoincrement())
+  name                     String               @db.VarChar(255)
+  email                    String               @db.VarChar(255)
+  mobile_number            String               @db.VarChar(11)
+  gender_id                Int                  @db.Int
+  service_id               Int                  @db.Int
+  priority_id              Int                  @db.Int
+  office_id                Int                  @db.Int
+  status                   status?              @relation(fields: [status_id], references: [id])
+  token                    String               @db.VarChar(255)
+  status_id                Int                  @db.Int
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+  gender                   gender?              @relation(fields: [gender_id], references: [id])
+  service                  services?            @relation(fields: [service_id], references: [id])
+  priority                 priority?            @relation(fields: [priority_id], references: [id])
+  office                   office?              @relation(fields: [office_id], references: [id])
 }
