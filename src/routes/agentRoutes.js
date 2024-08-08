@@ -10,5 +10,7 @@ router.post('/reserve-queue', authAgentMiddleware, agentController.reserveQueue)
 router.post('/get-reserve-queue', authAgentMiddleware, agentController.getReserveQueue);
 router.post('/complete-queue', authAgentMiddleware, agentController.completeQueue);
 router.post('/cancel-queue', authAgentMiddleware, agentController.cancelQueue);
+router.post('/get-online-counter', authAgentMiddleware, agentController.getOnlineCounter);
+router.post('/tranfer-queue', authAgentMiddleware, agentController.transferQueue);
 
 module.exports = router;

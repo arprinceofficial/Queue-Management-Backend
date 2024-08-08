@@ -210,4 +210,56 @@ module.exports = {
             });
         }
     },
+    // get-online-counter without current counter
+    async getOnlineCounter(req, res) {
+        // return res.status(200).json({ counter: req.auth_user.queue_counter.id });
+        try {
+            const counters = await prisma.counter.findMany({
+                where: {
+                    office_id: req.auth_user.office.id,
+                    id: {
+                        not: req.auth_user.queue_counter.id,
+                    },
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: counters,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: "error",
+                message: error.message
+            });
+        }
+    },
+    // transfer-queue
+    async transferQueue(req, res) {
+        const { id, counter_id } = req.body;
+        try {
+            const token = await prisma.token.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    counter_number: parseInt(counter_id),
+                    user_id: null,
+                    status_id: 1,
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: token,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: "error",
+                message: error.message
+            });
+        }
+    },
 }
