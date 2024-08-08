@@ -1,9 +1,10 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const { secretKey } = require('../config/config');
+const { secretKeyAgent } = require('../config/config');
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const transporter = require('./emailController');
+const { log } = require('console');
 
 module.exports = {
     async login(req, res) {
@@ -23,7 +24,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { email: loginInput, role_id: 1 },
+                            { email: loginInput, role_id: 2 },
                         ],
                     },
                 });
@@ -34,7 +35,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { mobile_number: loginInput, role_id: 1 },
+                            { mobile_number: loginInput, role_id: 2 },
                         ],
                     },
                 });
@@ -99,7 +100,7 @@ module.exports = {
                 is_login: 1,
             };
             // Create token
-            const token = sign(payload, secretKey, { expiresIn: '24h' });
+            const token = sign(payload, secretKeyAgent, { expiresIn: '24h' });
             // Update is_login to 1
             await prisma.user.update({
                 where: { id: user.id },
@@ -148,24 +149,22 @@ module.exports = {
         }
     },
     async logout(req, res) {
-        const id = req.auth_user.user.id;
         try {
-            const user = await prisma.user.findUnique({ where: { id: parseInt(id) } });
-            if (user) {
+            if (req.auth_user) {
                 await prisma.user.update({
-                    where: { id: parseInt(id) },
+                    where: { id: req.auth_user.user.id },
                     data: { is_login: 0 },
                 });
                 res.status(200).json({
                     code: 200,
                     status: "success",
-                    message: 'User logged out successfully'
+                    message: 'Logout successfully'
                 });
             } else {
-                res.status(404).json({
-                    code: 404,
+                res.status(401).json({
+                    code: 401,
                     status: "error",
-                    message: 'User not found'
+                    message: 'Access denied! unauthorized user'
                 });
             }
         } catch (error) {
@@ -175,13 +174,12 @@ module.exports = {
                 message: error.message
             });
         }
-
     },
     async uploadUserImage(req, res) {
         const id = req.auth_user.user.id;
         const { imagepath } = req.params;
         try {
-            const user = await prisma.user.findFirst({ where: { id: parseInt(id), role_id: 1 } });
+            const user = await prisma.user.findFirst({ where: { id: parseInt(id), role_id: 2 } });
             if (!user) {
                 return res.status(404).json({
                     code: 404,
@@ -229,7 +227,7 @@ module.exports = {
             const user = await prisma.user.findFirst({
                 where: {
                     email,
-                    role_id: 1,
+                    role_id: 2,
                 },
             });
             if (!user) {
@@ -284,7 +282,7 @@ module.exports = {
         const { userid, otp } = req.body;
         try {
             // Check if user id exists
-            const user = await prisma.user.findFirst({ where: { id: parseInt(userid), role_id: 1 } });
+            const user = await prisma.user.findFirst({ where: { id: parseInt(userid), role_id: 2 } });
             if (!user) {
                 return res.status(404).json({
                     code: 404,
@@ -321,4 +319,4 @@ module.exports = {
             });
         }
     },
-};
+}

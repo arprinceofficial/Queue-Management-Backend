@@ -2,7 +2,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 module.exports = {
-    // Get menu
     async menu(req, res) {
         const { id } = req.params;
         try {
@@ -31,7 +30,6 @@ module.exports = {
             });
         }
     },
-    // Create menu
     async createMenu(req, res) {
         const menusData = req.body;
         try {
@@ -83,7 +81,6 @@ module.exports = {
             });
         }
     },
-    // update menu
     async updateMenu(req, res) {
         const { id } = req.params;
         const menuData = req.body;
@@ -122,7 +119,6 @@ module.exports = {
             });
         }
     },
-    // Delete menu
     async deleteMenu(req, res) {
         const { id } = req.params;
         try {
@@ -182,5 +178,4 @@ module.exports = {
             });
         }
     }
-
 };

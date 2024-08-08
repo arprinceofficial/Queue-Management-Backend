@@ -53,6 +53,8 @@ app.use((req, res, next) => {
 // Import routes
 const userOfficRoutes = require('./routes/userOfficRoutes');
 const officeRoutes = require('./routes/officeRoutes');
+const userAgentRoutes = require('./routes/userAgentRoutes');
+const agentRoutes = require('./routes/agentRoutes');
 
 // Images files path
 app.use('/images', express.static('assets/images'));
@@ -68,6 +70,10 @@ app.use(bodyParser.json());
 app.use('/api/office/',
     userOfficRoutes,
     officeRoutes,
+);
+app.use('/api/agent/',
+    userAgentRoutes,
+    agentRoutes,
 );
 
 // Socket.IO logic
