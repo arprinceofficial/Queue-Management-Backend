@@ -64,17 +64,17 @@ async function main() {
     await prisma.services.createMany({
         data: [
             {
-                name: 'Grievance Redress Service',
+                title: 'Grievance Redress Service',
                 created_at: new Date(),
                 updated_at: new Date(),
             },
             {
-                name: 'Certificate of Live Birth (COLB)',
+                title: 'Certificate of Live Birth (COLB)',
                 created_at: new Date(),
                 updated_at: new Date(),
             },
             {
-                name: 'Business Permit Registration and Renewal',
+                title: 'Business Permit Registration and Renewal',
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -373,12 +373,13 @@ async function main() {
             {
                 name: 'Md. Ashiqur Rahman',
                 email: 'example@email.com',
-                mobile_number: '01677879681',
+                mobile: '01677879681',
                 gender_id: 1,
                 service_id: 1,
                 priority_id: 1,
                 office_id: 1,
-                token: 'A001',
+                token: 'M-001',
+                counter_number: 1,
                 // remarks: 'Remarks',
                 // duration: "10:00:11",
                 status_id: 1,
@@ -388,12 +389,13 @@ async function main() {
             {
                 name: 'Muin Ali',
                 email: 'muin@email.com',
-                mobile_number: '01987879681',
+                mobile: '01987879681',
                 gender_id: 1,
                 service_id: 2,
                 priority_id: 2,
                 office_id: 2,
-                token: 'A002',
+                token: 'H-002',
+                counter_number: 2,
                 // remarks: 'Remarks',
                 // duration: "10:00:11",
                 status_id: 1,
@@ -408,7 +410,7 @@ async function main() {
         data: [
             {
                 title: 'Counter 1',
-                counter_number: '01',
+                counter_number: '1',
                 office_id: 1,
                 status: 1,
                 created_at: new Date(),
@@ -417,15 +419,15 @@ async function main() {
             {
                 title: 'Counter 2',
                 office_id: 1,
-                counter_number: '02',
+                counter_number: '2',
                 status: 1,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
             {
                 title: 'Counter 3',
-                office_id: 1,
-                counter_number: '03',
+                office_id: 2,
+                counter_number: '3',
                 status: 1,
                 created_at: new Date(),
                 updated_at: new Date(),

@@ -57,22 +57,19 @@ module.exports = {
     },
     async createQueueToken(req, res) {
         const { body } = req;
-        // console.log(body);
         try {
             const priority = await prisma.priority.findUnique({
                 where: {
                     id: parseInt(body.priority_lane),
                 },
             });
-            
+    
             if (!priority) {
                 throw new Error("Priority not found");
             }
-            
-            // Get the current date in YYYY-MM-DD format
+    
             const currentDate = new Date().toISOString().split('T')[0];
-            
-            // Find the last token for today and increment by 1
+    
             const lastToken = await prisma.token.findFirst({
                 where: {
                     priority_id: parseInt(body.priority_lane),
@@ -85,7 +82,7 @@ module.exports = {
                     id: 'desc',
                 },
             });
-            
+    
             let newToken = '';
             if (lastToken) {
                 const lastTokenParts = lastToken.token.split('-');
@@ -94,26 +91,62 @@ module.exports = {
                     if (!isNaN(lastTokenNumber)) {
                         newToken = `${priority.short_name}-${(lastTokenNumber + 1).toString().padStart(3, '0')}`;
                     } else {
-                        // console.error("Failed to parse last token number:", lastTokenParts[1]);
                         newToken = `${priority.short_name}-001`;
                     }
                 } else {
-                    // console.error("Unexpected token format:", lastToken.token);
                     newToken = `${priority.short_name}-001`;
                 }
             } else {
                 newToken = `${priority.short_name}-001`;
             }
-            
+    
+            // Find all counters for the office
+            const counters = await prisma.counter.findMany({
+                where: {
+                    office_id: req.auth_user.office.id,
+                },
+            });
+    
+            let counterNumber = null;
+            let minTokenCount = Infinity;
+    
+            // Randomly shuffle counters
+            const shuffledCounters = counters.sort(() => 0.5 - Math.random());
+    
+            // Iterate through shuffled counters and find the first one with the fewest tokens
+            for (const counter of shuffledCounters) {
+                const tokenCount = await prisma.token.count({
+                    where: {
+                        counter_number: counter.id,
+                        office_id: req.auth_user.office.id,
+                    },
+                });
+    
+                if (tokenCount < minTokenCount) {
+                    minTokenCount = tokenCount;
+                    counterNumber = counter.id;
+                }
+    
+                // If a counter with the fewest tokens is found, break the loop
+                if (tokenCount === minTokenCount) {
+                    break;
+                }
+            }
+    
+            if (counterNumber === null) {
+                throw new Error("No counters found for the given office");
+            }
+    
             const create_token = await prisma.token.create({
                 data: {
                     name: body.name,
                     email: body.email,
-                    mobile_number: body.mobile,
+                    mobile: body.mobile,
                     gender_id: parseInt(body.gender),
                     service_id: parseInt(body.service),
                     priority_id: parseInt(body.priority_lane),
                     office_id: req.auth_user.office.id,
+                    counter_number: counterNumber,
                     token: newToken,
                     remarks: body.remarks,
                     duration: body.duration,
@@ -122,6 +155,7 @@ module.exports = {
                     updated_at: new Date(),
                 },
             });
+    
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -131,8 +165,8 @@ module.exports = {
             res.status(500).json({
                 code: 500,
                 status: false,
-                message: error.message
+                message: error.message,
             });
         }
-    }
+    }    
 }
