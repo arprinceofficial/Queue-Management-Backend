@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 const { secretKey } = require('../config/config');
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
-const transporter = require('../controllers/emailController');
+const transporter = require('./emailController');
 
 module.exports = {
     // Create a new user
@@ -20,7 +20,7 @@ module.exports = {
 
         try {
             // Check if user email exists
-            const userExists = await prisma.user.findFirst({ where: { email } });
+            const userExists = await prisma.user.findFirst({ where: { email, role_id: 1 } });
             if (userExists) {
                 return res.status(400).json({
                     code: 400,
@@ -29,7 +29,7 @@ module.exports = {
                 });
             }
             // Check if user phone number exists
-            const phoneNumberExists = await prisma.user.findFirst({ where: { mobile_number } });
+            const phoneNumberExists = await prisma.user.findFirst({ where: { mobile_number, role_id: 1 } });
             if (phoneNumberExists) {
                 return res.status(400).json({
                     code: 400,
@@ -157,7 +157,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { email: loginInput },
+                            { email: loginInput, role_id: 1 },
                         ],
                     },
                 });
@@ -168,7 +168,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { mobile_number: loginInput },
+                            { mobile_number: loginInput, role_id: 1 },
                         ],
                     },
                 });

@@ -7,20 +7,19 @@ const prisma = new PrismaClient();
 
 async function main() {
     // Roles seed
-    const queueOfficeRole = await prisma.role.create({
-        data: {
-            name: 'Queue Office',
-            created_at: new Date(),
-            updated_at: new Date(),
-        },
-    });
-
-    const agentRole = await prisma.role.create({
-        data: {
-            name: 'Agent',
-            created_at: new Date(),
-            updated_at: new Date(),
-        },
+    const queueOfficeRole = await prisma.role.createMany({
+        data: [
+            {
+                name: 'Office',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Agent',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
     });
 
     // office Name seed
@@ -452,7 +451,7 @@ async function main() {
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: queueOfficeRole.id,
+            role_id: 1,
             office_id: dhakaOffice.id,
         },
     });
@@ -468,7 +467,7 @@ async function main() {
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: chittagongOffice.id,
+            role_id: 1,
             office_id: dhakaOffice.id,
         },
     });
@@ -484,7 +483,7 @@ async function main() {
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: agentRole.id,
+            role_id: 2,
             office_id: dhakaOffice.id,
         },
     });
@@ -500,7 +499,7 @@ async function main() {
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: agentRole.id,
+            role_id: 2,
             office_id: dhakaOffice.id,
         },
     });
@@ -516,7 +515,7 @@ async function main() {
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: agentRole.id,
+            role_id: 2,
             office_id: chittagongOffice.id,
         },
     });
@@ -531,7 +530,7 @@ async function main() {
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: agentRole.id,
+            role_id: 2,
             office_id: chittagongOffice.id,
         },
     });

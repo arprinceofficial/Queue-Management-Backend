@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 });
 
 // Import routes
-const userRouter = require('./routes/userRoutes');
+const userRouter = require('./routes/userOfficRoutes');
 const officeRouter = require('./routes/officeRoutes');
 
 // Images files path
@@ -65,7 +65,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Define routes
-app.use('/api/',
+app.use('/api/office/',
     userRouter,
     officeRouter,
 );
