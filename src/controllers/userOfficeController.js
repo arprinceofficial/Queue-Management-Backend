@@ -6,7 +6,6 @@ const { sign } = require("jsonwebtoken");
 const transporter = require('./emailController');
 
 module.exports = {
-    // login 
     async login(req, res) {
         const { loginInput, password } = req.body;
         try {
@@ -125,7 +124,6 @@ module.exports = {
             });
         }
     },
-    // Current Login user
     async currentUser(req, res) {
         try {
             if (req.auth_user) {
@@ -149,7 +147,6 @@ module.exports = {
             });
         }
     },
-    // logout
     async logout(req, res) {
         const id = req.auth_user.user.id;
         try {
@@ -180,7 +177,6 @@ module.exports = {
         }
 
     },
-    // Profile image upload
     async uploadUserImage(req, res) {
         const id = req.auth_user.user.id;
         const { imagepath } = req.params;
@@ -226,8 +222,6 @@ module.exports = {
             });
         }
     },
-
-    // Otp request sent to email
     async otpRequestEmail(req, res) {
         const { email } = req.body;
         try {
@@ -281,7 +275,6 @@ module.exports = {
             });
         }
     },
-    // Verify otp
     async verifyOtp(req, res) {
         const { userid, otp } = req.body;
         try {
