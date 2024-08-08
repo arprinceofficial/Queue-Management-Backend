@@ -112,6 +112,7 @@ model counter {
   counter_number           String               @db.VarChar(255)
   office_id                Int                  @db.Int
   status                   Int                  @default(0)
+  user_id                  Int?                 @db.Int
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
   office                   office               @relation(fields: [office_id], references: [id])

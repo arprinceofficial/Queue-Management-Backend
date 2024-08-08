@@ -33,6 +33,11 @@ module.exports = {
                         message: 'Invalid token'
                     });
                 }
+                const queueCounter = await prisma.counter.findFirst({
+                    where: {
+                        user_id: user.user.id
+                    },
+                });
                 req.auth_user = user;
                 // Formating the data
                 req.auth_user = {
@@ -40,6 +45,7 @@ module.exports = {
                     user: req.auth_user.user,
                     role: req.auth_user.role,
                     office: req.auth_user.office,
+                    queue_counter: queueCounter
                 }
                 next();
             });

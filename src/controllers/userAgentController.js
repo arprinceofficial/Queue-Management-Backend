@@ -68,6 +68,12 @@ module.exports = {
                     message: 'Incorrect password'
                 });
             }
+            // get user queue counter
+            const queueCounter = await prisma.counter.findFirst({
+                where: {
+                    user_id: user.id,
+                },
+            });
             // Prepare user data for the payload and response, including role as a nested object
             const userData = {
                 user: {
@@ -91,6 +97,7 @@ module.exports = {
                     id: user.office.id,
                     office_name: user.office.office_name,
                 },
+                queue_counter: queueCounter ? queueCounter : null,
             };
             // Create payload for JWT token with user data
             const payload = {
@@ -114,6 +121,7 @@ module.exports = {
                     user: userData.user,
                     role: userData.role,
                     office: userData.office,
+                    queue_counter: userData.queue_counter,
                 }
             });
 
@@ -153,8 +161,19 @@ module.exports = {
             if (req.auth_user) {
                 await prisma.user.update({
                     where: { id: req.auth_user.user.id },
-                    data: { is_login: 0 },
+                    data: { is_login: 0, },
                 });
+                // update queue counter to null
+                const data = await prisma.counter.findFirst({
+                    where: { office_id: req.auth_user.office.id, user_id: req.auth_user.user.id },
+                });
+                if (data) {
+                    await prisma.counter.update({
+                        where: { id: data.id },
+                        data: { user_id: null },
+                    });
+                }
+                
                 res.status(200).json({
                     code: 200,
                     status: "success",
