@@ -131,7 +131,6 @@ model token {
   status                   status?              @relation(fields: [status_id], references: [id])
   token                    String               @db.VarChar(255)
   status_id                Int                  @db.Int
-  counter_number           Int?                 @db.Int
   counter_id               Int?                 @db.Int
   user_id                  Int?                 @db.Int
   duration                 String?              @db.VarChar(255)

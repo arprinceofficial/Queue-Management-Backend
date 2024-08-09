@@ -78,8 +78,8 @@ module.exports = {
     },
     // get waiting list from token table
     async getWaitingList(req, res) {
-        // return res.status(200).json({ office_id: req.auth_user });
-        // return res.status(200).json({ counter_number: parseInt(req.auth_user.queue_counter.counter_number), office_id: req.auth_user.office.id });
+        // return res.status(200).json({ data: req.auth_user });
+        // return res.status(200).json({ data: parseInt(req.auth_user.queue_counter.id), office_id: req.auth_user.office.id });
         try {
             const waitingList = await prisma.token.findMany({
                 where: {

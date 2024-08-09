@@ -4,7 +4,8 @@
     "main": "index.js",
     "license": "Md. Ashiqur Rahman",
     "scripts": {
-        "start": "node ./dist/index.js",
+        "start": "node ./src/index.js",
+        "start-prod": "node ./dist/index.js",
         "dev": "nodemon ./src/index.js",
         "build": "babel src --out-dir dist",
         "seed": "ts-node ./prisma/seed.js"

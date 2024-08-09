@@ -148,7 +148,6 @@ module.exports = {
                     service_id: parseInt(body.service),
                     priority_id: parseInt(body.priority_lane),
                     office_id: req.auth_user.office.id,
-                    // counter_number: counterNumber,
                     counter_id: counterNumber,
                     token: newToken,
                     remarks: body.remarks,
