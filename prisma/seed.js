@@ -273,6 +273,13 @@ async function main() {
                         "required": true
                     },
                     {
+                        "label": "Email",
+                        "name": "email",
+                        "type": "email",
+                        "place_holder": "i.e example@xyz.com",
+                        "required": true
+                    },
+                    {
                         "label": "Mobile",
                         "name": "mobile",
                         "type": "number",
