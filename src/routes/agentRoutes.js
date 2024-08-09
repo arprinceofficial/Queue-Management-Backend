@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { authAgentMiddleware } = require('../middleware/authAgentMiddleware');
+const { authAgentMiddleware } = require('../middleware/authMiddleware');
 const agentController = require('../controllers/agentController');
 
 router.post('/get-counter', authAgentMiddleware, agentController.getCounter);

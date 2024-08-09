@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { authAgentMiddleware } = require('../middleware/authAgentMiddleware');
+const { authAgentMiddleware } = require('../middleware/authMiddleware');
 const userAgentController = require('../controllers/userAgentController');
 const imageController = require('../controllers/imageController');
 
