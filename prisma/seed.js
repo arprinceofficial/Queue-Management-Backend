@@ -462,22 +462,6 @@ async function main() {
 
     await prisma.user.create({
         data: {
-            email: 'queueofficechittagong@email.com',
-            first_name: 'queue office',
-            last_name: 'chittagong',
-            mobile_number: '01677879681',
-            gender_id: 1,
-            is_validated: 1,
-            password: await hashPassword('12345678'),
-            created_at: new Date(),
-            updated_at: new Date(),
-            role_id: 1,
-            office_id: dhakaOffice.id,
-        },
-    });
-
-    await prisma.user.create({
-        data: {
             email: 'agent1@email.com',
             first_name: 'Agent',
             last_name: '1',
@@ -505,6 +489,22 @@ async function main() {
             updated_at: new Date(),
             role_id: 2,
             office_id: dhakaOffice.id,
+        },
+    });
+
+    await prisma.user.create({
+        data: {
+            email: 'queueofficechittagong@email.com',
+            first_name: 'queue office',
+            last_name: 'chittagong',
+            mobile_number: '01677879681',
+            gender_id: 1,
+            is_validated: 1,
+            password: await hashPassword('12345678'),
+            created_at: new Date(),
+            updated_at: new Date(),
+            role_id: 1,
+            office_id: chittagongOffice.id,
         },
     });
 

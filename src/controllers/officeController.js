@@ -57,7 +57,7 @@ module.exports = {
         }
     },
     async createQueueToken(req, res) {
-        // return res.status(200).json({ data: req.auth_user });
+        // return res.status(200).json({ data: req.auth_user.office.id });
         const { body } = req;
         try {
             const priority = await prisma.priority.findUnique({
@@ -119,7 +119,7 @@ module.exports = {
             for (const counter of shuffledCounters) {
                 const tokenCount = await prisma.token.count({
                     where: {
-                        counter_number: counter.id,
+                        counter_id: counter.id,
                         office_id: req.auth_user.office.id,
                     },
                 });
@@ -148,7 +148,7 @@ module.exports = {
                     service_id: parseInt(body.service),
                     priority_id: parseInt(body.priority_lane),
                     office_id: req.auth_user.office.id,
-                    counter_number: counterNumber,
+                    // counter_number: counterNumber,
                     counter_id: counterNumber,
                     token: newToken,
                     remarks: body.remarks,
@@ -179,7 +179,7 @@ module.exports = {
             const waitingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
-                    user_id: null,
+                    // user_id: null,
                     status_id: 1,
                 },
                 include: {
@@ -191,10 +191,9 @@ module.exports = {
             const servingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
-                    // user_id not null
-                    user_id: {
-                        not: null,
-                    },
+                    // user_id: {
+                    //     not: null,
+                    // },
                     status_id: 2,
                 },
                 include: {
