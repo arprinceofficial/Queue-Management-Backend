@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 // return res.status(200).json({ office_id: req.auth_user });
 
 module.exports = {
+    // Counter Section
     async getCounter(req, res) {
         // return console.log(req.auth_user.office.id);
         try {
@@ -16,7 +17,7 @@ module.exports = {
                 status: true,
                 availabeCounter: counters.filter(counter => counter.user_id === null).length,
                 bookedCounter: counters.filter(counter => counter.user_id !== null).length,
-                availabledata: counters.filter(counter => counter.user_id === null), 
+                availabledata: counters.filter(counter => counter.user_id === null),
                 bookeddata: counters.filter(counter => counter.user_id !== null),
             });
         } catch (error) {
@@ -51,7 +52,7 @@ module.exports = {
             });
         }
     },
-    // revoke-counter
+    // Main Screen Section
     async revokeCounter(req, res) {
         const { counter_id } = req.body;
         try {
@@ -76,23 +77,36 @@ module.exports = {
             });
         }
     },
-    // get waiting list from token table
     async getWaitingList(req, res) {
         // return res.status(200).json({ data: req.auth_user });
         // return res.status(200).json({ data: parseInt(req.auth_user.queue_counter.id), office_id: req.auth_user.office.id });
         try {
+            // Get the current date and time
+            const now = new Date();
+            // Calculate the date and time for 8 hours ago
+            const eightHoursAgo = new Date(now.getTime() - 8 * 60 * 60 * 1000);
+    
             const waitingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
                     counter_id: req.auth_user.queue_counter.id,
                     user_id: null,
                     status_id: 1,
+                    created_at: {
+                        gte: eightHoursAgo, // Filter records from the last 8 hours
+                    },
                 },
                 include: {
                     service: true,
                     priority: true,
                 },
+                orderBy: {
+                    priority: {
+                        short_name: 'asc',
+                    },
+                },
             });
+    
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -102,11 +116,10 @@ module.exports = {
             res.status(500).json({
                 code: 500,
                 status: "error",
-                message: error.message
+                message: error.message,
             });
         }
     },
-    // reserve-queue
     async reserveQueue(req, res) {
         // return res.status(200).json({ counter_id: req.auth_user.queue_counter.id });
         const { id } = req.body;
@@ -133,9 +146,8 @@ module.exports = {
                 message: error.message
             });
         }
-        
+
     },
-    // get reserveQueue
     async getReserveQueue(req, res) {
         try {
             const token = await prisma.token.findFirst({
@@ -161,7 +173,6 @@ module.exports = {
             });
         }
     },
-    // complete-queue
     async completeQueue(req, res) {
         const { id, duration, remarks } = req.body;
         try {
@@ -188,7 +199,6 @@ module.exports = {
             });
         }
     },
-    // cancel-queue
     async cancelQueue(req, res) {
         const { id } = req.body;
         try {
@@ -215,7 +225,7 @@ module.exports = {
             });
         }
     },
-    // get-online-counter without current counter
+    // Transfer Section
     async getOnlineCounter(req, res) {
         // return res.status(200).json({ counter: req.auth_user.queue_counter.id });
         try {
@@ -240,7 +250,6 @@ module.exports = {
             });
         }
     },
-    // transfer-queue
     async transferQueue(req, res) {
         const { id, counter_id } = req.body;
         try {

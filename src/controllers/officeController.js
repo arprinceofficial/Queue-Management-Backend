@@ -60,31 +60,30 @@ module.exports = {
         // return res.status(200).json({ data: req.auth_user.office.id });
         const { body } = req;
         try {
-            const priority = await prisma.priority.findUnique({
+            const priority = await prisma.priority.findFirst({
                 where: {
                     id: parseInt(body.priority_lane),
                 },
             });
-    
+
             if (!priority) {
                 throw new Error("Priority not found");
             }
-    
-            const currentDate = new Date().toISOString().split('T')[0];
-    
+
+            // Find the last token for the office with in last 8 hours
             const lastToken = await prisma.token.findFirst({
                 where: {
-                    priority_id: parseInt(body.priority_lane),
+                    office_id: req.auth_user.office.id,
                     created_at: {
-                        gte: new Date(currentDate + 'T00:00:00.000Z'),
-                        lt: new Date(currentDate + 'T23:59:59.999Z'),
+                        gte: new Date(new Date().getTime() - 8 * 60 * 60 * 1000),
                     },
+                    status_id: 1,
                 },
                 orderBy: {
-                    id: 'desc',
+                    created_at: 'desc',
                 },
             });
-    
+            
             let newToken = '';
             if (lastToken) {
                 const lastTokenParts = lastToken.token.split('-');
@@ -175,11 +174,18 @@ module.exports = {
     async getWaitingScreen(req, res) {
         // return res.status(200).json({ office_id: req.auth_user });
         try {
+            // Get the current date and time
+            const now = new Date();
+            const eightHoursAgo = new Date(now.getTime() - 8 * 60 * 60 * 1000);
+
             const waitingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
                     // user_id: null,
                     status_id: 1,
+                    created_at: {
+                        gte: eightHoursAgo,
+                    },
                 },
                 include: {
                     service: true,

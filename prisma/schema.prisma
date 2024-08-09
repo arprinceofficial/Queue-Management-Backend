@@ -121,9 +121,9 @@ model counter {
 
 model token {
   id                       Int                  @id @default(autoincrement())
-  name                     String               @db.VarChar(255)
-  email                    String               @db.VarChar(255)
-  mobile                   String               @db.VarChar(11)
+  name                     String?              @db.VarChar(255)
+  email                    String?              @db.VarChar(255)
+  mobile                   String?              @db.VarChar(11)
   gender_id                Int                  @db.Int
   service_id               Int                  @db.Int
   priority_id              Int                  @db.Int

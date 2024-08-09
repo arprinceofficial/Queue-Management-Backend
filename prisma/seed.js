@@ -136,7 +136,7 @@ async function main() {
                         "data_type": "static",
                         "options": [
                             {
-                                "id": 21,
+                                "id": 3,
                                 "name": "Grievance Redress Service"
                             },
                             {
@@ -223,7 +223,7 @@ async function main() {
                         "data_type": "static",
                         "options": [
                             {
-                                "id": 21,
+                                "id": 3,
                                 "name": "Grievance Redress Service"
                             },
                             {
@@ -273,6 +273,30 @@ async function main() {
                         "required": true
                     },
                     {
+                        "label": "Mobile",
+                        "name": "mobile",
+                        "type": "number",
+                        "place_holder": "i.e +63-2-1234-5678",
+                        "required": true
+                    },
+                    {
+                        "label": "Gender",
+                        "name": "gender",
+                        "type": "radio",
+                        "data_type": "static",
+                        "options": [
+                            {
+                                "id": 1,
+                                "name": "Male"
+                            },
+                            {
+                                "id": 2,
+                                "name": "Female"
+                            }
+                        ],
+                        "required": true
+                    },
+                    {
                         "label": "Priority lane",
                         "name": "priority_lane",
                         "type": "radio",
@@ -296,7 +320,7 @@ async function main() {
                         "data_type": "static",
                         "options": [
                             {
-                                "id": 21,
+                                "id": 3,
                                 "name": "Grievance Redress Service"
                             },
                             {
