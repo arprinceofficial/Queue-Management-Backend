@@ -116,6 +116,7 @@ model counter {
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
   office                   office               @relation(fields: [office_id], references: [id])
+  token                    token[]
 }
 
 model token {
@@ -131,6 +132,7 @@ model token {
   token                    String               @db.VarChar(255)
   status_id                Int                  @db.Int
   counter_number           Int?                 @db.Int
+  counter_id               Int?                 @db.Int
   user_id                  Int?                 @db.Int
   duration                 String?              @db.VarChar(255)
   remarks                  String?              @db.VarChar(255)
@@ -140,4 +142,5 @@ model token {
   service                  services?            @relation(fields: [service_id], references: [id])
   priority                 priority?            @relation(fields: [priority_id], references: [id])
   office                   office?              @relation(fields: [office_id], references: [id])
+  counter                  counter?             @relation(fields: [counter_id], references: [id])
 }

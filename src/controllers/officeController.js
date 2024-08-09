@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+// return res.status(200).json({ data: req.auth_user });
 
 module.exports = {
     async services(req, res) {
@@ -56,6 +57,7 @@ module.exports = {
         }
     },
     async createQueueToken(req, res) {
+        // return res.status(200).json({ data: req.auth_user });
         const { body } = req;
         try {
             const priority = await prisma.priority.findUnique({
@@ -147,6 +149,7 @@ module.exports = {
                     priority_id: parseInt(body.priority_lane),
                     office_id: req.auth_user.office.id,
                     counter_number: counterNumber,
+                    counter_id: counterNumber,
                     token: newToken,
                     remarks: body.remarks,
                     duration: body.duration,
@@ -168,5 +171,50 @@ module.exports = {
                 message: error.message,
             });
         }
-    }    
+    },
+    // Waiting Screen
+    async getWaitingScreen(req, res) {
+        // return res.status(200).json({ office_id: req.auth_user });
+        try {
+            const waitingList = await prisma.token.findMany({
+                where: {
+                    office_id: req.auth_user.office.id,
+                    user_id: null,
+                    status_id: 1,
+                },
+                include: {
+                    service: true,
+                    priority: true,
+                    counter: true,
+                },
+            });
+            const servingList = await prisma.token.findMany({
+                where: {
+                    office_id: req.auth_user.office.id,
+                    // user_id not null
+                    user_id: {
+                        not: null,
+                    },
+                    status_id: 2,
+                },
+                include: {
+                    service: true,
+                    priority: true,
+                    counter: true,
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                servingData: servingList,
+                waitingData: waitingList,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: "error",
+                message: error.message
+            });
+        }
+    },  
 }

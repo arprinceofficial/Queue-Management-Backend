@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+// return res.status(200).json({ office_id: req.auth_user });
 
 module.exports = {
     async getCounter(req, res) {
@@ -83,7 +84,7 @@ module.exports = {
             const waitingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
-                    counter_number: parseInt(req.auth_user.queue_counter.counter_number),
+                    counter_id: req.auth_user.queue_counter.id,
                     user_id: null,
                     status_id: 1,
                 },
@@ -107,6 +108,7 @@ module.exports = {
     },
     // reserve-queue
     async reserveQueue(req, res) {
+        // return res.status(200).json({ counter_id: req.auth_user.queue_counter.id });
         const { id } = req.body;
         try {
             const token = await prisma.token.update({
@@ -116,6 +118,7 @@ module.exports = {
                 data: {
                     user_id: req.auth_user.user.id,
                     status_id: 2,
+                    counter_id: req.auth_user.queue_counter.id,
                 },
             });
             res.status(200).json({
@@ -195,6 +198,8 @@ module.exports = {
                 },
                 data: {
                     status_id: 4,
+                    user_id: null,
+                    counter_id: null,
                 },
             });
             res.status(200).json({
@@ -244,7 +249,7 @@ module.exports = {
                     id: parseInt(id),
                 },
                 data: {
-                    counter_number: parseInt(counter_id),
+                    counter_id: parseInt(counter_id),
                     user_id: null,
                     status_id: 1,
                 },
