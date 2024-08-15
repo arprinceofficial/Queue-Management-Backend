@@ -58,7 +58,9 @@ module.exports = {
     },
     async createQueueToken(req, res) {
         // return res.status(200).json({ data: req.auth_user.office.id });
+        const limit_hours = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
         const { body } = req;
+
         try {
             const priority = await prisma.priority.findFirst({
                 where: {
@@ -70,12 +72,12 @@ module.exports = {
                 throw new Error("Priority not found");
             }
 
-            // Find the last token for the office with in last 8 hours
+            // Find the last token for that office with in last 8 hours
             const lastToken = await prisma.token.findFirst({
                 where: {
                     office_id: req.auth_user.office.id,
                     created_at: {
-                        gte: new Date(new Date().getTime() - 8 * 60 * 60 * 1000),
+                        gte: limit_hours,
                     },
                     status_id: 1,
                 },
@@ -83,7 +85,7 @@ module.exports = {
                     created_at: 'desc',
                 },
             });
-            
+
             let newToken = '';
             if (lastToken) {
                 const lastTokenParts = lastToken.token.split('-');
@@ -100,44 +102,49 @@ module.exports = {
             } else {
                 newToken = `${priority.short_name}-001`;
             }
-    
+
             // Find all counters for the office
             const counters = await prisma.counter.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
                 },
             });
-    
-            let counterNumber = null;
+
+            let set_counter_id = null;
             let minTokenCount = Infinity;
-    
+
             // Randomly shuffle counters
             const shuffledCounters = counters.sort(() => 0.5 - Math.random());
-    
+
             // Iterate through shuffled counters and find the first one with the fewest tokens
             for (const counter of shuffledCounters) {
                 const tokenCount = await prisma.token.count({
                     where: {
                         counter_id: counter.id,
                         office_id: req.auth_user.office.id,
+                        created_at: {
+                            gte: limit_hours,
+                        },
                     },
                 });
-    
+
                 if (tokenCount < minTokenCount) {
                     minTokenCount = tokenCount;
-                    counterNumber = counter.id;
+                    set_counter_id = counter.id;
                 }
-    
+
                 // If a counter with the fewest tokens is found, break the loop
                 if (tokenCount === minTokenCount) {
                     break;
                 }
             }
-    
-            if (counterNumber === null) {
+
+            if (set_counter_id === null) {
                 throw new Error("No counters found for the given office");
             }
-    
+
+            // return res.status(200).json({ data: set_counter_id });
+
             const create_token = await prisma.token.create({
                 data: {
                     name: body.name,
@@ -147,7 +154,7 @@ module.exports = {
                     service_id: parseInt(body.service),
                     priority_id: parseInt(body.priority_lane),
                     office_id: req.auth_user.office.id,
-                    counter_id: counterNumber,
+                    counter_id: set_counter_id,
                     token: newToken,
                     remarks: body.remarks,
                     duration: body.duration,
@@ -156,7 +163,7 @@ module.exports = {
                     updated_at: new Date(),
                 },
             });
-    
+
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -173,18 +180,16 @@ module.exports = {
     // Waiting Screen
     async getWaitingScreen(req, res) {
         // return res.status(200).json({ office_id: req.auth_user });
-        try {
-            // Get the current date and time
-            const now = new Date();
-            const eightHoursAgo = new Date(now.getTime() - 8 * 60 * 60 * 1000);
+        const limit_hours = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
 
+        try {
             const waitingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
                     // user_id: null,
                     status_id: 1,
                     created_at: {
-                        gte: eightHoursAgo,
+                        gte: limit_hours,
                     },
                 },
                 include: {
@@ -220,5 +225,5 @@ module.exports = {
                 message: error.message
             });
         }
-    },  
+    },
 }
