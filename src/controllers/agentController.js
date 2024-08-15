@@ -45,6 +45,7 @@ module.exports = {
                 status: true,
                 data: counter,
             });
+            req.io.emit('setCounter', 'setCounter');
         } catch (error) {
             res.status(500).json({
                 code: 500,

@@ -124,7 +124,7 @@ module.exports = {
                     queue_counter: userData.queue_counter,
                 }
             });
-
+            req.io.emit('setCounter', 'login');
         } catch (error) {
             res.status(500).json({
                 code: 500,
@@ -179,6 +179,7 @@ module.exports = {
                     status: "success",
                     message: 'Logout successfully'
                 });
+                req.io.emit('logout', 'logout');
             } else {
                 res.status(401).json({
                     code: 401,
