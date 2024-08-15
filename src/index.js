@@ -78,16 +78,9 @@ app.use('/api/agent/',
 
 // Socket.IO logic
 io.on('connection', (socket) => {
-    console.log('A user connected id:', socket.id);
-
-    // Handle events here... (emit for sending, on for receiving)
-    // socket.emit('testMessage', 'Hello from the server!');
-    // socket.on('testMessage', (data: any) => {
-    //     console.log('Received message:', data);
-    // });
-
+    // console.log('A user connected id:', socket.id);
     socket.on('disconnect', () => {
-        console.log('User disconnected id:', socket.id);
+        // console.log('User disconnected id:', socket.id);
     });
 });
 
