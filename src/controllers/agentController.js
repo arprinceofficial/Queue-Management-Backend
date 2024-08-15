@@ -136,6 +136,7 @@ module.exports = {
                 status: true,
                 data: token,
             });
+            req.io.emit('reserveQueue', token);
         } catch (error) {
             res.status(500).json({
                 code: 500,
@@ -191,6 +192,7 @@ module.exports = {
                 status: true,
                 data: token,
             });
+            req.io.emit('completeQueue', token);
         } catch (error) {
             res.status(500).json({
                 code: 500,
@@ -217,6 +219,7 @@ module.exports = {
                 status: true,
                 data: token,
             });
+            req.io.emit('cancelQueue', token);
         } catch (error) {
             res.status(500).json({
                 code: 500,
@@ -268,6 +271,7 @@ module.exports = {
                 status: true,
                 data: token,
             });
+            req.io.emit('transferQueue', token);
         } catch (error) {
             res.status(500).json({
                 code: 500,
