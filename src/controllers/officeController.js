@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const limit_hours = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
 // return res.status(200).json({ data: req.auth_user });
 
 module.exports = {
@@ -58,9 +59,8 @@ module.exports = {
     },
     async createQueueToken(req, res) {
         // return res.status(200).json({ data: req.auth_user.office.id });
-        const limit_hours = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
-        const { body } = req;
 
+        const { body } = req;
         try {
             const priority = await prisma.priority.findFirst({
                 where: {
@@ -180,8 +180,7 @@ module.exports = {
     // Waiting Screen
     async getWaitingScreen(req, res) {
         // return res.status(200).json({ office_id: req.auth_user });
-        const limit_hours = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
-
+        
         try {
             const waitingList = await prisma.token.findMany({
                 where: {

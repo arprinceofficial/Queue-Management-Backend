@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const limit_hours = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
 // return res.status(200).json({ office_id: req.auth_user });
 
 module.exports = {
@@ -81,11 +82,6 @@ module.exports = {
         // return res.status(200).json({ data: req.auth_user });
         // return res.status(200).json({ data: parseInt(req.auth_user.queue_counter.id), office_id: req.auth_user.office.id });
         try {
-            // Get the current date and time
-            const now = new Date();
-            // Calculate the date and time for 8 hours ago
-            const eightHoursAgo = new Date(now.getTime() - 8 * 60 * 60 * 1000);
-    
             const waitingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
@@ -93,7 +89,7 @@ module.exports = {
                     user_id: null,
                     status_id: 1,
                     created_at: {
-                        gte: eightHoursAgo, // Filter records from the last 8 hours
+                        gte: limit_hours,
                     },
                 },
                 include: {
@@ -110,6 +106,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                count: waitingList.length,
                 data: waitingList,
             });
         } catch (error) {
@@ -154,6 +151,9 @@ module.exports = {
                 where: {
                     user_id: req.auth_user.user.id,
                     status_id: 2,
+                    created_at: {
+                        gte: limit_hours,
+                    },
                 },
                 include: {
                     service: true,
