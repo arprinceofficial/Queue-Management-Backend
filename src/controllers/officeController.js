@@ -169,6 +169,7 @@ module.exports = {
                 status: true,
                 data: create_token,
             });
+            req.io.emit('updateWaitingList', create_token);
         } catch (error) {
             res.status(500).json({
                 code: 500,
