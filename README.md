@@ -26,17 +26,9 @@ npm i path
 
 npm i multer
 
-npm i @babel/core
-
-npm i @babel/cli
-
 npm install nodemailer prisma
 
 npm i cors
-
-npm i exceljs
-
-npm i pdfkit
 
 ```
 
@@ -96,15 +88,6 @@ npm run dev
 
 ```
 
-## 🚀 Production Build
-
-- Run the production build
-
-```
-yarn build
-npm run build
-```
-
 ## 🚀 Start the production server
 
 ```
@@ -112,9 +95,6 @@ yarn start
 npm run start
 
 ```
-
-> Your production build is available on `dist` folder
-
 
 ## 🚀 assets folders
 

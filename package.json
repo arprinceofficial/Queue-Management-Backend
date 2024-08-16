@@ -5,9 +5,7 @@
     "license": "Md. Ashiqur Rahman",
     "scripts": {
         "start": "node ./src/index.js",
-        "start-prod": "node ./dist/index.js",
         "dev": "nodemon ./src/index.js",
-        "build": "babel src --out-dir dist",
         "seed": "ts-node ./prisma/seed.js"
     },
     "devDependencies": {
@@ -19,22 +17,15 @@
         "typescript": "^5.0.4"
     },
     "dependencies": {
-        "@babel/cli": "^7.22.6",
-        "@babel/core": "^7.22.8",
         "@prisma/client": "^5.18.0",
-        "axios": "^1.6.8",
         "bcrypt": "^5.1.1",
         "body-parser": "^1.20.2",
         "cors": "^2.8.5",
-        "exceljs": "^4.3.0",
         "express": "^4.19.2",
-        "js-levenshtein": "^1.1.6",
         "jsonwebtoken": "^9.0.0",
         "multer": "^1.4.5-lts.1",
         "nodemailer": "^6.9.4",
-        "openai": "^4.0.0",
         "path": "^0.12.7",
-        "pdfkit": "^0.13.0",
         "socket.io": "^4.7.5"
     }
 }
