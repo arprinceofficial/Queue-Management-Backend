@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 async function main() {
     // Roles seed
-    const queueOfficeRole = await prisma.role.createMany({
+    const user_role = await prisma.role.createMany({
         data: [
             {
                 name: 'Office',
@@ -16,6 +16,11 @@ async function main() {
             },
             {
                 name: 'Agent',
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Admin',
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -481,7 +486,6 @@ async function main() {
             office_id: dhakaOffice.id,
         },
     });
-
     await prisma.user.create({
         data: {
             email: 'agent1@email.com',
@@ -497,7 +501,6 @@ async function main() {
             office_id: dhakaOffice.id,
         },
     });
-
     await prisma.user.create({
         data: {
             email: 'agent2@email.com',
@@ -513,7 +516,6 @@ async function main() {
             office_id: dhakaOffice.id,
         },
     });
-
     await prisma.user.create({
         data: {
             email: 'queueofficechittagong@email.com',
@@ -529,7 +531,6 @@ async function main() {
             office_id: chittagongOffice.id,
         },
     });
-
     await prisma.user.create({
         data: {
             email: 'agent1ctg@email.com',
@@ -558,6 +559,21 @@ async function main() {
             updated_at: new Date(),
             role_id: 2,
             office_id: chittagongOffice.id,
+        },
+    });
+    await prisma.user.create({
+        data: {
+            email: 'admin@email.com',
+            first_name: 'admin',
+            last_name: '',
+            mobile_number: '01577879681',
+            gender_id: 1,
+            is_validated: 1,
+            password: await hashPassword('12345678'),
+            created_at: new Date(),
+            updated_at: new Date(),
+            role_id: 3,
+            office_id: 0,
         },
     });
 }

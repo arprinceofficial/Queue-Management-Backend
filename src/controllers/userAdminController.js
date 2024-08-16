@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const { secretKeyAgent } = require('../config/config');
+const { secretKeyAdmin } = require('../config/config');
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const transporter = require('./emailController');
@@ -13,17 +13,16 @@ module.exports = {
             const queryRelations = {
                 include: {
                     role: true,
-                    office: true,
                     gender: true,
                 },
             };
-            // check if login input is loginInput
+            // check if login input is email loginInput
             if (loginInput.includes('@')) {
                 user = await prisma.user.findFirst({
                     ...queryRelations,
                     where: {
                         OR: [
-                            { email: loginInput, role_id: 2 },
+                            { email: loginInput, role_id: 3 },
                         ],
                     },
                 });
@@ -34,7 +33,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { mobile_number: loginInput, role_id: 2 },
+                            { mobile_number: loginInput, role_id: 3 },
                         ],
                     },
                 });
@@ -45,7 +44,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { id: parseInt(loginInput), role_id: 2 },
+                            { id: parseInt(loginInput), role_id: 3 },
                         ],
                     },
                 });
@@ -67,12 +66,6 @@ module.exports = {
                     message: 'Incorrect password'
                 });
             }
-            // get user queue counter
-            const queueCounter = await prisma.counter.findFirst({
-                where: {
-                    user_id: user.id,
-                },
-            });
             // Prepare user data for the payload and response, including role as a nested object
             const userData = {
                 user: {
@@ -91,21 +84,15 @@ module.exports = {
                     id: user.role.id,
                     name: user.role.name,
                 },
-                office: {
-                    id: user.office.id,
-                    office_name: user.office.office_name,
-                },
-                queue_counter: queueCounter ? queueCounter : null,
             };
             // Create payload for JWT token with user data
             const payload = {
                 user: userData.user,
                 role: userData.role,
-                office: userData.office,
                 is_login: 1,
             };
             // Create token
-            const token = sign(payload, secretKeyAgent, { expiresIn: '24h' });
+            const token = sign(payload, secretKeyAdmin, { expiresIn: '24h' });
             // Update is_login to 1
             await prisma.user.update({
                 where: { id: user.id },
@@ -118,11 +105,8 @@ module.exports = {
                     access_token: token,
                     user: userData.user,
                     role: userData.role,
-                    office: userData.office,
-                    queue_counter: userData.queue_counter,
                 }
             });
-            req.io.emit('setCounter', 'login');
         } catch (error) {
             res.status(500).json({
                 code: 500,
@@ -161,23 +145,11 @@ module.exports = {
                     where: { id: req.auth_user.user.id },
                     data: { is_login: 0, },
                 });
-                // update queue counter to null
-                const data = await prisma.counter.findFirst({
-                    where: { office_id: req.auth_user.office.id, user_id: req.auth_user.user.id },
-                });
-                if (data) {
-                    await prisma.counter.update({
-                        where: { id: data.id },
-                        data: { user_id: null },
-                    });
-                }
-                
                 res.status(200).json({
                     code: 200,
                     status: "success",
                     message: 'Logout successfully'
                 });
-                req.io.emit('logout', 'logout');
             } else {
                 res.status(401).json({
                     code: 401,
@@ -197,7 +169,7 @@ module.exports = {
         const id = req.auth_user.user.id;
         const { imagepath } = req.params;
         try {
-            const user = await prisma.user.findFirst({ where: { id: parseInt(id), role_id: 2 } });
+            const user = await prisma.user.findFirst({ where: { id: parseInt(id), role_id: 3 } });
             if (!user) {
                 return res.status(404).json({
                     code: 404,
@@ -245,7 +217,7 @@ module.exports = {
             const user = await prisma.user.findFirst({
                 where: {
                     email,
-                    role_id: 2,
+                    role_id: 3,
                 },
             });
             if (!user) {
@@ -300,7 +272,7 @@ module.exports = {
         const { userid, otp } = req.body;
         try {
             // Check if user id exists
-            const user = await prisma.user.findFirst({ where: { id: parseInt(userid), role_id: 2 } });
+            const user = await prisma.user.findFirst({ where: { id: parseInt(userid), role_id: 3 } });
             if (!user) {
                 return res.status(404).json({
                     code: 404,
@@ -321,7 +293,7 @@ module.exports = {
                 where: { id: parseInt(userid) },
                 data: {
                     is_validated: 1,
-                    // otp_verification_code: null,
+                    otp_verification_code: null,
                 },
             });
             res.status(200).json({
@@ -337,4 +309,4 @@ module.exports = {
             });
         }
     },
-}
+};

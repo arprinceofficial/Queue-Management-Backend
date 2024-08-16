@@ -45,7 +45,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { id: parseInt(loginInput) },
+                            { id: parseInt(loginInput), role_id: 1 },
                         ],
                     },
                 });
