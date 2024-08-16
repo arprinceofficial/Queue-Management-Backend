@@ -1,14 +1,14 @@
 const { verify } = require('jsonwebtoken');
-const { secretKey, secretKeyAgent, secretKeyAdmin } = require('../config/config');
+const { secretKeyOffice, secretKeyAgent, secretKeyAdmin } = require('../config/config');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 module.exports = {
-    authMiddleware: (req, res, next) => {
+    authOfficeMiddleware: (req, res, next) => {
         const authHeader = req.headers.authorization;
         if (authHeader) {
             const token = authHeader.split(' ')[1];
-            verify(token, secretKey, async (err, user) => {
+            verify(token, secretKeyOffice, async (err, user) => {
                 if (err || !user || !user.user || !user.user.id) {
                     return res.status(403).json({
                         code: 403,

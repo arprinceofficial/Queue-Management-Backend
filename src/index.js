@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
-const { authMiddleware } = require('./middleware/authMiddleware');
+const { authOfficeMiddleware, authAgentMiddleware, authAdminMiddleware } = require('./middleware/authMiddleware');
 
 const app = express();
 
@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 });
 
 // Import routes
-const userOfficRoutes = require('./routes/userOfficRoutes');
+const userOfficeRoutes = require('./routes/userOfficeRoutes');
 const officeRoutes = require('./routes/officeRoutes');
 const userAgentRoutes = require('./routes/userAgentRoutes');
 const agentRoutes = require('./routes/agentRoutes');
@@ -59,7 +59,7 @@ const userAdminRoutes = require('./routes/userAdminRoutes');
 
 // Images files path
 app.use('/images', express.static('assets/images'));
-app.use('/profile_images', authMiddleware, express.static('assets/images/profile_images'));
+app.use('/profile_images', authOfficeMiddleware, authAgentMiddleware, authAdminMiddleware, express.static('assets/images/profile_images'));
 
 // Use middlewares
 app.use(express.json());
@@ -68,7 +68,7 @@ app.use(bodyParser.json());
 
 // Define routes
 app.use('/api/office/',
-    userOfficRoutes,
+    userOfficeRoutes,
     officeRoutes,
 );
 app.use('/api/agent/',

@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const { secretKey } = require('../config/config');
+const { secretKeyOffice } = require('../config/config');
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const transporter = require('./emailController');
@@ -98,7 +98,7 @@ module.exports = {
                 is_login: 1,
             };
             // Create token
-            const token = sign(payload, secretKey, { expiresIn: '24h' });
+            const token = sign(payload, secretKeyOffice, { expiresIn: '24h' });
             // Update is_login to 1
             await prisma.user.update({
                 where: { id: user.id },
