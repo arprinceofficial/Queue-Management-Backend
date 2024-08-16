@@ -4,7 +4,6 @@ const { secretKeyAgent } = require('../config/config');
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const transporter = require('./emailController');
-const { log } = require('console');
 
 module.exports = {
     async login(req, res) {
