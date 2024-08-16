@@ -59,7 +59,9 @@ const userAdminRoutes = require('./routes/userAdminRoutes');
 
 // Images files path
 app.use('/images', express.static('assets/images'));
-app.use('/profile_images', authOfficeMiddleware, authAgentMiddleware, authAdminMiddleware, express.static('assets/images/profile_images'));
+app.use('/office/profile_images', authOfficeMiddleware, express.static('assets/images/profile_images'));
+app.use('/agent/profile_images', authAgentMiddleware, express.static('assets/images/profile_images'));
+app.use('/admin/profile_images', authAdminMiddleware, express.static('assets/images/profile_images'));
 
 // Use middlewares
 app.use(express.json());
