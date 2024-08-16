@@ -21,7 +21,7 @@
     "dependencies": {
         "@babel/cli": "^7.22.6",
         "@babel/core": "^7.22.8",
-        "@prisma/client": "^4.14.1",
+        "@prisma/client": "^5.18.0",
         "axios": "^1.6.8",
         "bcrypt": "^5.1.1",
         "body-parser": "^1.20.2",
