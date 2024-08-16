@@ -205,6 +205,9 @@ module.exports = {
                     //     not: null,
                     // },
                     status_id: 2,
+                    created_at: {
+                        gte: limit_hours,
+                    },
                 },
                 include: {
                     service: true,
