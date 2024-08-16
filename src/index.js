@@ -56,6 +56,7 @@ const officeRoutes = require('./routes/officeRoutes');
 const userAgentRoutes = require('./routes/userAgentRoutes');
 const agentRoutes = require('./routes/agentRoutes');
 const userAdminRoutes = require('./routes/userAdminRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 // Images files path
 app.use('/images', express.static('assets/images'));
@@ -79,6 +80,7 @@ app.use('/api/agent/',
 );
 app.use('/api/admin/',
     userAdminRoutes,
+    adminRoutes,
 );
 
 // Socket.IO logic
