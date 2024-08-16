@@ -59,7 +59,6 @@ const agentRoutes = require('./routes/agentRoutes');
 // Images files path
 app.use('/images', express.static('assets/images'));
 app.use('/profile_images', authMiddleware, express.static('assets/images/profile_images'));
-app.use('/passport_images', authMiddleware, express.static('assets/images/passport_images'));
 
 // Use middlewares
 app.use(express.json());

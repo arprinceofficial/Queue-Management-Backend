@@ -8,7 +8,6 @@ const ensureDirectoriesExist = () => {
     const dirs = [
         path.resolve('./assets/images'),
         path.resolve('./assets/images/profile_images'),
-        path.resolve('./assets/images/passport_images'),
     ];
 
     dirs.forEach(dir => {
@@ -19,7 +18,7 @@ const ensureDirectoriesExist = () => {
 };
 ensureDirectoriesExist();
 
-// configure for profile and passport image upload
+// configure for profile image upload
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // console.log(req.params);
@@ -29,9 +28,6 @@ const storage = multer.diskStorage({
                 break;
             case 'profile':
                 cb(null, './assets/images/profile_images');
-                break;
-            case 'passport':
-                cb(null, './assets/images/passport_images');
                 break;
             default:
                 cb(

@@ -17,7 +17,6 @@ model user {
   last_name                String               @db.VarChar(255)
   mobile_number            String?              @db.VarChar(11)
   profile_image            String?              @db.VarChar(255)
-  passport_image           String?              @db.VarChar(255)
   is_login                 Int                  @default(0)
   reset_token              String?              @db.VarChar(255)
   reset_token_expires_at   DateTime?            @db.DateTime

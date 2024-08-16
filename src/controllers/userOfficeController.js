@@ -77,7 +77,6 @@ module.exports = {
                     mobile_number: user.mobile_number,
                     gender: user.gender.name,
                     profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/profile_images/${user.profile_image}` : null,
-                    passport_image: user.passport_image ? `${req.protocol + '://' + req.get('host')}/passport_images/${user.passport_image}` : null,
                     is_validated: user.is_validated,
                     created_at: user.created_at,
                     updated_at: user.updated_at,

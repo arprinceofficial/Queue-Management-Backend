@@ -119,10 +119,9 @@ Content-Type: application/json
 DELETE http://localhost:4000/api/menu/1
 
 ### POST (/user/:imagepath/:id)
-# Profile Picture or Passport Upload
+# Profile Picture Upload
 # body form-data and key is image, value is image file, type is file
 POST http://localhost:4000/api/user/profile/3
-POST http://localhost:4000/api/user/passport/3
 Content-Type: multipart/form-data
 {
   "image": "image.jpg"

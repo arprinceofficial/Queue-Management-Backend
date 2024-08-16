@@ -1,6 +1,6 @@
-## Node Express Prisma Boilerplate
+## Node Express Prisma Queue Management System
 
-Starter template for your Express Prisma MySQL API
+Starter project for Node.js with Express, Prisma, MySQL, and Queue Management System.
 
 ## 🍔 Stack Specs
 
@@ -30,6 +30,8 @@ npm install nodemailer prisma
 
 npm i cors
 
+npm install @prisma/client@5.18.0
+
 ```
 
 ## Create a Database in MySQL (or) You can use GUI to create a database
@@ -47,7 +49,7 @@ cp .env.sample .env
 - Edit the MySQL Details in the `.env` file
 
 ```
-DATABASE_URL="mysql://USERNAME:PASSWORD@localhost:3306/DBNAME?schema=public"
+DATABASE_URL="mysql://USERNAME:PASSWORD@localhost:3306/DBNAME"
 ```
 
 - Push the Prisma Schema into Database
@@ -100,6 +102,5 @@ npm run start
 
 - /assets/images
 - /assets/images/profile_images
-- /assets/images/passport_images
 
 ```
