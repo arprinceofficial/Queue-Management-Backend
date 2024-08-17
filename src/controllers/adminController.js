@@ -36,6 +36,9 @@ module.exports = {
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
+                include: {
+                    office: true,
+                },
             });
             res.status(200).json({
                 code: 200,
@@ -77,6 +80,9 @@ module.exports = {
                     office_id: parseInt(office_id),
                     status: parseInt(status),
                     updated_at: new Date(),
+                },
+                include: {
+                    office: true,
                 },
             });
             res.status(200).json({
