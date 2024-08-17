@@ -107,6 +107,7 @@ module.exports = {
             const counters = await prisma.counter.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
+                    status: 1,
                 },
             });
 
