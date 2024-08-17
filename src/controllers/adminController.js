@@ -151,6 +151,13 @@ module.exports = {
                 code: 200,
                 status: true,
                 message: 'Counter deleted successfully',
+                data: {
+                    id: found_counter.id,
+                    title: found_counter.title,
+                    counter_number: found_counter.counter_number,
+                    office_id: found_counter.office_id,
+                    status: found_counter.status,
+                }
             });
         } catch (error) {
             res.status(500).json({
