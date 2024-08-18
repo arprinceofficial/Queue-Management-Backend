@@ -18,5 +18,10 @@ router.get('/priority-list', authAdminMiddleware, adminController.priorityList);
 router.post('/priority-create', authAdminMiddleware, adminController.priorityCreate);
 router.post('/priority-update', authAdminMiddleware, adminController.priorityUpdate);
 router.post('/priority-delete', authAdminMiddleware, adminController.priorityDelete);
+// Gender
+router.get('/gender-list', authAdminMiddleware, adminController.genderList);
+router.post('/gender-create', authAdminMiddleware, adminController.genderCreate);
+router.post('/gender-update', authAdminMiddleware, adminController.genderUpdate);
+router.post('/gender-delete', authAdminMiddleware, adminController.genderDelete);
 
 module.exports = router;
