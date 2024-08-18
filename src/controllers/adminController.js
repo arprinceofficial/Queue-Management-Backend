@@ -813,4 +813,253 @@ module.exports = {
             });
         }
     },
+    // Agent User
+    async agentUserList(req, res) {
+        try {
+            const office_user = await prisma.user.findMany({
+                where: {
+                    role_id: 2,
+                },
+                include: {
+                    office: true,
+                    gender: true,
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: office_user.map((user) => ({
+                    id: user.id,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    mobile_number: user.mobile_number,
+                    email: user.email,
+                    gender_id: user.gender_id,
+                    gender_name: user.gender.name,
+                    office_id: user.office_id,
+                    status: user.status
+                }))
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async agentUserCreate(req, res) {
+        const { first_name, last_name, mobile_number, email, password, gender_id, office_id, status } = req.body;
+        try {
+            // Check if user email exists
+            const userExists = await prisma.user.findFirst({ where: { email } });
+            if (userExists) {
+                return res.status(400).json({
+                    code: 400,
+                    status: "error",
+                    message: 'This email already exists'
+                });
+            }
+            // Check if user phone number exists
+            const phoneNumberExists = await prisma.user.findFirst({ where: { mobile_number } });
+            if (phoneNumberExists) {
+                return res.status(400).json({
+                    code: 400,
+                    status: "error",
+                    message: 'This phone number already exists'
+                });
+            }
+            // Check mobile number length
+            if (mobile_number.length !== 11) {
+                return res.status(400).json({
+                    code: 400,
+                    status: "error",
+                    message: 'Mobile number must be 11 digits'
+                });
+            }
+
+            // Hash the password
+            const salt = genSaltSync(10);
+            const hashedPassword = hashSync(password, salt);
+
+            const user = await prisma.user.create({
+                data: {
+                    first_name,
+                    last_name,
+                    mobile_number,
+                    email,
+                    password: hashedPassword,
+                    gender_id: parseInt(gender_id),
+                    role_id: 2,
+                    office_id: parseInt(office_id),
+                    status: parseInt(status),
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            const gender = await prisma.gender.findFirst({
+                where: {
+                    id: parseInt(gender_id),
+                },
+            })
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: {
+                    id: user.id,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    mobile_number: user.mobile_number,
+                    email: user.email,
+                    gender_id: user.gender_id,
+                    gender_name: gender.name,
+                    office_id: user.office_id,
+                    status: user.status
+                }
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async agentUserUpdate(req, res) {
+        const { id, first_name, last_name, mobile_number, email, password, gender_id, office_id, status } = req.body;
+        try {
+            // Check if user email exists
+            const userExists = await prisma.user.findFirst({
+                where: {
+                    email,
+                    id: {
+                        not: parseInt(id)
+                    }
+                }
+            });
+            if (userExists) {
+                return res.status(400).json({
+                    code: 400,
+                    status: "error",
+                    message: 'This email already exists'
+                });
+            }
+            // Check if user phone number exists
+            const phoneNumberExists = await prisma.user.findFirst({
+                where: {
+                    mobile_number,
+                    id: {
+                        not: parseInt(id)
+                    }
+                }
+            });
+            if (phoneNumberExists) {
+                return res.status(400).json({
+                    code: 400,
+                    status: "error",
+                    message: 'This phone number already exists'
+                });
+            }
+
+            // Check mobile number length
+            if (mobile_number.length !== 11) {
+                return res.status(400).json({
+                    code: 400,
+                    status: "error",
+                    message: 'Mobile number must be 11 digits'
+                });
+            }
+
+            // Hash the password
+            const salt = genSaltSync(10);
+            const hashedPassword = hashSync(password, salt);
+
+            const user = await prisma.user.update({
+                where: {
+                    id: parseInt(id),
+                    role_id: 2,
+                },
+                data: {
+                    first_name,
+                    last_name,
+                    mobile_number,
+                    email,
+                    password: hashedPassword,
+                    gender_id: parseInt(gender_id),
+                    role_id: 2,
+                    office_id: parseInt(office_id),
+                    status: parseInt(status),
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            // get gender
+            const gender = await prisma.gender.findFirst({
+                where: {
+                    id: parseInt(gender_id),
+                },
+            })
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: {
+                    id: user.id,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    mobile_number: user.mobile_number,
+                    email: user.email,
+                    gender_id: user.gender_id,
+                    gender_name: gender.name,
+                    office_id: user.office_id,
+                    status: user.status
+                }
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async agentUserDelete(req, res) {
+        const { id } = req.body;
+        try {
+            // check user found
+            const found_user = await prisma.user.findFirst({
+                where: {
+                    id: parseInt(id),
+                    role_id: 2,
+                },
+            });
+            if (!found_user) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'User not found',
+                });
+            }
+            // delete user
+            await prisma.user.delete({
+                where: {
+                    id: parseInt(id),
+                    role_id: 2,
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                message: 'User deleted successfully',
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
 };
