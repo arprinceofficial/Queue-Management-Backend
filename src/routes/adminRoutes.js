@@ -23,5 +23,10 @@ router.get('/gender-list', authAdminMiddleware, adminController.genderList);
 router.post('/gender-create', authAdminMiddleware, adminController.genderCreate);
 router.post('/gender-update', authAdminMiddleware, adminController.genderUpdate);
 router.post('/gender-delete', authAdminMiddleware, adminController.genderDelete);
+// Office User
+router.get('/office-user-list', authAdminMiddleware, adminController.officeUserList);
+router.post('/office-user-create', authAdminMiddleware, adminController.officeUserCreate);
+router.post('/office-user-update', authAdminMiddleware, adminController.officeUserUpdate);
+router.post('/office-user-delete', authAdminMiddleware, adminController.officeUserDelete);
 
 module.exports = router;
