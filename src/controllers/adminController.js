@@ -7,6 +7,11 @@ module.exports = {
     async counterList(req, res) {
         try {
             const counter = await prisma.counter.findMany({
+                where: {
+                    office: {
+                        status: 1, // Filter counter list where office status is 1
+                    },
+                },
                 include: {
                     office: true,
                 },

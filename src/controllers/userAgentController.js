@@ -67,6 +67,22 @@ module.exports = {
                     message: 'Incorrect password'
                 });
             }
+            // check user status
+            if (user.status !== 1) {
+                return res.status(401).json({
+                    code: 401,
+                    status: "error",
+                    message: 'User is inactive'
+                });
+            }
+            // check office status
+            if (user.office.status !== 1) {
+                return res.status(401).json({
+                    code: 401,
+                    status: "error",
+                    message: 'Office is inactive'
+                });
+            }
             // get user queue counter
             const queueCounter = await prisma.counter.findFirst({
                 where: {
@@ -133,6 +149,31 @@ module.exports = {
     },
     async currentUser(req, res) {
         try {
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: req.auth_user.user.id,
+                    role_id: 2,
+                },
+                include: {
+                    office: true,
+                }
+            });
+            // check user status
+            if (user.status !== 1) {
+                return res.status(401).json({
+                    code: 401,
+                    status: "error",
+                    message: 'User is inactive'
+                });
+            }
+            // check office status
+            if (user.office.status !== 1) {
+                return res.status(401).json({
+                    code: 401,
+                    status: "error",
+                    message: 'Office is inactive'
+                });
+            }
             if (req.auth_user) {
                 res.status(200).json({
                     code: 200,
