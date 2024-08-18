@@ -8,6 +8,7 @@ router.post('/counter-create', authAdminMiddleware, adminController.counterCreat
 router.post('/counter-update', authAdminMiddleware, adminController.counterUpdate);
 router.post('/counter-delete', authAdminMiddleware, adminController.counterDelete);
 // Office
+router.get('/office-list-all', authAdminMiddleware, adminController.officeListAll);
 router.get('/office-list', authAdminMiddleware, adminController.officeList);
 router.post('/office-create', authAdminMiddleware, adminController.officeCreate);
 router.post('/office-update', authAdminMiddleware, adminController.officeUpdate);

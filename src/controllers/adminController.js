@@ -168,9 +168,29 @@ module.exports = {
         }
     },
     // Office
-    async officeList(req, res) {
+    async officeListAll(req, res) {
         try {
             const office = await prisma.office.findMany();
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: office,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async officeList(req, res) {
+        try {
+            const office = await prisma.office.findMany({
+                where: {
+                    status: 1,
+                },
+            });
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -262,6 +282,26 @@ module.exports = {
                     code: 404,
                     status: false,
                     message: 'Office not found',
+                });
+            }
+            // check office used
+            const check_office = await prisma.counter.findFirst({
+                where: {
+                    office_id: parseInt(id),
+                },
+            });
+            if (check_office) {
+                return res.status(400).json({
+                    code: 400,
+                    status: false,
+                    message: 'Office is being used, cannot delete office',
+                    error: {
+                        id: check_office.id,
+                        title: check_office.title,
+                        counter_number: check_office.counter_number,
+                        office_id: check_office.office_id,
+                        status: check_office.status,
+                    }
                 });
             }
             // delete office
