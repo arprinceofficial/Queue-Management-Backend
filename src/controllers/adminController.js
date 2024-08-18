@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
+// return res.status(200).json({ data:  });
 
 module.exports = {
     // Counter
@@ -122,13 +123,11 @@ module.exports = {
             // check counter used
             const check_counter = await prisma.counter.findFirst({
                 where: {
-                    user_id: {
-                        not: null,
-                        not: 0,
-                    }
+                    id: parseInt(id),
                 },
             });
-            if (check_counter) {
+            // return res.status(200).json({ data: check_counter.user_id });
+            if (check_counter.user_id) {
                 let user = await prisma.user.findFirst({
                     where: {
                         id: check_counter.user_id,
