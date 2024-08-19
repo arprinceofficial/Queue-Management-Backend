@@ -49,6 +49,8 @@ app.use((req, res, next) => {
     req.io = io;
     next();
 });
+// Increase the limit of the request body
+app.use(express.json({ limit: '50mb' }));
 
 // Import routes
 const userOfficeRoutes = require('./routes/userOfficeRoutes');
@@ -62,7 +64,7 @@ const adminRoutes = require('./routes/adminRoutes');
 app.use('/images', express.static('assets/images'));
 app.use('/office/profile_images', authOfficeMiddleware, express.static('assets/images/profile_images'));
 app.use('/agent/profile_images', authAgentMiddleware, express.static('assets/images/profile_images'));
-app.use('/admin/profile_images', authAdminMiddleware, express.static('assets/images/profile_images'));
+app.use('/admin/profile_images', express.static('assets/images/profile_images'));
 
 // Use middlewares
 app.use(express.json());

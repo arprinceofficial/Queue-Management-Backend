@@ -2,6 +2,24 @@ const router = require('express').Router();
 const { authAdminMiddleware } = require('../middleware/authMiddleware');
 const adminController = require('../controllers/adminController');
 
+// Multer
+// const multer = require('multer');
+// const crypto = require('crypto');
+// const path = require('path');
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, './assets/images/profile_images');
+//     },
+//     filename: function (req, file, cb) {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//         const randomBytes = crypto.randomBytes(8).toString('hex');
+//         const newFilename = `${file.fieldname}_${uniqueSuffix}_${randomBytes}${path.extname(file.originalname)}`;
+
+//         return cb(null, newFilename);
+//     }
+// });
+// const upload = multer({ storage: storage });
+
 // Counter
 router.get('/counter-list', authAdminMiddleware, adminController.counterList);
 router.post('/counter-create', authAdminMiddleware, adminController.counterCreate);
@@ -26,6 +44,7 @@ router.post('/gender-delete', authAdminMiddleware, adminController.genderDelete)
 // Office User
 router.get('/office-user-list', authAdminMiddleware, adminController.officeUserList);
 router.post('/office-user-create', authAdminMiddleware, adminController.officeUserCreate);
+// router.post('/office-user-update', authAdminMiddleware, upload.single('profile_image'), adminController.officeUserUpdate);
 router.post('/office-user-update', authAdminMiddleware, adminController.officeUserUpdate);
 router.post('/office-user-delete', authAdminMiddleware, adminController.officeUserDelete);
 // Office Agent
