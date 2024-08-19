@@ -729,6 +729,23 @@ module.exports = {
             const salt = genSaltSync(10);
             const hashedPassword = hashSync(password, salt);
 
+            // if password is empty, do not update password
+            const update_data = {
+                first_name,
+                last_name,
+                mobile_number,
+                email,
+                gender_id: parseInt(gender_id),
+                role_id: 1,
+                office_id: parseInt(office_id),
+                status: parseInt(status),
+                created_at: new Date(),
+                updated_at: new Date(),
+            };
+            if (password && password.trim() !== "") {
+                update_data.password = hashedPassword;
+            }
+
             const user = await prisma.user.update({
                 where: {
                     id: parseInt(id),
@@ -737,19 +754,7 @@ module.exports = {
                     office: true,
                     gender: true,
                 },
-                data: {
-                    first_name,
-                    last_name,
-                    mobile_number,
-                    email,
-                    password: hashedPassword,
-                    gender_id: parseInt(gender_id),
-                    role_id: 1,
-                    office_id: parseInt(office_id),
-                    status: parseInt(status),
-                    created_at: new Date(),
-                    updated_at: new Date(),
-                },
+                data: update_data,
             });
             res.status(200).json({
                 code: 200,
