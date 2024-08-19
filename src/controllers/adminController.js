@@ -585,9 +585,10 @@ module.exports = {
                     mobile_number: user.mobile_number,
                     email: user.email,
                     gender_id: user.gender_id,
-                    gender_name: user.gender.name,
                     office_id: user.office_id,
-                    status: user.status
+                    status: user.status,
+                    gender: user.gender,
+                    office: user.office,
                 }))
             });
         }
@@ -634,6 +635,10 @@ module.exports = {
             const hashedPassword = hashSync(password, salt);
 
             const user = await prisma.user.create({
+                include: {
+                    office: true,
+                    gender: true,
+                },
                 data: {
                     first_name,
                     last_name,
@@ -648,11 +653,6 @@ module.exports = {
                     updated_at: new Date(),
                 },
             });
-            const gender = await prisma.gender.findFirst({
-                where: {
-                    id: parseInt(gender_id),
-                },
-            })
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -663,9 +663,10 @@ module.exports = {
                     mobile_number: user.mobile_number,
                     email: user.email,
                     gender_id: user.gender_id,
-                    gender_name: gender.name,
                     office_id: user.office_id,
-                    status: user.status
+                    status: user.status,
+                    gender: user.gender,
+                    office: user.office,
                 }
             });
         }
@@ -686,7 +687,8 @@ module.exports = {
                     email,
                     id: {
                         not: parseInt(id)
-                    }
+                    },
+                    role_id: 1,
                 }
             });
             if (userExists) {
@@ -702,7 +704,8 @@ module.exports = {
                     mobile_number,
                     id: {
                         not: parseInt(id)
-                    }
+                    },
+                    role_id: 1,
                 }
             });
             if (phoneNumberExists) {
@@ -729,7 +732,10 @@ module.exports = {
             const user = await prisma.user.update({
                 where: {
                     id: parseInt(id),
-                    role_id: 1,
+                },
+                include: {
+                    office: true,
+                    gender: true,
                 },
                 data: {
                     first_name,
@@ -745,12 +751,6 @@ module.exports = {
                     updated_at: new Date(),
                 },
             });
-            // get gender
-            const gender = await prisma.gender.findFirst({
-                where: {
-                    id: parseInt(gender_id),
-                },
-            })
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -761,9 +761,10 @@ module.exports = {
                     mobile_number: user.mobile_number,
                     email: user.email,
                     gender_id: user.gender_id,
-                    gender_name: gender.name,
                     office_id: user.office_id,
-                    status: user.status
+                    status: user.status,
+                    gender: user.gender,
+                    office: user.office,
                 }
             });
         }
