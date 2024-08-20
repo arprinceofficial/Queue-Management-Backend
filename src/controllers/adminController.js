@@ -842,7 +842,6 @@ module.exports = {
             await prisma.user.delete({
                 where: {
                     id: parseInt(id),
-                    role_id: 1,
                 },
             });
             res.status(200).json({
@@ -1134,7 +1133,6 @@ module.exports = {
             await prisma.user.delete({
                 where: {
                     id: parseInt(id),
-                    role_id: 2,
                 },
             });
             res.status(200).json({
