@@ -667,7 +667,7 @@ module.exports = {
             if (newFilename) {
                 create_user.profile_image = newFilename;
             }
-            
+
             const user = await prisma.user.create({
                 include: {
                     office: true,
@@ -764,7 +764,7 @@ module.exports = {
                 const filePath = path.join(__dirname, '../../assets/images/profile_images', newFilename);
                 fs.writeFileSync(filePath, imageBuffer);
             }
-            
+
             // if password is empty or profile image is empty, do not update
             const update_data = {
                 first_name,
@@ -879,10 +879,12 @@ module.exports = {
                     last_name: user.last_name,
                     mobile_number: user.mobile_number,
                     email: user.email,
+                    profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/admin/profile_images/${user.profile_image}` : null,
                     gender_id: user.gender_id,
-                    gender_name: user.gender.name,
                     office_id: user.office_id,
-                    status: user.status
+                    status: user.status,
+                    gender: user.gender,
+                    office: user.office,
                 }))
             });
         }
@@ -928,26 +930,43 @@ module.exports = {
             const salt = genSaltSync(10);
             const hashedPassword = hashSync(password, salt);
 
+            // Base64 image upload conversion
+            const base64Image = req.body.profile_image;
+            let newFilename = null;
+            const matches = base64Image?.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+            if (matches && matches.length === 3) {
+                const imageBuffer = Buffer.from(matches[2], 'base64');
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                const randomBytes = crypto.randomBytes(8).toString('hex');
+                const extension = matches[1].split('/')[1];
+                newFilename = `profile_image_${uniqueSuffix}_${randomBytes}.${extension}`;
+                const filePath = path.join(__dirname, '../../assets/images/profile_images', newFilename);
+                fs.writeFileSync(filePath, imageBuffer);
+            }
+            const create_user = {
+                first_name,
+                last_name,
+                mobile_number,
+                email,
+                password: hashedPassword,
+                gender_id: parseInt(gender_id),
+                role_id: 2,
+                office_id: parseInt(office_id),
+                status: parseInt(status),
+                created_at: new Date(),
+                updated_at: new Date(),
+            };
+            if (newFilename) {
+                create_user.profile_image = newFilename;
+            }
+
             const user = await prisma.user.create({
-                data: {
-                    first_name,
-                    last_name,
-                    mobile_number,
-                    email,
-                    password: hashedPassword,
-                    gender_id: parseInt(gender_id),
-                    role_id: 2,
-                    office_id: parseInt(office_id),
-                    status: parseInt(status),
-                    created_at: new Date(),
-                    updated_at: new Date(),
+                include: {
+                    office: true,
+                    gender: true,
                 },
+                data: create_user,
             });
-            const gender = await prisma.gender.findFirst({
-                where: {
-                    id: parseInt(gender_id),
-                },
-            })
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -957,10 +976,12 @@ module.exports = {
                     last_name: user.last_name,
                     mobile_number: user.mobile_number,
                     email: user.email,
+                    profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/admin/profile_images/${user.profile_image}` : null,
                     gender_id: user.gender_id,
-                    gender_name: gender.name,
                     office_id: user.office_id,
-                    status: user.status
+                    status: user.status,
+                    gender: user.gender,
+                    office: user.office,
                 }
             });
         }
@@ -981,7 +1002,8 @@ module.exports = {
                     email,
                     id: {
                         not: parseInt(id)
-                    }
+                    },
+                    role_id: 2,
                 }
             });
             if (userExists) {
@@ -997,7 +1019,8 @@ module.exports = {
                     mobile_number,
                     id: {
                         not: parseInt(id)
-                    }
+                    },
+                    role_id: 2,
                 }
             });
             if (phoneNumberExists) {
@@ -1020,32 +1043,50 @@ module.exports = {
             // Hash the password
             const salt = genSaltSync(10);
             const hashedPassword = hashSync(password, salt);
+            // Base64 image upload conversion
+            const base64Image = req.body.profile_image;
+            let newFilename = null;
+            const matches = base64Image?.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+            if (matches && matches.length === 3) {
+                const imageBuffer = Buffer.from(matches[2], 'base64');
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                const randomBytes = crypto.randomBytes(8).toString('hex');
+                const extension = matches[1].split('/')[1];
+                newFilename = `profile_image_${uniqueSuffix}_${randomBytes}.${extension}`;
+                const filePath = path.join(__dirname, '../../assets/images/profile_images', newFilename);
+                fs.writeFileSync(filePath, imageBuffer);
+            }
+
+            // if password is empty or profile image is empty, do not update
+            const update_data = {
+                first_name,
+                last_name,
+                mobile_number,
+                email,
+                gender_id: parseInt(gender_id),
+                role_id: 2,
+                office_id: parseInt(office_id),
+                status: parseInt(status),
+                created_at: new Date(),
+                updated_at: new Date(),
+            };
+            if (password && password.trim() !== "") {
+                update_data.password = hashedPassword;
+            }
+            if (newFilename) {
+                update_data.profile_image = newFilename;
+            }
 
             const user = await prisma.user.update({
                 where: {
                     id: parseInt(id),
-                    role_id: 2,
                 },
-                data: {
-                    first_name,
-                    last_name,
-                    mobile_number,
-                    email,
-                    password: hashedPassword,
-                    gender_id: parseInt(gender_id),
-                    role_id: 2,
-                    office_id: parseInt(office_id),
-                    status: parseInt(status),
-                    created_at: new Date(),
-                    updated_at: new Date(),
+                include: {
+                    office: true,
+                    gender: true,
                 },
+                data: update_data,
             });
-            // get gender
-            const gender = await prisma.gender.findFirst({
-                where: {
-                    id: parseInt(gender_id),
-                },
-            })
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -1055,10 +1096,12 @@ module.exports = {
                     last_name: user.last_name,
                     mobile_number: user.mobile_number,
                     email: user.email,
+                    profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/admin/profile_images/${user.profile_image}` : null,
                     gender_id: user.gender_id,
-                    gender_name: gender.name,
                     office_id: user.office_id,
-                    status: user.status
+                    status: user.status,
+                    gender: user.gender,
+                    office: user.office,
                 }
             });
         }
