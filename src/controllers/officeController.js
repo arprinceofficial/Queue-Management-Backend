@@ -22,11 +22,28 @@ module.exports = {
     },
     async queueServices(req, res) {
         try {
-            const services = await prisma.queue_services.findMany();
+            const services = await prisma.queue_services.findMany(
+                {
+                    where: {
+                        status: 1
+                    }
+                }
+            );
             res.status(200).json({
                 code: 200,
                 status: true,
-                data: services,
+                data: services.map((service) => {
+                    return {
+                        id: service.id,
+                        name: service.name,
+                        color: service.color,
+                        slug: service.slug,
+                        route: service.route,
+                        icon: service.icon,
+                        fields: JSON.parse(service.fields),
+                        status: service.status,
+                    };
+                }),
             });
         } catch (error) {
             res.status(500).json({
@@ -42,12 +59,22 @@ module.exports = {
             const services = await prisma.queue_services.findFirst({
                 where: {
                     slug: slug,
+                    status: 1,
                 },
             });
             res.status(200).json({
                 code: 200,
                 status: true,
-                data: services,
+                data: {
+                    id: services.id,
+                    name: services.name,
+                    color: services.color,
+                    slug: services.slug,
+                    route: services.route,
+                    icon: services.icon,
+                    fields: JSON.parse(services.fields),
+                    status: services.status,
+                },
             });
         } catch (error) {
             res.status(500).json({
@@ -61,6 +88,9 @@ module.exports = {
         // return res.status(200).json({ data: req.auth_user.office.id });
 
         const { body } = req;
+        if (!body.priority_lane) {
+            body.priority_lane = 1;
+        }
         try {
             const priority = await prisma.priority.findFirst({
                 where: {
@@ -108,6 +138,9 @@ module.exports = {
                 where: {
                     office_id: req.auth_user.office.id,
                     status: 1,
+                    user_id: {
+                        not: null,
+                    },
                 },
             });
 
@@ -151,9 +184,9 @@ module.exports = {
                     name: body.name,
                     email: body.email,
                     mobile: body.mobile,
-                    gender_id: parseInt(body.gender),
-                    service_id: parseInt(body.service),
-                    priority_id: parseInt(body.priority_lane),
+                    gender_id: body.gender ? parseInt(body.gender) : 1,
+                    service_id: body.service ? parseInt(body.service) : 1,
+                    priority_id: body.priority_lane ? parseInt(body.priority_lane) : 1,
                     office_id: req.auth_user.office.id,
                     counter_id: set_counter_id,
                     token: newToken,

@@ -1151,13 +1151,7 @@ module.exports = {
     // Queue Service
     async queueServiceList(req, res) {
         try {
-            const queue_service = await prisma.queue_services.findMany(
-                {
-                    where: {
-                        status: 1
-                    }
-                }
-            );
+            const queue_service = await prisma.queue_services.findMany();
             res.status(200).json({
                 code: 200,
                 status: true,
@@ -1169,8 +1163,8 @@ module.exports = {
                     route: item.route,
                     icon: item.icon,
                     status: item.status,
-                    fields: item.fields
-                    // fields: JSON.parse(item.fields)
+                    // fields: item.fields
+                    fields: JSON.parse(item.fields)
                 }))
             });
         }
@@ -1193,7 +1187,7 @@ module.exports = {
                     route,
                     icon,
                     status: parseInt(status),
-                    fields: JSON.parse(fields),
+                    fields: JSON.stringify(fields),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -1201,7 +1195,16 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                data: queue_service,
+                data: {
+                    id: queue_service.id,
+                    name: queue_service.name,
+                    color: queue_service.color,
+                    slug: queue_service.slug,
+                    route: queue_service.route,
+                    icon: queue_service.icon,
+                    status: queue_service.status,
+                    fields: JSON.parse(queue_service.fields)
+                }
             });
         }
         catch (error) {
@@ -1240,14 +1243,23 @@ module.exports = {
                     route,
                     icon,
                     status: parseInt(status),
-                    fields: JSON.parse(fields),
+                    fields: JSON.stringify(fields),
                     updated_at: new Date(),
                 },
             });
             res.status(200).json({
                 code: 200,
                 status: true,
-                data: queue_service,
+                data: {
+                    id: queue_service.id,
+                    name: queue_service.name,
+                    color: queue_service.color,
+                    slug: queue_service.slug,
+                    route: queue_service.route,
+                    icon: queue_service.icon,
+                    status: queue_service.status,
+                    fields: JSON.parse(queue_service.fields)
+                }
             });
         }
         catch (error) {
