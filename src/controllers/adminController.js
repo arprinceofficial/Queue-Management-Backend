@@ -1148,4 +1148,150 @@ module.exports = {
             });
         }
     },
+    // Queue Service
+    async queueServiceList(req, res) {
+        try {
+            const queue_service = await prisma.queue_services.findMany(
+                {
+                    where: {
+                        status: 1
+                    }
+                }
+            );
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: queue_service.map((item) => ({
+                    id: item.id,
+                    name: item.name,
+                    color: item.color,
+                    slug: item.slug,
+                    route: item.route,
+                    icon: item.icon,
+                    status: item.status,
+                    fields: item.fields
+                    // fields: JSON.parse(item.fields)
+                }))
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async queueServiceCreate(req, res) {
+        const { name, color, slug, route, icon, status, fields } = req.body;
+        try {
+            const queue_service = await prisma.queue_services.create({
+                data: {
+                    name,
+                    color,
+                    slug,
+                    route,
+                    icon,
+                    status: parseInt(status),
+                    fields: JSON.parse(fields),
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: queue_service,
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async queueServiceUpdate(req, res) {
+        const { id, name, color, slug, route, icon, status, fields } = req.body;
+        try {
+            // check queue service found
+            const found_queue_service = await prisma.queue_services.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_queue_service) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'Queue Service not found',
+                });
+            }
+            // update queue service
+            const queue_service = await prisma.queue_services.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    name,
+                    color,
+                    slug,
+                    route,
+                    icon,
+                    status: parseInt(status),
+                    fields: JSON.parse(fields),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: queue_service,
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async queueServiceDelete(req, res) {
+        const { id } = req.body;
+        try {
+            // check queue service found
+            const found_queue_service = await prisma.queue_services.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_queue_service) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'Queue Service not found',
+                });
+            }
+            // delete queue service
+            await prisma.queue_services.delete({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                message: 'Queue Service deleted successfully',
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    }
 };
