@@ -95,84 +95,8 @@ async function main() {
                 slug: 'inquiry',
                 route: 'inquiry',
                 icon: 'fa-solid fa-messages-question',
-                fields: [
-                    {
-                        "label": "Name",
-                        "name": "name",
-                        "type": "text",
-                        "place_holder": "i.e John doe",
-                        "required": true
-                    },
-                    {
-                        "label": "Email",
-                        "name": "email",
-                        "type": "email",
-                        "place_holder": "i.e example@xyz.com",
-                        "required": true
-                    },
-                    {
-                        "label": "Mobile",
-                        "name": "mobile",
-                        "type": "number",
-                        "place_holder": "i.e +63-2-1234-5678",
-                        "required": true
-                    },
-                    {
-                        "label": "Gender",
-                        "name": "gender",
-                        "type": "radio",
-                        "data_type": "static",
-                        "options": [
-                            {
-                                "id": 1,
-                                "name": "Male"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Female"
-                            }
-                        ],
-                        "required": true
-                    },
-                    {
-                        "label": "Service",
-                        "name": "service",
-                        "type": "radio",
-                        "data_type": "static",
-                        "options": [
-                            {
-                                "id": 3,
-                                "name": "Grievance Redress Service"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Certificate of Live Birth (COLB)"
-                            },
-                            {
-                                "id": 1,
-                                "name": "Business Permit Registration and Renewal"
-                            }
-                        ],
-                        "required": true
-                    },
-                    {
-                        "label": "Priority lane",
-                        "name": "priority_lane",
-                        "type": "radio",
-                        "data_type": "dunamic",
-                        "options": [
-                            {
-                                "id": 1,
-                                "name": "Regular"
-                            },
-                            {
-                                "id": 2,
-                                "name": "PWD\/Pregnant\/IP"
-                            }
-                        ],
-                        "required": true
-                    }
-                ],
+                status: 1,
+                fields: "[{\"selected_option\":\"\",\"type\":\"text\",\"name\":\"name\",\"label\":\"Name\",\"placeholder\":\"i.e John doe\",\"required\":true,\"options\":[]},{\"selected_option\":\"\",\"type\":\"email\",\"name\":\"email\",\"label\":\"Email\",\"placeholder\":\"i.e example@xyz.com\",\"required\":true,\"options\":[]},{\"selected_option\":\"\",\"type\":\"number\",\"name\":\"mobile\",\"label\":\"Mobile\",\"placeholder\":\"i.e +63-2-1234-5678\",\"required\":true,\"options\":[]},{\"selected_option\":1,\"type\":\"radio\",\"name\":\"gender\",\"label\":\"Gender\",\"placeholder\":\"\",\"required\":true,\"options\":[]},{\"selected_option\":3,\"type\":\"radio\",\"name\":\"service\",\"label\":\"Service\",\"placeholder\":\"\",\"required\":true,\"options\":[]},{\"selected_option\":2,\"type\":\"radio\",\"name\":\"priority_lane\",\"label\":\"Priority lane \",\"placeholder\":\"\",\"required\":true,\"options\":[]}]",
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -182,84 +106,8 @@ async function main() {
                 slug: 'avail-service',
                 route: 'avail-service',
                 icon: 'fa-duotone fa-solid fa-gears',
-                fields: [
-                    {
-                        "label": "Name",
-                        "name": "name",
-                        "type": "text",
-                        "place_holder": "i.e John doe",
-                        "required": true
-                    },
-                    {
-                        "label": "Email",
-                        "name": "email",
-                        "type": "email",
-                        "place_holder": "i.e example@xyz.com",
-                        "required": true
-                    },
-                    {
-                        "label": "Mobile",
-                        "name": "mobile",
-                        "type": "number",
-                        "place_holder": "i.e +63-2-1234-5678",
-                        "required": true
-                    },
-                    {
-                        "label": "Gender",
-                        "name": "gender",
-                        "type": "radio",
-                        "data_type": "static",
-                        "options": [
-                            {
-                                "id": 1,
-                                "name": "Male"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Female"
-                            }
-                        ],
-                        "required": true
-                    },
-                    {
-                        "label": "Service",
-                        "name": "service",
-                        "type": "radio",
-                        "data_type": "static",
-                        "options": [
-                            {
-                                "id": 3,
-                                "name": "Grievance Redress Service"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Certificate of Live Birth (COLB)"
-                            },
-                            {
-                                "id": 1,
-                                "name": "Business Permit Registration and Renewal"
-                            }
-                        ],
-                        "required": true
-                    },
-                    {
-                        "label": "Priority lane",
-                        "name": "priority_lane",
-                        "type": "radio",
-                        "data_type": "dunamic",
-                        "options": [
-                            {
-                                "id": 1,
-                                "name": "Regular"
-                            },
-                            {
-                                "id": 2,
-                                "name": "PWD\/Pregnant\/IP"
-                            }
-                        ],
-                        "required": true
-                    }
-                ],
+                status: 1,
+                fields: "[{\"selected_option\":\"\",\"type\":\"text\",\"name\":\"Name\",\"label\":\"Name\",\"placeholder\":\"i.e John doe\",\"required\":true,\"options\":[]},{\"selected_option\":\"\",\"type\":\"email\",\"name\":\"Email\",\"label\":\"Email\",\"placeholder\":\"i.e example@xyz.com\",\"required\":false,\"options\":[]},{\"selected_option\":\"\",\"type\":\"number\",\"name\":\"Mobile\",\"label\":\"Mobile\",\"placeholder\":\"i.e +63-2-1234-5678\",\"required\":true,\"options\":[]},{\"selected_option\":2,\"type\":\"radio\",\"name\":\"Priority\",\"label\":\"Priority\",\"placeholder\":\"\",\"required\":true,\"options\":[]},{\"selected_option\":3,\"type\":\"radio\",\"name\":\"service\",\"label\":\"Service\",\"placeholder\":\"\",\"required\":true,\"options\":[]}]",
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -269,77 +117,8 @@ async function main() {
                 slug: 'complaint',
                 route: 'complaint',
                 icon: 'fa-regular fa-memo-circle-info',
-                fields: [
-                    {
-                        "label": "Name",
-                        "name": "name",
-                        "type": "text",
-                        "place_holder": "i.e John doe",
-                        "required": true
-                    },
-                    {
-                        "label": "Mobile",
-                        "name": "mobile",
-                        "type": "number",
-                        "place_holder": "i.e +63-2-1234-5678",
-                        "required": true
-                    },
-                    {
-                        "label": "Gender",
-                        "name": "gender",
-                        "type": "radio",
-                        "data_type": "static",
-                        "options": [
-                            {
-                                "id": 1,
-                                "name": "Male"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Female"
-                            }
-                        ],
-                        "required": true
-                    },
-                    {
-                        "label": "Priority lane",
-                        "name": "priority_lane",
-                        "type": "radio",
-                        "data_type": "dunamic",
-                        "options": [
-                            {
-                                "id": 1,
-                                "name": "Regular"
-                            },
-                            {
-                                "id": 2,
-                                "name": "PWD\/Pregnant\/IP"
-                            }
-                        ],
-                        "required": true
-                    },
-                    {
-                        "label": "Service",
-                        "name": "service",
-                        "type": "radio",
-                        "data_type": "static",
-                        "options": [
-                            {
-                                "id": 3,
-                                "name": "Grievance Redress Service"
-                            },
-                            {
-                                "id": 2,
-                                "name": "Certificate of Live Birth (COLB)"
-                            },
-                            {
-                                "id": 1,
-                                "name": "Business Permit Registration and Renewal"
-                            }
-                        ],
-                        "required": true
-                    }
-                ],
+                status: 1,
+                fields: "[{\"selected_option\":\"\",\"type\":\"text\",\"name\":\"Name\",\"label\":\"Name\",\"placeholder\":\"i.e John doe\",\"required\":true,\"options\":[]},{\"selected_option\":\"\",\"type\":\"email\",\"name\":\"Email\",\"label\":\"Email\",\"placeholder\":\"i.e example@xyz.com\",\"required\":false,\"options\":[]},{\"selected_option\":\"\",\"type\":\"number\",\"name\":\"Mobile\",\"label\":\"Mobile\",\"placeholder\":\"i.e +63-2-1234-5678\",\"required\":true,\"options\":[]},{\"selected_option\":2,\"type\":\"radio\",\"name\":\"Priority\",\"label\":\"Priority\",\"placeholder\":\"\",\"required\":true,\"options\":[]},{\"selected_option\":3,\"type\":\"radio\",\"name\":\"service\",\"label\":\"Service\",\"placeholder\":\"\",\"required\":true,\"options\":[]}]",
                 created_at: new Date(),
                 updated_at: new Date(),
             },

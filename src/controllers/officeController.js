@@ -22,30 +22,76 @@ module.exports = {
     },
     async queueServices(req, res) {
         try {
-            const services = await prisma.queue_services.findMany(
-                {
-                    where: {
-                        status: 1
-                    }
+            // Fetch genders, priorities, and services from the database
+            const genders = await prisma.gender.findMany({
+                where: {
+                    status: 1
                 }
-            );
+            });
+
+            const priorities = await prisma.priority.findMany({
+                where: {
+                    status: 1
+                }
+            });
+
+            const services = await prisma.services.findMany({
+                where: {
+                    status: 1
+                }
+            });
+
+            // Fetch the queue services
+            const queueServices = await prisma.queue_services.findMany({
+                where: {
+                    status: 1
+                }
+            });
+
+            // Iterate over each queue service and add the appropriate options to its fields
+            const responseData = queueServices.map(service => {
+                const fields = JSON.parse(service.fields).map(field => {
+                    if (field.selected_option == 1) {
+                        field.options = genders.map(gender => ({
+                            id: gender.id,
+                            name: gender.name
+                        }));
+                    } else if (field.selected_option == 2) {
+                        field.options = priorities.map(priority => ({
+                            id: priority.id,
+                            name: priority.name
+                        }));
+                    } else if (field.selected_option == 3) {
+                        field.options = services.map(srv => ({
+                            id: srv.id,
+                            name: srv.name
+                        }));
+                    }
+                    return field;
+                });
+
+                return {
+                    id: service.id,
+                    name: service.name,
+                    color: service.color,
+                    slug: service.slug,
+                    route: service.route,
+                    icon: service.icon,
+                    fields: fields,
+                    status: service.status,
+                    created_at: service.created_at,
+                    updated_at: service.updated_at
+                };
+            });
+
+            // Return the response
             res.status(200).json({
                 code: 200,
                 status: true,
-                data: services.map((service) => {
-                    return {
-                        id: service.id,
-                        name: service.name,
-                        color: service.color,
-                        slug: service.slug,
-                        route: service.route,
-                        icon: service.icon,
-                        fields: JSON.parse(service.fields),
-                        status: service.status,
-                    };
-                }),
+                data: responseData
             });
         } catch (error) {
+            // Handle errors
             res.status(500).json({
                 code: 500,
                 status: false,
@@ -53,28 +99,71 @@ module.exports = {
             });
         }
     },
+
     async queueServicesByslug(req, res) {
         const { slug } = req.params;
         try {
-            const services = await prisma.queue_services.findFirst({
+            // Fetch genders, priorities, and services from the database
+            const genders = await prisma.gender.findMany({
+                where: {
+                    status: 1
+                }
+            });
+            const priorities = await prisma.priority.findMany({
+                where: {
+                    status: 1
+                }
+            });
+            const services = await prisma.services.findMany({
+                where: {
+                    status: 1
+                }
+            });
+            // Fetch the queue services
+            const queueServices = await prisma.queue_services.findFirst({
                 where: {
                     slug: slug,
-                    status: 1,
-                },
+                    status: 1
+                }
             });
+
+            // Iterate over each queue service and add the appropriate options to its fields
+            const fields = JSON.parse(queueServices.fields).map(field => {
+                if (field.selected_option == 1) {
+                    field.options = genders.map(gender => ({
+                        id: gender.id,
+                        name: gender.name
+                    }));
+                } else if (field.selected_option == 2) {
+                    field.options = priorities.map(priority => ({
+                        id: priority.id,
+                        name: priority.name
+                    }));
+                } else if (field.selected_option == 3) {
+                    field.options = services.map(srv => ({
+                        id: srv.id,
+                        name: srv.title
+                    }));
+                }
+                return field;
+            });
+            const responseData = {
+                id: queueServices.id,
+                name: queueServices.name,
+                color: queueServices.color,
+                slug: queueServices.slug,
+                route: queueServices.route,
+                icon: queueServices.icon,
+                fields: fields,
+                status: queueServices.status,
+                created_at: queueServices.created_at,
+                updated_at: queueServices.updated_at
+            };
+
             res.status(200).json({
                 code: 200,
                 status: true,
-                data: {
-                    id: services.id,
-                    name: services.name,
-                    color: services.color,
-                    slug: services.slug,
-                    route: services.route,
-                    icon: services.icon,
-                    fields: JSON.parse(services.fields),
-                    status: services.status,
-                },
+                data: responseData
             });
         } catch (error) {
             res.status(500).json({
@@ -215,7 +304,7 @@ module.exports = {
     // Waiting Screen
     async getWaitingScreen(req, res) {
         // return res.status(200).json({ office_id: req.auth_user });
-        
+
         try {
             const waitingList = await prisma.token.findMany({
                 where: {
