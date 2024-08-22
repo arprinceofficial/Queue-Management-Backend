@@ -1425,5 +1425,251 @@ module.exports = {
                 message: error.message
             });
         }
-    }
+    },
+    // WT News
+    async WTnewsList(req, res) {
+        try {
+            const wt_news = await prisma.wt_news.findMany({
+                where: {
+                    status: 1,
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: wt_news,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async WTnewsCreate(req, res) {
+        const { title, description, status } = req.body;
+        try {
+            const wt_news = await prisma.wt_news.create({
+                data: {
+                    title,
+                    description,
+                    status: parseInt(status),
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: wt_news,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async WTnewsUpdate(req, res) {
+        const { id, title, description, status } = req.body;
+        try {
+            // check wt_news found
+            const found_wt_news = await prisma.wt_news.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_wt_news) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'wt_news not found',
+                });
+            }
+            // update wt_news
+            const wt_news = await prisma.wt_news.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    title,
+                    description,
+                    status: parseInt(status),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: wt_news,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async WTnewsDelete(req, res) {
+        const { id } = req.body;
+        try {
+            // check wt_news found
+            const found_wt_news = await prisma.wt_news.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_wt_news) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'wt_news not found',
+                });
+            }
+            // delete wt_news
+            await prisma.wt_news.delete({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                message: 'wt_news deleted successfully',
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    // WT Video
+    async WTvideoList(req, res) {
+        try {
+            const wt_video = await prisma.wt_video.findMany({
+                where: {
+                    status: 1,
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: wt_video,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async WTvideoCreate(req, res) {
+        const { title, link, description, status } = req.body;
+        try {
+            const wt_video = await prisma.wt_video.create({
+                data: {
+                    title,
+                    link,
+                    description,
+                    status: parseInt(status),
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: wt_video,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async WTvideoUpdate(req, res) {
+        const { id, title, link, description, status } = req.body;
+        try {
+            // check wt_video found
+            const found_wt_video = await prisma.wt_video.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_wt_video) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'wt_video not found',
+                });
+            }
+            // update wt_video
+            const wt_video = await prisma.wt_video.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    title,
+                    link,
+                    description,
+                    status: parseInt(status),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: wt_video,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async WTvideoDelete(req, res) {
+        const { id } = req.body;
+        try {
+            // check wt_video found
+            const found_wt_video = await prisma.wt_video.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_wt_video) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'wt_video not found',
+                });
+            }
+            // delete wt_video
+            await prisma.wt_video.delete({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                message: 'wt_video deleted successfully',
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
 };

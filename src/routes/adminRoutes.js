@@ -62,5 +62,15 @@ router.get('/queue-service-list', authAdminMiddleware, adminController.queueServ
 router.post('/queue-service-create', authAdminMiddleware, adminController.queueServiceCreate);
 router.post('/queue-service-update', authAdminMiddleware, adminController.queueServiceUpdate);
 router.post('/queue-service-delete', authAdminMiddleware, adminController.queueServiceDelete);
+// WT News
+router.get('/wt-news-list', authAdminMiddleware, adminController.WTnewsList);
+router.post('/wt-news-create', authAdminMiddleware, adminController.WTnewsCreate);
+router.post('/wt-news-update', authAdminMiddleware, adminController.WTnewsUpdate);
+router.post('/wt-news-delete', authAdminMiddleware, adminController.WTnewsDelete);
+// WT Video
+router.get('/wt-video-list', authAdminMiddleware, adminController.WTvideoList);
+router.post('/wt-video-create', authAdminMiddleware, adminController.WTvideoCreate);
+router.post('/wt-video-update', authAdminMiddleware, adminController.WTvideoUpdate);
+router.post('/wt-video-delete', authAdminMiddleware, adminController.WTvideoDelete);
 
 module.exports = router;

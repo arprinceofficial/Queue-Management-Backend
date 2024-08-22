@@ -64,6 +64,12 @@ npx prisma migrate dev
 npm run seed
 ```
 
+- Run Custom Seed File
+
+```
+npx ts-node ./prisma/seed-wt.js
+```
+
 - Update/Add New Column the Prisma Schema into Database
 
 ```
@@ -79,6 +85,14 @@ npx prisma migrate deploy
 
 ```
 npx prisma generate
+```
+
+## Add New Model (Table) in Prisma Schema and Update the Database 
+
+```
+npx prisma migrate dev --create-only
+npx prisma migrate deploy
+
 ```
 
 ## Run the development server
