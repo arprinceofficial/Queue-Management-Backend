@@ -330,6 +330,126 @@ module.exports = {
             });
         }
     },
+    // Service
+    async serviceList(req, res) {
+        try {
+            const service = await prisma.services.findMany({
+                where: {
+                    status: 1,
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: service,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async serviceCreate(req, res) {
+        const { title, status } = req.body;
+        try {
+            const services = await prisma.services.create({
+                data: {
+                    title,
+                    status: parseInt(status),
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: services,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async serviceUpdate(req, res) {
+        const { id, title, status } = req.body;
+        try {
+            // check service found
+            const found_service = await prisma.services.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_service) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'Service not found',
+                });
+            }
+            // update service
+            const service = await prisma.services.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    title,
+                    status: parseInt(status),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: service,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async serviceDelete(req, res) {
+        const { id } = req.body;
+        try {
+            // check service found
+            const found_service = await prisma.services.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_service) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'Service not found',
+                });
+            }
+            // delete service
+            await prisma.services.delete({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                message: 'Service deleted successfully',
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
     // Priority
     async priorityList(req, res) {
         try {

@@ -41,6 +41,11 @@ router.get('/gender-list', authAdminMiddleware, adminController.genderList);
 router.post('/gender-create', authAdminMiddleware, adminController.genderCreate);
 router.post('/gender-update', authAdminMiddleware, adminController.genderUpdate);
 router.post('/gender-delete', authAdminMiddleware, adminController.genderDelete);
+// Service
+router.get('/service-list', authAdminMiddleware, adminController.serviceList);
+router.post('/service-create', authAdminMiddleware, adminController.serviceCreate);
+router.post('/service-update', authAdminMiddleware, adminController.serviceUpdate);
+router.post('/service-delete', authAdminMiddleware, adminController.serviceDelete);
 // Office User
 router.get('/office-user-list', authAdminMiddleware, adminController.officeUserList);
 router.post('/office-user-create', authAdminMiddleware, adminController.officeUserCreate);
