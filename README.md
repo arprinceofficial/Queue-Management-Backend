@@ -9,7 +9,7 @@ Starter project for Node.js with Express, Prisma, MySQL, and Queue Management Sy
 - Prisma
 - MySQL
 
-## 🧬 Install dependencies
+## 🧬 Dependencies Install
 
 ```
 yarn install / npm install
