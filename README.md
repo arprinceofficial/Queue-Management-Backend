@@ -45,6 +45,9 @@ mysql> CREATE DATABASE express;
 ```
 cp .env.sample .env
 ```
+```
+cp ".env(example)" .env
+```
 
 - Edit the MySQL Details in the `.env` file
 
