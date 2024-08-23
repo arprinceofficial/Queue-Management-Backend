@@ -76,7 +76,7 @@ npx ts-node ./prisma/seed-wt.js
 npx prisma generate
 ```
 
-## Add New Model (Table) in Prisma Schema and Update the Database 
+## Add New Model (Table) in Prisma Schema
 
 ```
 npx prisma migrate dev --create-only
@@ -90,7 +90,7 @@ npx prisma migrate deploy
 npx prisma migrate dev updateDB
 ```
 ```
-npx prisma migrate dev updateDB addNewColoumn
+npx prisma migrate dev addNewColoumn
 ```
 ## Apply the changes to the database without generating a migration file(if needed)
 
