@@ -70,17 +70,6 @@ npm run seed
 npx ts-node ./prisma/seed-wt.js
 ```
 
-- Update/Add New Column the Prisma Schema into Database
-
-```
-npx prisma migrate dev updateDB addNewColoumn
-```
-- Apply the changes to the database without generating a migration file(if needed)
-
-```
-npx prisma migrate deploy
-```
-
 - Generate the Prisma Client
 
 ```
@@ -93,6 +82,20 @@ npx prisma generate
 npx prisma migrate dev --create-only
 npx prisma migrate deploy
 
+```
+
+## Update/Add New Column the Prisma Schema
+
+```
+npx prisma migrate dev updateDB
+```
+```
+npx prisma migrate dev updateDB addNewColoumn
+```
+## Apply the changes to the database without generating a migration file(if needed)
+
+```
+npx prisma migrate deploy
 ```
 
 ## Run the development server

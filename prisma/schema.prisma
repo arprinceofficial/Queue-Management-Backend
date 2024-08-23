@@ -146,7 +146,7 @@ model token {
 model wt_news {
   id                       Int                  @id @default(autoincrement())
   title                    String               @db.VarChar(255)
-  description              String               @db.Text
+  description              String?              @db.Text
   status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
@@ -156,7 +156,7 @@ model wt_video {
   id                       Int                  @id @default(autoincrement())
   title                    String               @db.VarChar(255)
   link                     String               @db.Text
-  description              String               @db.Text
+  description              String?              @db.Text
   status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
