@@ -338,11 +338,23 @@ module.exports = {
                     counter: true,
                 },
             });
+            const announcementData = await prisma.wt_news.findMany({
+                where: {
+                    status: 1,
+                },
+            })
+            const contentData = await prisma.wt_video.findMany({
+                where: {
+                    status: 1,
+                },
+            })
             res.status(200).json({
                 code: 200,
                 status: true,
                 servingData: servingList,
                 waitingData: waitingList,
+                announcementData: announcementData,
+                contentData: contentData,
             });
         } catch (error) {
             res.status(500).json({
