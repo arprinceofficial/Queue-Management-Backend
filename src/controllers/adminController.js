@@ -1707,7 +1707,17 @@ module.exports = {
             if (status !== "") {
                 whereClause.status = parseInt(status || 1);
             }
-
+            // If limit and page is not provided then fetch all records
+            if (!limit && !page) {
+                const country = await prisma.country.findMany({
+                    where: whereClause,
+                });
+                return res.status(200).json({
+                    code: 200,
+                    status: true,
+                    data: country,
+                });
+            }
             const country = await prisma.country.findMany({
                 where: whereClause,
                 take: parseInt(limit) || 10,
