@@ -70,7 +70,7 @@ npm run seed
 - Run Custom Seed File
 
 ```
-npx ts-node ./prisma/seed-wt.js
+npx ts-node ./prisma/seed-custom.js
 ```
 
 - Generate the Prisma Client
@@ -90,10 +90,15 @@ npx prisma migrate deploy
 ## Update/Add New Column the Prisma Schema
 
 ```
-npx prisma migrate dev updateDB
+npx prisma migrate dev updateDB or 
 ```
 ```
-npx prisma migrate dev addNewColoumn
+npx prisma migrate dev addNewColoumn 
+```
+## Executed the Migration Command if you make relation (table) changes in the Prisma Schema
+
+```
+npx prisma migrate dev
 ```
 ## Apply the changes to the database without generating a migration file(if needed)
 

@@ -30,6 +30,8 @@ model user {
   office                   office               @relation(fields: [office_id], references: [id])
   gender_id                Int                  @db.Int
   gender                   gender               @relation(fields: [gender_id], references: [id])
+  country_id               Int                  @db.Int
+  country                  country              @relation(fields: [country_id], references: [id])
   status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
@@ -160,4 +162,15 @@ model wt_video {
   status                   Int                  @default(1)
   created_at               DateTime?            @db.DateTime
   updated_at               DateTime?            @db.DateTime
+}
+
+model country {
+  id                       Int                  @id @default(autoincrement())
+  country_name             String               @db.VarChar(255)
+  country_code             String               @db.VarChar(255)
+  iso                      String               @db.VarChar(255)
+  status                   Int                  @default(1)
+  created_at               DateTime?            @db.DateTime
+  updated_at               DateTime?            @db.DateTime
+  user                     user[]
 }

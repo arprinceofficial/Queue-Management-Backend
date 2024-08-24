@@ -72,5 +72,10 @@ router.get('/wt-video-list', authAdminMiddleware, adminController.WTvideoList);
 router.post('/wt-video-create', authAdminMiddleware, adminController.WTvideoCreate);
 router.post('/wt-video-update', authAdminMiddleware, adminController.WTvideoUpdate);
 router.post('/wt-video-delete', authAdminMiddleware, adminController.WTvideoDelete);
+// Country
+router.get('/country-list', authAdminMiddleware, adminController.countryList);
+router.post('/country-create', authAdminMiddleware, adminController.countryCreate);
+router.post('/country-update', authAdminMiddleware, adminController.countryUpdate);
+router.post('/country-delete', authAdminMiddleware, adminController.countryDelete);
 
 module.exports = router;

@@ -15,6 +15,7 @@ module.exports = {
                     role: true,
                     office: true,
                     gender: true,
+                    country: true,
                 },
             };
             // check if login input is loginInput
@@ -106,6 +107,12 @@ module.exports = {
                     id: user.office.id,
                     office_name: user.office.office_name,
                 },
+                country: {
+                    id: user.country.id,
+                    country_name: user.country.country_name,
+                    country_code: user.country.country_code,
+                    iso: user.country.iso,
+                },
             };
             // Create payload for JWT token with user data
             const payload = {
@@ -129,7 +136,9 @@ module.exports = {
                     user: userData.user,
                     role: userData.role,
                     office: userData.office,
-                }
+                    country: userData.country,
+                },
+                country_code: userData.country.country_code,
             });
 
         } catch (error) {
@@ -149,6 +158,7 @@ module.exports = {
                 },
                 include: {
                     office: true,
+                    country: true,
                 }
             });
             // check user status
@@ -171,7 +181,11 @@ module.exports = {
                 res.status(200).json({
                     code: 200,
                     status: "success",
-                    data: req.auth_user
+                    data: {
+                        ...req.auth_user,
+                        country: user.country,
+                    },
+                    country_code: user.country.country_code,
                 });
             } else {
                 res.status(401).json({

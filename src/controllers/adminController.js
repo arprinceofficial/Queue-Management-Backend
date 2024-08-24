@@ -696,6 +696,7 @@ module.exports = {
                 include: {
                     office: true,
                     gender: true,
+                    country: true,
                 },
             });
             res.status(200).json({
@@ -713,6 +714,7 @@ module.exports = {
                     status: user.status,
                     gender: user.gender,
                     office: user.office,
+                    country: user.country,
                 }))
             });
         }
@@ -725,7 +727,7 @@ module.exports = {
         }
     },
     async officeUserCreate(req, res) {
-        const { first_name, last_name, mobile_number, email, password, gender_id, office_id, status } = req.body;
+        const { first_name, last_name, mobile_number, email, password, gender_id, office_id, country_id, status } = req.body;
         try {
             // Check if user email exists
             const userExists = await prisma.user.findFirst({ where: { email } });
@@ -780,6 +782,7 @@ module.exports = {
                 gender_id: parseInt(gender_id),
                 role_id: 1,
                 office_id: parseInt(office_id),
+                country_id: parseInt(country_id),
                 status: parseInt(status),
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -792,6 +795,7 @@ module.exports = {
                 include: {
                     office: true,
                     gender: true,
+                    country: true,
                 },
                 data: create_user,
             });
@@ -810,7 +814,8 @@ module.exports = {
                     status: user.status,
                     gender: user.gender,
                     office: user.office,
-                }
+                    country: user.country,
+                },
             });
         }
         catch (error) {
@@ -822,7 +827,7 @@ module.exports = {
         }
     },
     async officeUserUpdate(req, res) {
-        const { id, first_name, last_name, mobile_number, email, password, gender_id, office_id, status } = req.body;
+        const { id, first_name, last_name, mobile_number, email, password, gender_id, office_id, country_id, status } = req.body;
         try {
             // Check if user email exists
             const userExists = await prisma.user.findFirst({
@@ -894,6 +899,7 @@ module.exports = {
                 gender_id: parseInt(gender_id),
                 role_id: 1,
                 office_id: parseInt(office_id),
+                country_id: parseInt(country_id),
                 status: parseInt(status),
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -912,6 +918,7 @@ module.exports = {
                 include: {
                     office: true,
                     gender: true,
+                    country: true,
                 },
                 data: update_data,
             });
@@ -930,6 +937,7 @@ module.exports = {
                     status: user.status,
                     gender: user.gender,
                     office: user.office,
+                    country: user.country,
                 }
             });
         }
@@ -1663,6 +1671,130 @@ module.exports = {
                 code: 200,
                 status: true,
                 message: 'wt_video deleted successfully',
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    // Country
+    async countryList(req, res) {
+        try {
+            const country = await prisma.country.findMany({
+                where: {
+                    status: 1,
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: country,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async countryCreate(req, res) {
+        const { country_name, country_code, iso, status } = req.body;
+        try {
+            const country = await prisma.country.create({
+                data: {
+                    country_name,
+                    country_code,
+                    iso,
+                    status: parseInt(status),
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: country,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async countryUpdate(req, res) {
+        const { id, country_name, country_code, iso, status } = req.body;
+        try {
+            // check country found
+            const found_country = await prisma.country.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_country) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'country not found',
+                });
+            }
+            // update country
+            const country = await prisma.country.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    country_name,
+                    country_code,
+                    iso,
+                    status: parseInt(status),
+                    updated_at: new Date(),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: country,
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
+    async countryDelete(req, res) {
+        const { id } = req.body;
+        try {
+            // check country found
+            const found_country = await prisma.country.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!found_country) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'country not found',
+                });
+            }
+            // delete country
+            await prisma.country.delete({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            res.status(200).json({
+                code: 200,
+                status: true,
+                message: 'country deleted successfully',
             });
         } catch (error) {
             res.status(500).json({
