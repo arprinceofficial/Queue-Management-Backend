@@ -1682,22 +1682,60 @@ module.exports = {
     },
     // Country
     async countryList(req, res) {
+        const { limit, page, search, status } = req.body;
         try {
+            const whereClause = {
+                OR: [
+                    {
+                        country_name: {
+                            contains: search || '',
+                        },
+                    },
+                    {
+                        country_code: {
+                            contains: search || '',
+                        },
+                    },
+                    {
+                        iso: {
+                            contains: search || '',
+                        },
+                    },
+                ],
+            };
+            // Apply status filter only if it is not an empty string
+            if (status !== "") {
+                whereClause.status = parseInt(status || 1);
+            }
+
             const country = await prisma.country.findMany({
-                where: {
-                    status: 1,
-                },
+                where: whereClause,
+                take: parseInt(limit) || 10,
+                skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
             });
+
+            const totalRecords = await prisma.country.count({
+                where: whereClause,
+            });
+    
             res.status(200).json({
                 code: 200,
                 status: true,
+                pagination: {
+                    from: parseInt(page) || 1,
+                    to: parseInt(page) + 1 || 1,
+                    current_page: parseInt(page) || 1,
+                    last_page: Math.ceil(totalRecords / (parseInt(limit) || 10)),
+                    per_page: parseInt(limit) || 10,
+                    total: totalRecords,
+                },
                 data: country,
             });
         } catch (error) {
             res.status(500).json({
                 code: 500,
                 status: false,
-                message: error.message
+                message: error.message,
             });
         }
     },

@@ -73,7 +73,7 @@ router.post('/wt-video-create', authAdminMiddleware, adminController.WTvideoCrea
 router.post('/wt-video-update', authAdminMiddleware, adminController.WTvideoUpdate);
 router.post('/wt-video-delete', authAdminMiddleware, adminController.WTvideoDelete);
 // Country
-router.get('/country-list', authAdminMiddleware, adminController.countryList);
+router.post('/country-list', authAdminMiddleware, adminController.countryList);
 router.post('/country-create', authAdminMiddleware, adminController.countryCreate);
 router.post('/country-update', authAdminMiddleware, adminController.countryUpdate);
 router.post('/country-delete', authAdminMiddleware, adminController.countryDelete);
