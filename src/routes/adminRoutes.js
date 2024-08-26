@@ -21,7 +21,7 @@ const adminController = require('../controllers/adminController');
 // const upload = multer({ storage: storage });
 
 // Counter
-router.get('/counter-list', authAdminMiddleware, adminController.counterList);
+router.post('/counter-list', authAdminMiddleware, adminController.counterList);
 router.post('/counter-create', authAdminMiddleware, adminController.counterCreate);
 router.post('/counter-update', authAdminMiddleware, adminController.counterUpdate);
 router.post('/counter-delete', authAdminMiddleware, adminController.counterDelete);

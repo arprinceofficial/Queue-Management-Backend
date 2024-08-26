@@ -5,24 +5,89 @@ const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
+const { title, off } = require('process');
 
 module.exports = {
     // Counter
     async counterList(req, res) {
+        const { limit, page, search, status, office_id } = req.body;
         try {
+            const where_clause = {
+                OR: [
+                    {
+                        title: {
+                            contains: search || '',
+                        },
+                    },
+                    {
+                        counter_number: {
+                            contains: search || '',
+                        },
+                    },
+                ],
+            };
+            // If status is provided then filter by status
+            if (status) {
+                where_clause.status = parseInt(status);
+            }
+            // If office_id is provided then filter by office_id
+            if (office_id) {
+                where_clause.office_id = parseInt(office_id);
+            }
+            // If limit and page is not provided then fetch all records
+            if (!limit && !page) {
+                const counter = await prisma.counter.findMany({
+                    where: {
+                        office: {
+                            status: 1, // Filter counter list where office status is 1
+                        },
+                        AND: where_clause,
+                    },
+                    include: {
+                        office: true,
+                    },
+                });
+                return res.status(200).json({
+                    code: 200,
+                    status: true,
+                    total: counter.length,
+                    data: counter,
+                });
+            }
             const counter = await prisma.counter.findMany({
                 where: {
                     office: {
                         status: 1, // Filter counter list where office status is 1
                     },
+                    AND: where_clause,
                 },
                 include: {
                     office: true,
                 },
+                take: parseInt(limit) || 10,
+                skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
             });
+
+            const totalRecords = await prisma.counter.count({
+                where: {
+                    office: {
+                        status: 1, // Filter counter list where office status is 1
+                    },
+                    AND: where_clause,
+                },
+            });
+
             res.status(200).json({
                 code: 200,
                 status: true,
+                pagination: {
+                    from: parseInt(page) || 1,
+                    to: parseInt(page) + 1 || 1,
+                    current_page: parseInt(page) || 1,
+                    last_page: Math.ceil(totalRecords / (parseInt(limit) || 10)),
+                    per_page: parseInt(limit) || 10,
+                    total: totalRecords,
+                },
                 data: counter,
             });
         } catch (error) {
