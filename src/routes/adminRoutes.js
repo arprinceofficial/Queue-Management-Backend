@@ -47,7 +47,7 @@ router.post('/service-create', authAdminMiddleware, adminController.serviceCreat
 router.post('/service-update', authAdminMiddleware, adminController.serviceUpdate);
 router.post('/service-delete', authAdminMiddleware, adminController.serviceDelete);
 // Office User
-router.get('/office-user-list', authAdminMiddleware, adminController.officeUserList);
+router.post('/office-user-list', authAdminMiddleware, adminController.officeUserList);
 router.post('/office-user-create', authAdminMiddleware, adminController.officeUserCreate);
 // router.post('/office-user-update', authAdminMiddleware, upload.single('profile_image'), adminController.officeUserUpdate);
 router.post('/office-user-update', authAdminMiddleware, adminController.officeUserUpdate);
