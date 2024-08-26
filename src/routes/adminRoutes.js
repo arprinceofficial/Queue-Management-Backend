@@ -68,7 +68,7 @@ router.post('/wt-news-create', authAdminMiddleware, adminController.WTnewsCreate
 router.post('/wt-news-update', authAdminMiddleware, adminController.WTnewsUpdate);
 router.post('/wt-news-delete', authAdminMiddleware, adminController.WTnewsDelete);
 // WT Video
-router.get('/wt-video-list', authAdminMiddleware, adminController.WTvideoList);
+router.post('/wt-video-list', authAdminMiddleware, adminController.WTvideoList);
 router.post('/wt-video-create', authAdminMiddleware, adminController.WTvideoCreate);
 router.post('/wt-video-update', authAdminMiddleware, adminController.WTvideoUpdate);
 router.post('/wt-video-delete', authAdminMiddleware, adminController.WTvideoDelete);

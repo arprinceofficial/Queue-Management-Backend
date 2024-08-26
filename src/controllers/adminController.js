@@ -1776,15 +1776,59 @@ module.exports = {
     },
     // WT Video
     async WTvideoList(req, res) {
+        const { limit, page, search, status } = req.body;
         try {
+            const where_clause = {
+                OR: [
+                    {
+                        title: {
+                            contains: search || '',
+                        },
+                    },
+                    {
+                        description: {
+                            contains: search || '',
+                        },
+                    },
+                ],
+            };
+            // If status is provided then filter by status
+            if (status !== "") {
+                where_clause.status = parseInt(status || 1);
+            }
+            // If limit and page is not provided then fetch all records
+            if (!limit && !page) {
+                const wt_video = await prisma.wt_video.findMany({
+                    where: where_clause,
+                });
+                return res.status(200).json({
+                    code: 200,
+                    status: true,
+                    total: wt_video.length,
+                    data: wt_video,
+                });
+            }
             const wt_video = await prisma.wt_video.findMany({
-                where: {
-                    status: 1,
-                },
+                where: where_clause,
+                take: parseInt(limit) || 10,
+                skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
             });
+
+            const totalRecords = await prisma.wt_video.count({
+                where: where_clause,
+            });
+
             res.status(200).json({
                 code: 200,
                 status: true,
+                pagination: {
+                    from: parseInt(page) || 1,
+                    to: parseInt(page) + 1 || 1,
+                    current_page: parseInt(page) || 1,
+                    last_page: Math.ceil(totalRecords / (parseInt(limit) || 10)),
+                    per_page: parseInt(limit) || 10,
+                    total: totalRecords,
+                },
                 data: wt_video,
             });
         } catch (error) {
