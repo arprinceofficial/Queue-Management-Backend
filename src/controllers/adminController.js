@@ -1278,12 +1278,63 @@ module.exports = {
     },
     // Queue Service
     async queueServiceList(req, res) {
+        const { limit, page, search, status } = req.body;
         try {
-            const queue_service = await prisma.queue_services.findMany();
+            const where_clause = {
+                OR: [
+                    {
+                        name: {
+                            contains: search || '',
+                        },
+                    },
+                ],
+            };
+            // If status is provided then filter by status
+            if (status !== "") {
+                where_clause.status = parseInt(status || 1);
+            }
+            // If limit and page is not provided then fetch all records
+            if (!limit && !page) {
+                const queue_services = await prisma.queue_services.findMany({
+                    where: where_clause,
+                });
+                return res.status(200).json({
+                    code: 200,
+                    status: true,
+                    total: queue_services.length,
+                    data: queue_services.map((item) => ({
+                        id: item.id,
+                        name: item.name,
+                        color: item.color,
+                        slug: item.slug,
+                        route: item.route,
+                        icon: item.icon,
+                        status: item.status,
+                        // fields: item.fields
+                        fields: JSON.parse(item.fields)
+                    }))
+                });
+            }
+            const queue_services = await prisma.queue_services.findMany({
+                where: where_clause,
+                take: parseInt(limit) || 10,
+                skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
+            });
+            const totalRecords = await prisma.queue_services.count({
+                where: where_clause,
+            });
             res.status(200).json({
                 code: 200,
                 status: true,
-                data: queue_service.map((item) => ({
+                pagination: {
+                    from: parseInt(page) || 1,
+                    to: parseInt(page) + 1 || 1,
+                    current_page: parseInt(page) || 1,
+                    last_page: Math.ceil(totalRecords / (parseInt(limit) || 10)),
+                    per_page: parseInt(limit) || 10,
+                    total: totalRecords,
+                },
+                data: queue_services.map((item) => ({
                     id: item.id,
                     name: item.name,
                     color: item.color,
