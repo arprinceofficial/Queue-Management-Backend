@@ -63,7 +63,7 @@ router.post('/queue-service-create', authAdminMiddleware, adminController.queueS
 router.post('/queue-service-update', authAdminMiddleware, adminController.queueServiceUpdate);
 router.post('/queue-service-delete', authAdminMiddleware, adminController.queueServiceDelete);
 // WT News
-router.get('/wt-news-list', authAdminMiddleware, adminController.WTnewsList);
+router.post('/wt-news-list', authAdminMiddleware, adminController.WTnewsList);
 router.post('/wt-news-create', authAdminMiddleware, adminController.WTnewsCreate);
 router.post('/wt-news-update', authAdminMiddleware, adminController.WTnewsUpdate);
 router.post('/wt-news-delete', authAdminMiddleware, adminController.WTnewsDelete);

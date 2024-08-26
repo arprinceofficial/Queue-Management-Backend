@@ -1654,15 +1654,59 @@ module.exports = {
     },
     // WT News
     async WTnewsList(req, res) {
+        const { limit, page, search, status } = req.body;
         try {
+            const where_clause = {
+                OR: [
+                    {
+                        title: {
+                            contains: search || '',
+                        },
+                    },
+                    {
+                        description: {
+                            contains: search || '',
+                        },
+                    },
+                ],
+            };
+            // If status is provided then filter by status
+            if (status !== "") {
+                where_clause.status = parseInt(status || 1);
+            }
+            // If limit and page is not provided then fetch all records
+            if (!limit && !page) {
+                const wt_news = await prisma.wt_news.findMany({
+                    where: where_clause,
+                });
+                return res.status(200).json({
+                    code: 200,
+                    status: true,
+                    total: wt_news.length,
+                    data: wt_news,
+                });
+            }
             const wt_news = await prisma.wt_news.findMany({
-                where: {
-                    status: 1,
-                },
+                where: where_clause,
+                take: parseInt(limit) || 10,
+                skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
             });
+
+            const totalRecords = await prisma.wt_news.count({
+                where: where_clause,
+            });
+
             res.status(200).json({
                 code: 200,
                 status: true,
+                pagination: {
+                    from: parseInt(page) || 1,
+                    to: parseInt(page) + 1 || 1,
+                    current_page: parseInt(page) || 1,
+                    last_page: Math.ceil(totalRecords / (parseInt(limit) || 10)),
+                    per_page: parseInt(limit) || 10,
+                    total: totalRecords,
+                },
                 data: wt_news,
             });
         } catch (error) {
@@ -1990,7 +2034,7 @@ module.exports = {
             const totalRecords = await prisma.country.count({
                 where: where_clause,
             });
-    
+
             res.status(200).json({
                 code: 200,
                 status: true,
