@@ -1684,7 +1684,7 @@ module.exports = {
     async countryList(req, res) {
         const { limit, page, search, status } = req.body;
         try {
-            const whereClause = {
+            const where_clause = {
                 OR: [
                     {
                         country_name: {
@@ -1705,12 +1705,12 @@ module.exports = {
             };
             // Apply status filter only if it is not an empty string
             if (status !== "") {
-                whereClause.status = parseInt(status || 1);
+                where_clause.status = parseInt(status || 1);
             }
             // If limit and page is not provided then fetch all records
             if (!limit && !page) {
                 const country = await prisma.country.findMany({
-                    where: whereClause,
+                    where: where_clause,
                 });
                 return res.status(200).json({
                     code: 200,
@@ -1720,13 +1720,13 @@ module.exports = {
                 });
             }
             const country = await prisma.country.findMany({
-                where: whereClause,
+                where: where_clause,
                 take: parseInt(limit) || 10,
                 skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
             });
 
             const totalRecords = await prisma.country.count({
-                where: whereClause,
+                where: where_clause,
             });
     
             res.status(200).json({
