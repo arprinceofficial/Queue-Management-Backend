@@ -1703,7 +1703,7 @@ module.exports = {
                     },
                 ],
             };
-            // Apply status filter only if it is not an empty string
+            // If status is provided then filter by status
             if (status !== "") {
                 where_clause.status = parseInt(status || 1);
             }
