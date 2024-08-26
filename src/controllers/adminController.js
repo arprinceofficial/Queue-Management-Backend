@@ -240,32 +240,55 @@ module.exports = {
         }
     },
     // Office
-    async officeListAll(req, res) {
-        try {
-            const office = await prisma.office.findMany();
-            res.status(200).json({
-                code: 200,
-                status: true,
-                data: office,
-            });
-        } catch (error) {
-            res.status(500).json({
-                code: 500,
-                status: false,
-                message: error.message
-            });
-        }
-    },
     async officeList(req, res) {
+        const { limit, page, search, status } = req.body;
         try {
+            const where_clause = {
+                OR: [
+                    {
+                        office_name: {
+                            contains: search || '',
+                        },
+                    },
+                ],
+            };
+            // If status is provided then filter by status
+            if (status) {
+                where_clause.status = parseInt(status || 1);
+            }
+            // If limit and page is not provided then fetch all records
+            if (!limit && !page) {
+                const office = await prisma.office.findMany({
+                    where: where_clause,
+                });
+                return res.status(200).json({
+                    code: 200,
+                    status: true,
+                    total: office.length,
+                    data: office,
+                });
+            }
             const office = await prisma.office.findMany({
-                where: {
-                    status: 1,
-                },
+                where: where_clause,
+                take: parseInt(limit) || 10,
+                skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
             });
+            
+            const totalRecords = await prisma.office.count({
+                where: where_clause,
+            });
+
             res.status(200).json({
                 code: 200,
                 status: true,
+                pagination: {
+                    from: parseInt(page) || 1,
+                    to: parseInt(page) + 1 || 1,
+                    current_page: parseInt(page) || 1,
+                    last_page: Math.ceil(totalRecords / (parseInt(limit) || 10)),
+                    per_page: parseInt(limit) || 10,
+                    total: totalRecords,
+                },
                 data: office,
             });
         } catch (error) {
