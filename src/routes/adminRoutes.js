@@ -53,7 +53,7 @@ router.post('/office-user-create', authAdminMiddleware, adminController.officeUs
 router.post('/office-user-update', authAdminMiddleware, adminController.officeUserUpdate);
 router.post('/office-user-delete', authAdminMiddleware, adminController.officeUserDelete);
 // Office Agent
-router.get('/agent-user-list', authAdminMiddleware, adminController.agentUserList);
+router.post('/agent-user-list', authAdminMiddleware, adminController.agentUserList);
 router.post('/agent-user-create', authAdminMiddleware, adminController.agentUserCreate);
 router.post('/agent-user-update', authAdminMiddleware, adminController.agentUserUpdate);
 router.post('/agent-user-delete', authAdminMiddleware, adminController.agentUserDelete);

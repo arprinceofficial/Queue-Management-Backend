@@ -987,19 +987,90 @@ module.exports = {
     },
     // Agent User
     async agentUserList(req, res) {
+        const { limit, page, search, status, office_id } = req.body;
         try {
+            const where_clause = {
+                OR: [
+                    {
+                        first_name: {
+                            contains: search || '',
+                        },
+                    },
+                    {
+                        last_name: {
+                            contains: search || '',
+                        },
+                    },
+                    {
+                        email: {
+                            contains: search || '',
+                        },
+                    },
+                    {
+                        mobile_number: {
+                            contains: search || '',
+                        },
+                    },
+                ],
+            };
+            // If status is provided then filter by status
+            if (status !== "") {
+                where_clause.status = parseInt(status || 1);
+            }
+            // If office_id is provided then filter by office_id
+            if (office_id) {
+                where_clause.office_id = parseInt(office_id);
+            }
+            // If limit and page is not provided then fetch all records
+            if (!limit && !page) {
+                const user = await prisma.user.findMany({
+                    where: {
+                        role_id: 2,
+                        AND: where_clause,
+                    },
+                    include: {
+                        office: true,
+                        gender: true,
+                    },
+                });
+                return res.status(200).json({
+                    code: 200,
+                    status: true,
+                    total: user.length,
+                    data: user,
+                });
+            }
             const office_user = await prisma.user.findMany({
                 where: {
                     role_id: 2,
+                    AND: where_clause,
                 },
+                take: parseInt(limit) || 10,
+                skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
                 include: {
                     office: true,
                     gender: true,
                 },
             });
+
+            const totalRecords = await prisma.user.count({
+                where: {
+                    role_id: 2,
+                    AND: where_clause,
+                },
+            });
+
             res.status(200).json({
                 code: 200,
                 status: true,
+                pagination: {
+                    from: parseInt(page) || 1,
+                    to: parseInt(page) + 1 || 1,
+                    current_page: parseInt(page) || 1,
+                    last_page: Math.ceil(totalRecords / (parseInt(limit) || 10)),
+                    per_page: parseInt(limit) || 10,
+                    total: totalRecords,
+                },
                 data: office_user.map((user) => ({
                     id: user.id,
                     first_name: user.first_name,
