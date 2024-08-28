@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
                 cb(
                     {
                         code: 400,
-                        status: "error",
+                        status: false,
                         message: 'Invalid image path'
 
                     }, false);
@@ -72,7 +72,7 @@ function checkFileType(file, cb) {
         // set error for invalid file type
         cb({
             code: 400,
-            status: "error",
+            status: false,
             message: 'Only images are allowed'
         }, false);
     }
@@ -85,7 +85,7 @@ exports.singleImageUpload = async (req, res, next) => {
             if (error) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: error.message
                 });
             }
@@ -94,7 +94,7 @@ exports.singleImageUpload = async (req, res, next) => {
     } catch (error) {
         return res.status(500).json({
             code: 500,
-            status: "error",
+            status: false,
             message: error.message
         });
     }
@@ -107,7 +107,7 @@ exports.multipleImageUpload = async (req, res, next) => {
             if (error) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: error.message
                 });
             }
@@ -116,7 +116,7 @@ exports.multipleImageUpload = async (req, res, next) => {
     } catch (error) {
         return res.status(500).json({
             code: 500,
-            status: "error",
+            status: false,
             message: error.message
         });
     }

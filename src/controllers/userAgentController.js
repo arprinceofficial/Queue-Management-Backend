@@ -54,7 +54,7 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({
                     code: 404,
-                    status: "error",
+                    status: false,
                     message: 'User not found'
                 });
             }
@@ -63,7 +63,7 @@ module.exports = {
             if (!isPasswordCorrect) {
                 return res.status(401).json({
                     code: 401,
-                    status: "error",
+                    status: false,
                     message: 'Incorrect password'
                 });
             }
@@ -71,7 +71,7 @@ module.exports = {
             if (user.status !== 1) {
                 return res.status(401).json({
                     code: 401,
-                    status: "error",
+                    status: false,
                     message: 'User is inactive'
                 });
             }
@@ -79,7 +79,7 @@ module.exports = {
             if (user.office.status !== 1) {
                 return res.status(401).json({
                     code: 401,
-                    status: "error",
+                    status: false,
                     message: 'Office is inactive'
                 });
             }
@@ -142,7 +142,7 @@ module.exports = {
         } catch (error) {
             res.status(500).json({
                 code: 500,
-                status: "error",
+                status: false,
                 message: error.message
             });
         }
@@ -162,7 +162,7 @@ module.exports = {
             if (user.status !== 1) {
                 return res.status(401).json({
                     code: 401,
-                    status: "error",
+                    status: false,
                     message: 'User is inactive'
                 });
             }
@@ -170,7 +170,7 @@ module.exports = {
             if (user.office.status !== 1) {
                 return res.status(401).json({
                     code: 401,
-                    status: "error",
+                    status: false,
                     message: 'Office is inactive'
                 });
             }
@@ -183,14 +183,14 @@ module.exports = {
             } else {
                 res.status(401).json({
                     code: 401,
-                    status: "error",
+                    status: false,
                     message: 'Access denied! unauthorized user'
                 });
             }
         } catch (error) {
             res.status(500).json({
                 code: 500,
-                status: "error",
+                status: false,
                 message: error.message
             });
         }
@@ -222,14 +222,14 @@ module.exports = {
             } else {
                 res.status(401).json({
                     code: 401,
-                    status: "error",
+                    status: false,
                     message: 'Access denied! unauthorized user'
                 });
             }
         } catch (error) {
             res.status(500).json({
                 code: 500,
-                status: "error",
+                status: false,
                 message: error.message
             });
         }
@@ -242,7 +242,7 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({
                     code: 404,
-                    status: "error",
+                    status: false,
                     message: 'User not found'
                 });
             }
@@ -267,14 +267,14 @@ module.exports = {
             } else {
                 res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: `${imagepath} image is required`
                 });
             }
         } catch (error) {
             res.status(500).json({
                 code: 500,
-                status: "error",
+                status: false,
                 message: error.message
             });
         }
@@ -292,7 +292,7 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({
                     code: 404,
-                    status: "error",
+                    status: false,
                     message: 'User not found'
                 });
             }
@@ -317,7 +317,7 @@ module.exports = {
                 if (error) {
                     return res.status(500).json({
                         code: 500,
-                        status: "error",
+                        status: false,
                         message: error.message
                     });
                 } else {
@@ -332,7 +332,7 @@ module.exports = {
         } catch (error) {
             res.status(500).json({
                 code: 500,
-                status: "error",
+                status: false,
                 message: error.message
             });
         }
@@ -345,7 +345,7 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({
                     code: 404,
-                    status: "error",
+                    status: false,
                     message: 'User not found'
                 });
             }
@@ -353,7 +353,7 @@ module.exports = {
             if (user.otp_verification_code !== Number(otp)) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'Invalid OTP'
                 });
             }
@@ -373,7 +373,7 @@ module.exports = {
         } catch (error) {
             res.status(500).json({
                 code: 500,
-                status: "error",
+                status: false,
                 message: error.message
             });
         }

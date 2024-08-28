@@ -359,7 +359,7 @@ module.exports = {
         } catch (error) {
             res.status(500).json({
                 code: 500,
-                status: "error",
+                status: false,
                 message: error.message
             });
         }

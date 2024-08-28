@@ -945,7 +945,7 @@ module.exports = {
             if (userExists) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'This email already exists'
                 });
             }
@@ -954,7 +954,7 @@ module.exports = {
             if (phoneNumberExists) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'This phone number already exists'
                 });
             }
@@ -962,7 +962,7 @@ module.exports = {
             if (mobile_number.length !== 11) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'Mobile number must be 11 digits'
                 });
             }
@@ -1053,7 +1053,7 @@ module.exports = {
             if (userExists) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'This email already exists'
                 });
             }
@@ -1070,7 +1070,7 @@ module.exports = {
             if (phoneNumberExists) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'This phone number already exists'
                 });
             }
@@ -1079,7 +1079,7 @@ module.exports = {
             if (mobile_number.length !== 11) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'Mobile number must be 11 digits'
                 });
             }
@@ -1325,7 +1325,7 @@ module.exports = {
             if (userExists) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'This email already exists'
                 });
             }
@@ -1334,7 +1334,7 @@ module.exports = {
             if (phoneNumberExists) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'This phone number already exists'
                 });
             }
@@ -1342,7 +1342,7 @@ module.exports = {
             if (mobile_number.length !== 11) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'Mobile number must be 11 digits'
                 });
             }
@@ -1430,7 +1430,7 @@ module.exports = {
             if (userExists) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'This email already exists'
                 });
             }
@@ -1447,7 +1447,7 @@ module.exports = {
             if (phoneNumberExists) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'This phone number already exists'
                 });
             }
@@ -1456,7 +1456,7 @@ module.exports = {
             if (mobile_number.length !== 11) {
                 return res.status(400).json({
                     code: 400,
-                    status: "error",
+                    status: false,
                     message: 'Mobile number must be 11 digits'
                 });
             }

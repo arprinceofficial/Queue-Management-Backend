@@ -12,7 +12,7 @@ module.exports = {
                 if (err || !user || !user.user || !user.user.id) {
                     return res.status(403).json({
                         code: 403,
-                        status: "error",
+                        status: false,
                         message: 'Invalid token'
                     });
                 }
@@ -28,7 +28,7 @@ module.exports = {
                 if (!currentLoginStatus || currentLoginStatus.is_login !== user.is_login) {
                     return res.status(403).json({
                         code: 403,
-                        status: "error",
+                        status: false,
                         message: 'Invalid token'
                     });
                 }
@@ -45,7 +45,7 @@ module.exports = {
         } else {
             return res.status(401).json({
                 code: 401,
-                status: "error",
+                status: false,
                 message: 'Access denied! unauthorized user'
             });
         }
@@ -59,7 +59,7 @@ module.exports = {
                 if (err || !user || !user.user || !user.user.id) {
                     return res.status(403).json({
                         code: 403,
-                        status: "error",
+                        status: false,
                         message: 'Invalid token'
                     });
                 }
@@ -75,7 +75,7 @@ module.exports = {
                 if (!currentLoginStatus || currentLoginStatus.is_login !== user.is_login) {
                     return res.status(403).json({
                         code: 403,
-                        status: "error",
+                        status: false,
                         message: 'Invalid token'
                     });
                 }
@@ -98,7 +98,7 @@ module.exports = {
         } else {
             return res.status(401).json({
                 code: 401,
-                status: "error",
+                status: false,
                 message: 'Access denied! unauthorized user'
             });
         }
@@ -112,7 +112,7 @@ module.exports = {
                 if (err || !user || !user.user || !user.user.id) {
                     return res.status(403).json({
                         code: 403,
-                        status: "error",
+                        status: false,
                         message: 'Invalid token'
                     });
                 }
@@ -128,7 +128,7 @@ module.exports = {
                 if (!currentLoginStatus || currentLoginStatus.is_login !== user.is_login) {
                     return res.status(403).json({
                         code: 403,
-                        status: "error",
+                        status: false,
                         message: 'Invalid token'
                     });
                 }
@@ -144,7 +144,7 @@ module.exports = {
         } else {
             return res.status(401).json({
                 code: 401,
-                status: "error",
+                status: false,
                 message: 'Access denied! unauthorized user'
             });
         }
