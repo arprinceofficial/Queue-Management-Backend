@@ -107,7 +107,7 @@ module.exports = {
                     title,
                     counter_number,
                     office_id: parseInt(office_id),
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -308,7 +308,7 @@ module.exports = {
             const office = await prisma.office.create({
                 data: {
                     office_name,
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -489,7 +489,7 @@ module.exports = {
             const services = await prisma.services.create({
                 data: {
                     title,
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -609,7 +609,7 @@ module.exports = {
                 data: {
                     name,
                     short_name,
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -729,7 +729,7 @@ module.exports = {
             const gender = await prisma.gender.create({
                 data: {
                     name,
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -1005,7 +1005,7 @@ module.exports = {
                 role_id: 1,
                 office_id: parseInt(office_id),
                 country_id: parseInt(country_id),
-                status: parseInt(status),
+                status: parseInt(status || 0),
                 created_at: new Date(),
                 updated_at: new Date(),
             };
@@ -1052,6 +1052,20 @@ module.exports = {
     async officeUserUpdate(req, res) {
         const { id, first_name, last_name, mobile_number, email, password, gender_id, office_id, country_id, status } = req.body;
         try {
+            // Check if user found
+            const found_user = await prisma.user.findFirst({
+                where: {
+                    id: parseInt(id),
+                    role_id: 1,
+                },
+            });
+            if (!found_user) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'User not found',
+                });
+            }
             // Check if user email exists
             const userExists = await prisma.user.findFirst({
                 where: {
@@ -1255,6 +1269,7 @@ module.exports = {
                     include: {
                         office: true,
                         gender: true,
+                        country: true,
                     },
                 });
                 return res.status(200).json({
@@ -1270,9 +1285,11 @@ module.exports = {
                         profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/admin/profile_images/${user.profile_image}` : null,
                         gender_id: user.gender_id,
                         office_id: user.office_id,
+                        country_id: user.country_id,
                         status: user.status,
                         gender: user.gender,
                         office: user.office,
+                        country: user.country,
                     }))
                 });
             }
@@ -1286,6 +1303,7 @@ module.exports = {
                 include: {
                     office: true,
                     gender: true,
+                    country: true,
                 },
             });
 
@@ -1316,9 +1334,11 @@ module.exports = {
                     profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/admin/profile_images/${user.profile_image}` : null,
                     gender_id: user.gender_id,
                     office_id: user.office_id,
+                    country_id: user.country_id,
                     status: user.status,
                     gender: user.gender,
                     office: user.office,
+                    country: user.country,
                 }))
             });
         }
@@ -1339,6 +1359,7 @@ module.exports = {
         await body('password').notEmpty().withMessage('Password is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters').run(req);
         await body('gender_id').notEmpty().withMessage('Gender is required').run(req);
         await body('office_id').notEmpty().withMessage('Office is required').run(req);
+        await body('country_id').notEmpty().withMessage('Country is required').run(req);
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -1358,7 +1379,7 @@ module.exports = {
             });
         }
 
-        const { first_name, last_name, mobile_number, email, password, gender_id, office_id, status } = req.body;
+        const { first_name, last_name, mobile_number, email, password, gender_id, office_id, country_id, status } = req.body;
         try {
             // Check if user email exists
             const userExists = await prisma.user.findFirst({ where: { email } });
@@ -1411,7 +1432,8 @@ module.exports = {
                 gender_id: parseInt(gender_id),
                 role_id: 2,
                 office_id: parseInt(office_id),
-                status: parseInt(status),
+                country_id: parseInt(country_id),
+                status: parseInt(status || 0),
                 created_at: new Date(),
                 updated_at: new Date(),
             };
@@ -1423,6 +1445,7 @@ module.exports = {
                 include: {
                     office: true,
                     gender: true,
+                    country: true,
                 },
                 data: create_user,
             });
@@ -1439,9 +1462,11 @@ module.exports = {
                     profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/admin/profile_images/${user.profile_image}` : null,
                     gender_id: user.gender_id,
                     office_id: user.office_id,
+                    country_id: user.country_id,
                     status: user.status,
                     gender: user.gender,
                     office: user.office,
+                    country: user.country,
                 }
             });
         }
@@ -1461,6 +1486,7 @@ module.exports = {
         // await body('password').notEmpty().withMessage('Password is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters').run(req);
         await body('gender_id').notEmpty().withMessage('Gender is required').run(req);
         await body('office_id').notEmpty().withMessage('Office is required').run(req);
+        await body('country_id').notEmpty().withMessage('Country is required').run(req);
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -1480,8 +1506,22 @@ module.exports = {
             });
         }
 
-        const { id, first_name, last_name, mobile_number, email, password, gender_id, office_id, status } = req.body;
+        const { id, first_name, last_name, mobile_number, email, password, gender_id, office_id, country_id, status } = req.body;
         try {
+            // Check if user found
+            const found_user = await prisma.user.findFirst({
+                where: {
+                    id: parseInt(id),
+                    role_id: 2,
+                },
+            });
+            if (!found_user) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'User not found',
+                });
+            }
             // Check if user email exists
             const userExists = await prisma.user.findFirst({
                 where: {
@@ -1549,6 +1589,7 @@ module.exports = {
                 gender_id: parseInt(gender_id),
                 role_id: 2,
                 office_id: parseInt(office_id),
+                country_id: parseInt(country_id),
                 status: parseInt(status),
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -1567,6 +1608,7 @@ module.exports = {
                 include: {
                     office: true,
                     gender: true,
+                    country: true,
                 },
                 data: update_data,
             });
@@ -1583,9 +1625,11 @@ module.exports = {
                     profile_image: user.profile_image ? `${req.protocol + '://' + req.get('host')}/admin/profile_images/${user.profile_image}` : null,
                     gender_id: user.gender_id,
                     office_id: user.office_id,
+                    country_id: user.country_id,
                     status: user.status,
                     gender: user.gender,
                     office: user.office,
+                    country: user.country,
                 }
             });
         }
@@ -1722,7 +1766,7 @@ module.exports = {
                     slug,
                     route,
                     icon,
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     fields: JSON.stringify(fields),
                     created_at: new Date(),
                     updated_at: new Date(),
@@ -1916,7 +1960,7 @@ module.exports = {
                 data: {
                     title,
                     description,
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -2085,7 +2129,7 @@ module.exports = {
                     title,
                     link,
                     description,
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -2260,7 +2304,7 @@ module.exports = {
                     country_name,
                     country_code,
                     iso,
-                    status: parseInt(status),
+                    status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
