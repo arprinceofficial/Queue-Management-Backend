@@ -1,11 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
-// return res.status(200).json({ data:  });
 const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
-const { title, off } = require('process');
+const { body, validationResult } = require('express-validator');
+// return res.status(200).json({ data:  });
+// await body('first_name').notEmpty().withMessage('First name is required').isString().withMessage('First name must be a string').isLength({ min: 3, max: 255 }).withMessage('First name must be between 3 and 255 characters').run(req);
 
 module.exports = {
     // Counter
@@ -203,8 +204,8 @@ module.exports = {
                         id: check_counter.user_id,
                     },
                 });
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
                     message: 'Counter is being used, cannot delete counter',
                     error: {
@@ -390,8 +391,8 @@ module.exports = {
                 },
             });
             if (check_office) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
                     message: 'Office is being used, cannot delete office',
                     error: {
@@ -953,8 +954,8 @@ module.exports = {
             // Check if user email exists
             const userExists = await prisma.user.findFirst({ where: { email } });
             if (userExists) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
                     message: 'This email already exists'
                 });
@@ -962,16 +963,16 @@ module.exports = {
             // Check if user phone number exists
             const phoneNumberExists = await prisma.user.findFirst({ where: { mobile_number } });
             if (phoneNumberExists) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
                     message: 'This phone number already exists'
                 });
             }
             // Check mobile number length
             if (mobile_number.length !== 11) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
                     message: 'Mobile number must be 11 digits'
                 });
@@ -1062,8 +1063,8 @@ module.exports = {
                 }
             });
             if (userExists) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
                     message: 'This email already exists'
                 });
@@ -1079,8 +1080,8 @@ module.exports = {
                 }
             });
             if (phoneNumberExists) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
                     message: 'This phone number already exists'
                 });
@@ -1088,8 +1089,8 @@ module.exports = {
 
             // Check mobile number length
             if (mobile_number.length !== 11) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
                     message: 'Mobile number must be 11 digits'
                 });
@@ -1330,32 +1331,57 @@ module.exports = {
         }
     },
     async agentUserCreate(req, res) {
+        // Validation rules
+        await body('first_name').notEmpty().withMessage('First name is required').run(req);
+        await body('last_name').notEmpty().withMessage('Last name is required').run(req);
+        await body('mobile_number').notEmpty().withMessage('Mobile number is required').isLength({ min: 11, max: 11 }).withMessage('Mobile number must be 11 digits').run(req);
+        await body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email format').run(req);
+        await body('password').notEmpty().withMessage('Password is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters').run(req);
+        await body('gender_id').notEmpty().withMessage('Gender is required').run(req);
+        await body('office_id').notEmpty().withMessage('Office is required').run(req);
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { first_name, last_name, mobile_number, email, password, gender_id, office_id, status } = req.body;
         try {
             // Check if user email exists
             const userExists = await prisma.user.findFirst({ where: { email } });
             if (userExists) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
-                    message: 'This email already exists'
+                    message: 'This email already exists',
+                    error: {
+                        "email": ["This email already exists"]
+                    }
                 });
             }
             // Check if user phone number exists
             const phoneNumberExists = await prisma.user.findFirst({ where: { mobile_number } });
             if (phoneNumberExists) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
-                    message: 'This phone number already exists'
-                });
-            }
-            // Check mobile number length
-            if (mobile_number.length !== 11) {
-                return res.status(400).json({
-                    code: 400,
-                    status: false,
-                    message: 'Mobile number must be 11 digits'
+                    message: 'This phone number already exists',
+                    error: {
+                        "mobile_number": ["This phone number already exists"]
+                    }
                 });
             }
 
@@ -1428,6 +1454,32 @@ module.exports = {
         }
     },
     async agentUserUpdate(req, res) {
+        await body('first_name').notEmpty().withMessage('First name is required').run(req);
+        await body('last_name').notEmpty().withMessage('Last name is required').run(req);
+        await body('mobile_number').notEmpty().withMessage('Mobile number is required').isLength({ min: 11, max: 11 }).withMessage('Mobile number must be 11 digits').run(req);
+        await body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email format').run(req);
+        // await body('password').notEmpty().withMessage('Password is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters').run(req);
+        await body('gender_id').notEmpty().withMessage('Gender is required').run(req);
+        await body('office_id').notEmpty().withMessage('Office is required').run(req);
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { id, first_name, last_name, mobile_number, email, password, gender_id, office_id, status } = req.body;
         try {
             // Check if user email exists
@@ -1441,10 +1493,13 @@ module.exports = {
                 }
             });
             if (userExists) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
-                    message: 'This email already exists'
+                    message: 'This email already exists',
+                    error: {
+                        "email": ["This email already exists"]
+                    }
                 });
             }
             // Check if user phone number exists
@@ -1458,19 +1513,13 @@ module.exports = {
                 }
             });
             if (phoneNumberExists) {
-                return res.status(400).json({
-                    code: 400,
+                return res.status(409).json({
+                    code: 409,
                     status: false,
-                    message: 'This phone number already exists'
-                });
-            }
-
-            // Check mobile number length
-            if (mobile_number.length !== 11) {
-                return res.status(400).json({
-                    code: 400,
-                    status: false,
-                    message: 'Mobile number must be 11 digits'
+                    message: 'This phone number already exists',
+                    error: {
+                        "mobile_number": ["This phone number already exists"]
+                    }
                 });
             }
 
