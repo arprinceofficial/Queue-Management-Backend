@@ -263,6 +263,7 @@ async function main() {
             updated_at: new Date(),
             role_id: 1,
             office_id: dhakaOffice.id,
+            country_id: 118,
         },
     });
     await prisma.user.create({
@@ -278,6 +279,7 @@ async function main() {
             updated_at: new Date(),
             role_id: 2,
             office_id: dhakaOffice.id,
+            country_id: 118,
         },
     });
     await prisma.user.create({
@@ -293,6 +295,7 @@ async function main() {
             updated_at: new Date(),
             role_id: 2,
             office_id: dhakaOffice.id,
+            country_id: 118,
         },
     });
     await prisma.user.create({
@@ -308,6 +311,7 @@ async function main() {
             updated_at: new Date(),
             role_id: 1,
             office_id: chittagongOffice.id,
+            country_id: 118,
         },
     });
     await prisma.user.create({
@@ -323,6 +327,7 @@ async function main() {
             updated_at: new Date(),
             role_id: 2,
             office_id: chittagongOffice.id,
+            country_id: 118,
         },
     });
     await prisma.user.create({
@@ -338,6 +343,7 @@ async function main() {
             updated_at: new Date(),
             role_id: 2,
             office_id: chittagongOffice.id,
+            country_id: 118,
         },
     });
     await prisma.user.create({
@@ -353,6 +359,7 @@ async function main() {
             updated_at: new Date(),
             role_id: 3,
             office_id: 0,
+            country_id: 118,
         },
     });
     // create wt_news multiple seed
