@@ -117,6 +117,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Counter created successfully',
                 data: counter,
             });
         } catch (error) {
@@ -162,6 +163,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Counter updated successfully',
                 data: counter,
             });
         } catch (error) {
@@ -273,7 +275,7 @@ module.exports = {
                 take: parseInt(limit) || 10,
                 skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
             });
-            
+
             const totalRecords = await prisma.office.count({
                 where: where_clause,
             });
@@ -313,6 +315,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Office created successfully',
                 data: office,
             });
         } catch (error) {
@@ -353,6 +356,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Office updated successfully',
                 data: office,
             });
         } catch (error) {
@@ -452,7 +456,7 @@ module.exports = {
                 take: parseInt(limit) || 10,
                 skip: parseInt((page || 1) - 1) * parseInt(limit || 10),
             });
-            
+
             const totalRecords = await prisma.services.count({
                 where: where_clause,
             });
@@ -492,6 +496,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Service created successfully',
                 data: services,
             });
         } catch (error) {
@@ -532,6 +537,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Service updated successfully',
                 data: service,
             });
         } catch (error) {
@@ -610,6 +616,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Priority created successfully',
                 data: priority,
             });
         } catch (error) {
@@ -651,6 +658,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Priority updated successfully',
                 data: priority,
             });
         } catch (error) {
@@ -728,6 +736,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Gender created successfully',
                 data: gender,
             });
         } catch (error) {
@@ -768,6 +777,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Gender created successfully',
                 data: gender,
             });
         } catch (error) {
@@ -803,7 +813,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'gender deleted successfully',
+                message: 'Gender deleted successfully',
             });
         } catch (error) {
             res.status(500).json({
@@ -1013,6 +1023,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'User created successfully',
                 data: {
                     id: user.id,
                     first_name: user.first_name,
@@ -1136,6 +1147,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'User updated successfully',
                 data: {
                     id: user.id,
                     first_name: user.first_name,
@@ -1391,6 +1403,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'User created successfully',
                 data: {
                     id: user.id,
                     first_name: user.first_name,
@@ -1511,6 +1524,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'User updated successfully',
                 data: {
                     id: user.id,
                     first_name: user.first_name,
@@ -1668,6 +1682,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Queue Service created successfully',
                 data: {
                     id: queue_service.id,
                     name: queue_service.name,
@@ -1723,6 +1738,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Queue Service updated successfully',
                 data: {
                     id: queue_service.id,
                     name: queue_service.name,
@@ -1859,6 +1875,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'WT News created successfully',
                 data: wt_news,
             });
         } catch (error) {
@@ -1900,6 +1917,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'WT news updated successfully',
                 data: wt_news,
             });
         } catch (error) {
@@ -1935,7 +1953,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'wt_news deleted successfully',
+                message: 'WT news deleted successfully',
             });
         } catch (error) {
             res.status(500).json({
@@ -2026,6 +2044,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'WT video created successfully',
                 data: wt_video,
             });
         } catch (error) {
@@ -2068,6 +2087,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'WT video updated successfully',
                 data: wt_video,
             });
         } catch (error) {
@@ -2103,7 +2123,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'wt_video deleted successfully',
+                message: 'WT video deleted successfully',
             });
         } catch (error) {
             res.status(500).json({
@@ -2199,6 +2219,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Country created successfully',
                 data: country,
             });
         } catch (error) {
@@ -2241,6 +2262,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
+                message: 'Country updated successfully',
                 data: country,
             });
         } catch (error) {
