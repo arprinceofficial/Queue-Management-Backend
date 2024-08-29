@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
 const { body, validationResult } = require('express-validator');
+const image_path = '../../../assets/images/profile_images';
 
 module.exports = {
     async officeUserList(req, res) {
@@ -176,7 +177,7 @@ module.exports = {
                 const randomBytes = crypto.randomBytes(8).toString('hex');
                 const extension = matches[1].split('/')[1];
                 newFilename = `profile_image_${uniqueSuffix}_${randomBytes}.${extension}`;
-                const filePath = path.join(__dirname, '../../assets/images/profile_images', newFilename);
+                const filePath = path.join(__dirname, image_path, newFilename);
                 fs.writeFileSync(filePath, imageBuffer);
             }
             const create_user = {
@@ -307,7 +308,7 @@ module.exports = {
                 const randomBytes = crypto.randomBytes(8).toString('hex');
                 const extension = matches[1].split('/')[1];
                 newFilename = `profile_image_${uniqueSuffix}_${randomBytes}.${extension}`;
-                const filePath = path.join(__dirname, '../../assets/images/profile_images', newFilename);
+                const filePath = path.join(__dirname, image_path, newFilename);
                 fs.writeFileSync(filePath, imageBuffer);
             }
 
