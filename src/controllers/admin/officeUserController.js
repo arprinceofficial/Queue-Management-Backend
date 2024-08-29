@@ -3,11 +3,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
-const crypto = require('crypto');
-const path = require('path');
-const fs = require('fs');
+const { uploadBase64Image } = require('../../utils/custom-filter');
 const { body, validationResult } = require('express-validator');
-const image_path = '../../../assets/images/profile_images';
 
 module.exports = {
     async officeUserList(req, res) {
@@ -186,19 +183,9 @@ module.exports = {
             const salt = genSaltSync(10);
             const hashedPassword = hashSync(password, salt);
 
-            // Base64 image upload conversion
-            const base64Image = req.body.profile_image;
-            let newFilename = null;
-            const matches = base64Image?.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-            if (matches && matches.length === 3) {
-                const imageBuffer = Buffer.from(matches[2], 'base64');
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-                const randomBytes = crypto.randomBytes(8).toString('hex');
-                const extension = matches[1].split('/')[1];
-                newFilename = `profile_image_${uniqueSuffix}_${randomBytes}.${extension}`;
-                const filePath = path.join(__dirname, image_path, newFilename);
-                fs.writeFileSync(filePath, imageBuffer);
-            }
+            // Handle Base64 Image Upload
+            const image_file_name = uploadBase64Image(req.body.profile_image, 'profile');
+
             const create_user = {
                 first_name,
                 last_name,
@@ -213,8 +200,8 @@ module.exports = {
                 created_at: new Date(),
                 updated_at: new Date(),
             };
-            if (newFilename) {
-                create_user.profile_image = newFilename;
+            if (image_file_name) {
+                create_user.profile_image = image_file_name;
             }
 
             const user = await prisma.user.create({
@@ -335,19 +322,8 @@ module.exports = {
             // Hash the password
             const salt = genSaltSync(10);
             const hashedPassword = hashSync(password, salt);
-            // Base64 image upload conversion
-            const base64Image = req.body.profile_image;
-            let newFilename = null;
-            const matches = base64Image?.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-            if (matches && matches.length === 3) {
-                const imageBuffer = Buffer.from(matches[2], 'base64');
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-                const randomBytes = crypto.randomBytes(8).toString('hex');
-                const extension = matches[1].split('/')[1];
-                newFilename = `profile_image_${uniqueSuffix}_${randomBytes}.${extension}`;
-                const filePath = path.join(__dirname, image_path, newFilename);
-                fs.writeFileSync(filePath, imageBuffer);
-            }
+            // Handle Base64 Image Upload
+            const image_file_name = uploadBase64Image(req.body.profile_image, 'profile');
 
             // if password is empty or profile image is empty, do not update
             const update_data = {
@@ -366,8 +342,8 @@ module.exports = {
             if (password && password.trim() !== "") {
                 update_data.password = hashedPassword;
             }
-            if (newFilename) {
-                update_data.profile_image = newFilename;
+            if (image_file_name) {
+                update_data.profile_image = image_file_name;
             }
 
             const user = await prisma.user.update({
