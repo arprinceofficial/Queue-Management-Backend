@@ -50,7 +50,7 @@ module.exports = {
             const counter = await prisma.counter.findMany({
                 where: {
                     office: {
-                        status: 1, // Filter counter list where office status is 1
+                        status: 1, // Filter counter where office status is 1
                     },
                     AND: where_clause,
                 },
