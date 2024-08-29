@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
 
 module.exports = {
     async officeList(req, res) {
@@ -62,6 +63,25 @@ module.exports = {
         }
     },
     async officeCreate(req, res) {
+        await body('office_name').notEmpty().withMessage('First name is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { office_name, status } = req.body;
         try {
             const office = await prisma.office.create({
@@ -87,6 +107,25 @@ module.exports = {
         }
     },
     async officeUpdate(req, res) {
+        await body('office_name').notEmpty().withMessage('First name is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+        
         const { id, office_name, status } = req.body;
         try {
             // check office found
