@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
 
 module.exports = {
     async queueServiceList(req, res) {
@@ -81,6 +82,36 @@ module.exports = {
         }
     },
     async queueServiceCreate(req, res) {
+        await body('name').notEmpty().withMessage('Name is required').run(req);
+        await body('color').notEmpty().withMessage('Color is required').run(req);
+        await body('slug').notEmpty().withMessage('Slug is required').run(req);
+        await body('route').notEmpty().withMessage('Route is required').run(req);
+        await body('icon').notEmpty().withMessage('icon is required').run(req);
+        await body('fields').notEmpty().withMessage('Fields is required').custom(value => {
+            if (!Array.isArray(value) || value.length === 0) {
+                throw new Error('Fields is required');
+            }
+            return true;
+        }).run(req);
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { name, color, slug, route, icon, status, fields } = req.body;
         try {
             const queue_service = await prisma.queue_services.create({
@@ -121,6 +152,36 @@ module.exports = {
         }
     },
     async queueServiceUpdate(req, res) {
+        await body('name').notEmpty().withMessage('Name is required').run(req);
+        await body('color').notEmpty().withMessage('Color is required').run(req);
+        await body('slug').notEmpty().withMessage('Slug is required').run(req);
+        await body('route').notEmpty().withMessage('Route is required').run(req);
+        await body('icon').notEmpty().withMessage('icon is required').run(req);
+        await body('fields').notEmpty().withMessage('Fields is required').custom(value => {
+            if (!Array.isArray(value) || value.length === 0) {
+                throw new Error('Fields is required');
+            }
+            return true;
+        }).run(req);
+        
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+        
         const { id, name, color, slug, route, icon, status, fields } = req.body;
         try {
             // check queue service found
