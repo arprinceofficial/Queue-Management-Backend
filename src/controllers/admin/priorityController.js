@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
 
 module.exports = {
     async priorityList(req, res) {
@@ -20,6 +21,26 @@ module.exports = {
         }
     },
     async priorityCreate(req, res) {
+        await body('name').notEmpty().withMessage('Name is required').run(req);
+        await body('short_name').notEmpty().withMessage('Short Name is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { name, short_name, status } = req.body;
         try {
             const priority = await prisma.priority.create({
@@ -46,6 +67,26 @@ module.exports = {
         }
     },
     async priorityUpdate(req, res) {
+        await body('name').notEmpty().withMessage('Name is required').run(req);
+        await body('short_name').notEmpty().withMessage('Short Name is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { id, name, short_name, status } = req.body;
         try {
             // check priority found
