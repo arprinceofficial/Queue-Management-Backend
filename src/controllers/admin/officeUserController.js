@@ -411,7 +411,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'User deleted successfully',
+                message: 'User Deleted Successfully',
             });
         } catch (error) {
             res.status(500).json({

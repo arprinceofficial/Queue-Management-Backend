@@ -166,7 +166,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'country deleted successfully',
+                message: 'country Deleted Successfully',
             });
         } catch (error) {
             res.status(500).json({

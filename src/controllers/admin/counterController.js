@@ -258,7 +258,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Counter deleted successfully',
+                message: 'Counter Deleted Successfully',
                 data: {
                     id: found_counter.id,
                     title: found_counter.title,

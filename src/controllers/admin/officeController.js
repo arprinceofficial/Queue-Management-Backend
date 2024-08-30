@@ -211,7 +211,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Office deleted successfully',
+                message: 'Office Deleted Successfully',
             });
         } catch (error) {
             res.status(500).json({

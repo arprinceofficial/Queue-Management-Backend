@@ -153,7 +153,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Priority deleted successfully',
+                message: 'Priority Deleted Successfully',
             });
         } catch (error) {
             res.status(500).json({

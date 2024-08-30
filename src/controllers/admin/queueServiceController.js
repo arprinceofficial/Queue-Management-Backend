@@ -201,7 +201,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Queue Service deleted successfully',
+                message: 'Queue Service Deleted Successfully',
             });
         }
         catch (error) {

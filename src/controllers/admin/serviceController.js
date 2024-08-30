@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
 
 module.exports = {
     async serviceList(req, res) {
@@ -62,6 +63,25 @@ module.exports = {
         }
     },
     async serviceCreate(req, res) {
+        await body('title').notEmpty().withMessage('Title is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { title, status } = req.body;
         try {
             const services = await prisma.services.create({
@@ -87,6 +107,25 @@ module.exports = {
         }
     },
     async serviceUpdate(req, res) {
+        await body('title').notEmpty().withMessage('Title is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { id, title, status } = req.body;
         try {
             // check service found
@@ -152,7 +191,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Service deleted successfully',
+                message: 'Service Deleted Successfully',
             });
         } catch (error) {
             res.status(500).json({

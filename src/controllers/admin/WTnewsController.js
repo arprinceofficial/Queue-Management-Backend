@@ -159,7 +159,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'WT news deleted successfully',
+                message: 'WT news Deleted Successfully',
             });
         } catch (error) {
             res.status(500).json({
