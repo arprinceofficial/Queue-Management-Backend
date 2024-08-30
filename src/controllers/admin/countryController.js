@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
 
 module.exports = {
     async countryList(req, res) {
@@ -72,6 +73,27 @@ module.exports = {
         }
     },
     async countryCreate(req, res) {
+        await body('country_name').notEmpty().withMessage('Country Name is required').run(req);
+        await body('country_code').notEmpty().withMessage('Country Code is required').run(req);
+        await body('iso').notEmpty().withMessage('iso is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { country_name, country_code, iso, status } = req.body;
         try {
             const country = await prisma.country.create({
@@ -99,6 +121,27 @@ module.exports = {
         }
     },
     async countryUpdate(req, res) {
+        await body('country_name').notEmpty().withMessage('Country Name is required').run(req);
+        await body('country_code').notEmpty().withMessage('Country Code is required').run(req);
+        await body('iso').notEmpty().withMessage('iso is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { id, country_name, country_code, iso, status } = req.body;
         try {
             // check country found
@@ -166,7 +209,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'country Deleted Successfully',
+                message: 'Country Deleted Successfully',
             });
         } catch (error) {
             res.status(500).json({
