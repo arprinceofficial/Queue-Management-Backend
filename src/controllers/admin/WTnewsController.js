@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
 
 module.exports = {
     async WTnewsList(req, res) {
@@ -67,6 +68,25 @@ module.exports = {
         }
     },
     async WTnewsCreate(req, res) {
+        await body('title').notEmpty().withMessage('Title is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { title, description, status } = req.body;
         try {
             const wt_news = await prisma.wt_news.create({
@@ -93,6 +113,25 @@ module.exports = {
         }
     },
     async WTnewsUpdate(req, res) {
+        await body('title').notEmpty().withMessage('Title is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+        
         const { id, title, description, status } = req.body;
         try {
             // check wt_news found
