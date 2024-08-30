@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
 
 module.exports = {
     async counterList(req, res) {
@@ -92,6 +93,26 @@ module.exports = {
         }
     },
     async counterCreate(req, res) {
+        await body('office_id').notEmpty().withMessage('office_id is required').run(req);
+        await body('counter_number').notEmpty().withMessage('counter_number is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { title, counter_number, office_id, status } = req.body;
         try {
             const counter = await prisma.counter.create({
@@ -122,6 +143,26 @@ module.exports = {
         }
     },
     async counterUpdate(req, res) {
+        await body('office_id').notEmpty().withMessage('office_id is required').run(req);
+        await body('counter_number').notEmpty().withMessage('counter_number is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+        
         const { id, title, counter_number, office_id, status } = req.body;
         try {
             // check counter found
