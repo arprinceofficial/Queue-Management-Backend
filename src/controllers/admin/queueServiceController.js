@@ -81,6 +81,44 @@ module.exports = {
             });
         }
     },
+    async queueServiceListById(req, res) {
+        const { id } = req.params;
+        try {
+            const queue_service = await prisma.queue_services.findFirst({
+                where: {
+                    id: parseInt(id),
+                },
+            });
+            if (!queue_service) {
+                return res.status(404).json({
+                    code: 404,
+                    status: false,
+                    message: 'Queue Service not found',
+                });
+            }
+            res.status(200).json({
+                code: 200,
+                status: true,
+                data: {
+                    id: queue_service.id,
+                    name: queue_service.name,
+                    color: queue_service.color,
+                    slug: queue_service.slug,
+                    route: queue_service.route,
+                    icon: queue_service.icon,
+                    status: queue_service.status,
+                    fields: JSON.parse(queue_service.fields)
+                }
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message
+            });
+        }
+    },
     async queueServiceCreate(req, res) {
         await body('name').notEmpty().withMessage('Name is required').run(req);
         await body('color').notEmpty().withMessage('Color is required').run(req);
@@ -181,7 +219,7 @@ module.exports = {
                 error: errorObject
             });
         }
-        
+
         const { id, name, color, slug, route, icon, status, fields } = req.body;
         try {
             // check queue service found

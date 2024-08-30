@@ -48,6 +48,7 @@ module.exports = {
     agentUserDelete: agentUser.agentUserDelete,
     // Queue Service
     queueServiceList: queueService.queueServiceList,
+    queueServiceListById: queueService.queueServiceListById,
     queueServiceCreate: queueService.queueServiceCreate,
     queueServiceUpdate: queueService.queueServiceUpdate,
     queueServiceDelete: queueService.queueServiceDelete,

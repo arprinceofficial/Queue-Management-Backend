@@ -58,6 +58,7 @@ router.post('/agent-user-update', authAdminMiddleware, adminController.agentUser
 router.post('/agent-user-delete', authAdminMiddleware, adminController.agentUserDelete);
 // Queue Service
 router.post('/queue-service-list', authAdminMiddleware, adminController.queueServiceList);
+router.get('/queue-service/:id', authAdminMiddleware, adminController.queueServiceListById);
 router.post('/queue-service-create', authAdminMiddleware, adminController.queueServiceCreate);
 router.post('/queue-service-update', authAdminMiddleware, adminController.queueServiceUpdate);
 router.post('/queue-service-delete', authAdminMiddleware, adminController.queueServiceDelete);
