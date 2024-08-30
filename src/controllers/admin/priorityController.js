@@ -55,7 +55,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Priority created successfully',
+                message: 'Priority Created Successfully',
                 data: priority,
             });
         } catch (error) {
@@ -117,7 +117,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Priority updated successfully',
+                message: 'Priority Updated Successfully',
                 data: priority,
             });
         } catch (error) {

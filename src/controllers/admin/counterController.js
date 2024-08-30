@@ -131,7 +131,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Counter created successfully',
+                message: 'Counter Created Successfully',
                 data: counter,
             });
         } catch (error) {
@@ -197,7 +197,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Counter updated successfully',
+                message: 'Counter Updated Successfully',
                 data: counter,
             });
         } catch (error) {

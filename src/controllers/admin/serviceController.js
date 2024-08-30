@@ -75,7 +75,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Service created successfully',
+                message: 'Service Created Successfully',
                 data: services,
             });
         } catch (error) {
@@ -116,7 +116,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Service updated successfully',
+                message: 'Service Updated Successfully',
                 data: service,
             });
         } catch (error) {

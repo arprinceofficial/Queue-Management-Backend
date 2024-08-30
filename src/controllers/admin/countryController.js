@@ -87,7 +87,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Country created successfully',
+                message: 'Country Created Successfully',
                 data: country,
             });
         } catch (error) {
@@ -130,7 +130,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Country updated successfully',
+                message: 'Country Updated Successfully',
                 data: country,
             });
         } catch (error) {

@@ -82,7 +82,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'WT video created successfully',
+                message: 'WT video Created Successfully',
                 data: wt_video,
             });
         } catch (error) {
@@ -125,7 +125,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'WT video updated successfully',
+                message: 'WT video Updated Successfully',
                 data: wt_video,
             });
         } catch (error) {

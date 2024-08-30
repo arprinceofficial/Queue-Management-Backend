@@ -81,7 +81,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'WT News created successfully',
+                message: 'WT News Created Successfully',
                 data: wt_news,
             });
         } catch (error) {
@@ -123,7 +123,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'WT news updated successfully',
+                message: 'WT news Updated Successfully',
                 data: wt_news,
             });
         } catch (error) {

@@ -95,7 +95,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Office created successfully',
+                message: 'Office Created Successfully',
                 data: office,
             });
         } catch (error) {
@@ -125,7 +125,7 @@ module.exports = {
                 error: errorObject
             });
         }
-        
+
         const { id, office_name, status } = req.body;
         try {
             // check office found
@@ -155,7 +155,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Office updated successfully',
+                message: 'Office Updated Successfully',
                 data: office,
             });
         } catch (error) {

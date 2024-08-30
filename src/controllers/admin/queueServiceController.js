@@ -99,7 +99,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Queue Service created successfully',
+                message: 'Queue Service Created Successfully',
                 data: {
                     id: queue_service.id,
                     name: queue_service.name,
@@ -155,7 +155,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Queue Service updated successfully',
+                message: 'Queue Service Updated Successfully',
                 data: {
                     id: queue_service.id,
                     name: queue_service.name,

@@ -215,7 +215,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'User created successfully',
+                message: 'User Created Successfully',
                 data: {
                     id: user.id,
                     first_name: user.first_name,
@@ -360,7 +360,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'User updated successfully',
+                message: 'User Updated Successfully',
                 data: {
                     id: user.id,
                     first_name: user.first_name,

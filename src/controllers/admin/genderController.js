@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { body, validationResult } = require('express-validator');
 
 module.exports = {
     async genderList(req, res) {
@@ -20,7 +21,26 @@ module.exports = {
         }
     },
     async genderCreate(req, res) {
-        const { name, short_name, status } = req.body;
+        await body('name').notEmpty().withMessage('name is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
+        const { name, status } = req.body;
         try {
             const gender = await prisma.gender.create({
                 data: {
@@ -45,6 +65,25 @@ module.exports = {
         }
     },
     async genderUpdate(req, res) {
+        await body('name').notEmpty().withMessage('name is required').run(req);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorObject = errors.array().reduce((acc, err) => {
+                if (!acc[err.path]) {
+                    acc[err.path] = [];
+                }
+                acc[err.path].push(err.msg);
+                return acc;
+            }, {});
+
+            return res.status(403).json({
+                code: 403,
+                status: false,
+                message: "Validation Error",
+                error: errorObject
+            });
+        }
+
         const { id, name, status } = req.body;
         try {
             // check gender found
@@ -74,7 +113,7 @@ module.exports = {
             res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Gender created successfully',
+                message: 'Gender Update Successfully',
                 data: gender,
             });
         } catch (error) {
