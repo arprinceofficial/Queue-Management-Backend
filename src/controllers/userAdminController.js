@@ -7,6 +7,7 @@ const transporter = require('./emailController');
 
 module.exports = {
     async login(req, res) {
+        const role = await prisma.role.findFirst({ where: { name: 'Admin' } });
         const { loginInput, password } = req.body;
         try {
             let user;
@@ -22,7 +23,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { email: loginInput, role_id: 3 },
+                            { email: loginInput, role_id: role.id },
                         ],
                     },
                 });
@@ -33,7 +34,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { mobile_number: loginInput, role_id: 3 },
+                            { mobile_number: loginInput, role_id: role.id },
                         ],
                     },
                 });
@@ -44,7 +45,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { id: parseInt(loginInput), role_id: 3 },
+                            { id: loginInput, role_id: role.id },
                         ],
                     },
                 });
@@ -166,10 +167,11 @@ module.exports = {
         }
     },
     async uploadUserImage(req, res) {
+        const role = await prisma.role.findFirst({ where: { name: 'Admin' } });
         const id = req.auth_user.user.id;
         const { imagepath } = req.params;
         try {
-            const user = await prisma.user.findFirst({ where: { id: parseInt(id), role_id: 3 } });
+            const user = await prisma.user.findFirst({ where: { id: id, role_id: role.id } });
             if (!user) {
                 return res.status(404).json({
                     code: 404,
@@ -179,7 +181,7 @@ module.exports = {
             }
             if (req.file) {
                 const updatedUser = await prisma.user.update({
-                    where: { id: parseInt(id) },
+                    where: { id: id },
                     data: {
                         [imagepath + '_image']: req.file.filename,
                         updated_at: new Date(),
@@ -211,13 +213,14 @@ module.exports = {
         }
     },
     async otpRequestEmail(req, res) {
+        const role = await prisma.role.findFirst({ where: { name: 'Admin' } });
         const { email } = req.body;
         try {
             // Check if user email exists
             const user = await prisma.user.findFirst({
                 where: {
                     email,
-                    role_id: 3,
+                    role_id: role.id,
                 },
             });
             if (!user) {
@@ -269,10 +272,11 @@ module.exports = {
         }
     },
     async verifyOtp(req, res) {
+        const role = await prisma.role.findFirst({ where: { name: 'Admin' } });
         const { userid, otp } = req.body;
         try {
             // Check if user id exists
-            const user = await prisma.user.findFirst({ where: { id: parseInt(userid), role_id: 3 } });
+            const user = await prisma.user.findFirst({ where: { id: userid, role_id: role.id } });
             if (!user) {
                 return res.status(404).json({
                     code: 404,
@@ -290,7 +294,7 @@ module.exports = {
             }
             // Update is_validated to Y and otp_verification_code to null
             await prisma.user.update({
-                where: { id: parseInt(userid) },
+                where: { id: userid },
                 data: {
                     is_validated: 1,
                     otp_verification_code: null,
