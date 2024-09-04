@@ -1,176 +1,174 @@
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.1.x"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-// prisma/schema.prisma
-
 model user {
-  id                       Int                  @id @default(autoincrement())
-  email                    String?              @db.VarChar(255)
-  first_name               String               @db.VarChar(255)
-  last_name                String               @db.VarChar(255)
-  mobile_number            String?              @db.VarChar(11)
-  profile_image            String?              @db.VarChar(255)
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  email                    String?
+  first_name               String
+  last_name                String
+  mobile_number            String?
+  profile_image            String?
   is_login                 Int                  @default(0)
-  reset_token              String?              @db.VarChar(255)
-  reset_token_expires_at   DateTime?            @db.DateTime
-  is_validated             Int?                 @db.Int
-  otp_verification_code    Int?                 @db.Int
-  email_verification_token String?              @db.VarChar(255)
-  password                 String               @db.VarChar(255)
-  role_id                  Int                  @db.Int
+  reset_token              String?
+  reset_token_expires_at   DateTime?
+  is_validated             Int?
+  otp_verification_code    Int?
+  email_verification_token String?
+  password                 String
+  role_id                  String               @db.ObjectId
   role                     role                 @relation(fields: [role_id], references: [id])
-  office_id                Int                  @db.Int
+  office_id                String               @db.ObjectId
   office                   office               @relation(fields: [office_id], references: [id])
-  gender_id                Int                  @db.Int
+  gender_id                String               @db.ObjectId
   gender                   gender               @relation(fields: [gender_id], references: [id])
-  country_id               Int                  @db.Int
+  country_id               String               @db.ObjectId
   country                  country              @relation(fields: [country_id], references: [id])
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
 }
 
 model role {
-  id                       Int                  @id @default(autoincrement())
-  name                     String               @db.VarChar(255)
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
   user                     user[]
 }
 
 model office {
-  id                       Int                  @id @default(autoincrement())
-  office_name              String               @db.VarChar(255)
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  office_name              String
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
   user                     user[]
   token                    token[]
   counter                  counter[]
 }
 
 model gender {
-  id                       Int                  @id @default(autoincrement())
-  name                     String               @db.VarChar(255)
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
   user                     user[]
   token                    token[]
 }
 
 model services {
-  id                       Int                  @id @default(autoincrement())
-  title                     String               @db.VarChar(255)
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  title                    String
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
   token                    token[]
 }
+
 model queue_services {
-  id                       Int                  @id @default(autoincrement())
-  name                     String               @db.VarChar(255)
-  color                    String               @db.VarChar(255)
-  slug                     String?              @db.VarChar(255)
-  route                    String?              @db.VarChar(255)
-  icon                     String?              @db.VarChar(255)
-  fields                   Json?                @db.Json
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
+  color                    String
+  slug                     String?
+  route                    String?
+  icon                     String?
+  fields                   Json?
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
 }
 
 model priority {
-  id                       Int                  @id @default(autoincrement())
-  name                     String               @db.VarChar(255)
-  short_name               String               @db.VarChar(255)
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
+  short_name               String
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
   token                    token[]
 }
 
 model status {
-  id                       Int                  @id @default(autoincrement())
-  name                     String               @db.VarChar(255)
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
   token                    token[]
 }
 
 model counter {
-  id                       Int                  @id @default(autoincrement())
-  title                    String               @db.VarChar(255)
-  counter_number           String               @db.VarChar(255)
-  office_id                Int                  @db.Int
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  title                    String
+  counter_number           String
+  office_id                String               @db.ObjectId
   status                   Int                  @default(0)
-  user_id                  Int?                 @db.Int
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  user_id                  String?              @db.ObjectId
+  created_at               DateTime?
+  updated_at               DateTime?
   office                   office               @relation(fields: [office_id], references: [id])
   token                    token[]
 }
 
 model token {
-  id                       Int                  @id @default(autoincrement())
-  name                     String?              @db.VarChar(255)
-  email                    String?              @db.VarChar(255)
-  mobile                   String?              @db.VarChar(11)
-  gender_id                Int                  @db.Int
-  service_id               Int                  @db.Int
-  priority_id              Int                  @db.Int
-  office_id                Int                  @db.Int
-  status                   status?              @relation(fields: [status_id], references: [id])
-  token                    String               @db.VarChar(255)
-  status_id                Int                  @db.Int
-  counter_id               Int?                 @db.Int
-  user_id                  Int?                 @db.Int
-  duration                 String?              @db.VarChar(255)
-  remarks                  String?              @db.VarChar(255)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String?
+  email                    String?
+  mobile                   String?
+  gender_id                String               @db.ObjectId
+  service_id               String               @db.ObjectId
+  priority_id              String               @db.ObjectId
+  office_id                String               @db.ObjectId
+  status_id                String               @db.ObjectId
+  counter_id               String?              @db.ObjectId
+  user_id                  String?              @db.ObjectId
+  token                    String
+  duration                 String?
+  remarks                  String?
+  created_at               DateTime?
+  updated_at               DateTime?
   gender                   gender?              @relation(fields: [gender_id], references: [id])
   service                  services?            @relation(fields: [service_id], references: [id])
   priority                 priority?            @relation(fields: [priority_id], references: [id])
   office                   office?              @relation(fields: [office_id], references: [id])
   counter                  counter?             @relation(fields: [counter_id], references: [id])
+  status                   status?              @relation(fields: [status_id], references: [id])
 }
 
 model wt_news {
-  id                       Int                  @id @default(autoincrement())
-  title                    String               @db.VarChar(255)
-  description              String?              @db.Text
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  title                    String
+  description              String?
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
 }
 
 model wt_video {
-  id                       Int                  @id @default(autoincrement())
-  title                    String               @db.VarChar(255)
-  link                     String               @db.Text
-  description              String?              @db.Text
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  title                    String
+  link                     String
+  description              String?
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
 }
 
 model country {
-  id                       Int                  @id @default(autoincrement())
-  country_name             String               @db.VarChar(255)
-  country_code             String               @db.VarChar(255)
-  iso                      String               @db.VarChar(255)
+  id                       String               @id @default(auto()) @map("_id") @db.ObjectId
+  country_name             String
+  country_code             String
+  iso                      String
   status                   Int                  @default(1)
-  created_at               DateTime?            @db.DateTime
-  updated_at               DateTime?            @db.DateTime
+  created_at               DateTime?
+  updated_at               DateTime?
   user                     user[]
 }

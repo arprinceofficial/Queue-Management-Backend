@@ -35,7 +35,7 @@ async function main() {
             updated_at: new Date(),
         },
     });
-
+    
     const chittagongOffice = await prisma.office.create({
         data: {
             office_name: 'Chittagong Office',
@@ -175,58 +175,21 @@ async function main() {
         ],
     });
 
-    // create token multiple seed
-    await prisma.token.createMany({
-        data: [
-            {
-                name: 'Md. Ashiqur Rahman',
-                email: 'example@email.com',
-                mobile: '01677879681',
-                gender_id: 1,
-                service_id: 1,
-                priority_id: 1,
-                office_id: 1,
-                token: 'B-001',
-                counter_id: 1,
-                // remarks: 'Remarks',
-                // duration: "10:00:11",
-                status_id: 1,
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-            {
-                name: 'Muin Ali',
-                email: 'muin@email.com',
-                mobile: '01987879681',
-                gender_id: 1,
-                service_id: 2,
-                priority_id: 2,
-                office_id: 2,
-                token: 'A-002',
-                counter_id: 2,
-                // remarks: 'Remarks',
-                // duration: "10:00:11",
-                status_id: 1,
-                created_at: new Date(),
-                updated_at: new Date(),
-            },
-        ],
-    });
-
     // create counter multiple seed
+    const get_office = await prisma.office.findMany();
     await prisma.counter.createMany({
         data: [
             {
                 title: 'Counter 1',
                 counter_number: '1',
-                office_id: 1,
+                office_id: get_office[0].id,
                 status: 1,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
             {
                 title: 'Counter 2',
-                office_id: 1,
+                office_id: get_office[0].id,
                 counter_number: '2',
                 status: 1,
                 created_at: new Date(),
@@ -234,9 +197,52 @@ async function main() {
             },
             {
                 title: 'Counter 3',
-                office_id: 2,
+                office_id: get_office[1].id,
                 counter_number: '3',
                 status: 1,
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+        ],
+    });
+
+    // create token multiple seed
+    const get_gender = await prisma.gender.findMany();
+    const get_service = await prisma.services.findMany();
+    const get_priority = await prisma.priority.findMany();
+    const get_status = await prisma.status.findMany();
+    const get_counter = await prisma.counter.findMany();
+    await prisma.token.createMany({
+        data: [
+            {
+                name: 'Md. Ashiqur Rahman',
+                email: 'example@email.com',
+                mobile: '01677879681',
+                gender_id: get_gender[0].id,
+                service_id: get_service[0].id,
+                priority_id: get_priority[0].id,
+                office_id: get_office[0].id,
+                token: 'B-001',
+                counter_id: get_counter[0].id,
+                // remarks: 'Remarks',
+                // duration: "10:00:11",
+                status_id: get_status[2].id,
+                created_at: new Date(),
+                updated_at: new Date(),
+            },
+            {
+                name: 'Muin Ali',
+                email: 'muin@email.com',
+                mobile: '01987879681',
+                gender_id: get_gender[0].id,
+                service_id: get_service[0].id,
+                priority_id: get_priority[0].id,
+                office_id: get_office[1].id,
+                token: 'A-002',
+                counter_id: get_counter[2].id,
+                // remarks: 'Remarks',
+                // duration: "10:00:11",
+                status_id: get_status[3].id,
                 created_at: new Date(),
                 updated_at: new Date(),
             },
@@ -250,20 +256,23 @@ async function main() {
     };
 
     // Users seed
+    const get_user_role = await prisma.role.findMany();
+    const get_countery = await prisma.country.findMany();
+    
     await prisma.user.create({
         data: {
             email: 'queueofficedhaka@email.com',
             first_name: 'queue office',
             last_name: 'dhaka',
             mobile_number: '01677879681',
-            gender_id: 1,
+            gender_id: get_gender[0].id,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: 1,
-            office_id: dhakaOffice.id,
-            country_id: 18,
+            role_id: get_user_role[0].id,
+            office_id: get_office[0].id,
+            country_id: get_countery[17].id,
         },
     });
     await prisma.user.create({
@@ -272,14 +281,14 @@ async function main() {
             first_name: 'Agent',
             last_name: '1',
             mobile_number: '01977879681',
-            gender_id: 1,
+            gender_id: get_gender[0].id,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: 2,
-            office_id: dhakaOffice.id,
-            country_id: 18,
+            role_id: get_user_role[1].id,
+            office_id: get_office[0].id,
+            country_id: get_countery[17].id,
         },
     });
     await prisma.user.create({
@@ -288,14 +297,14 @@ async function main() {
             first_name: 'Agent',
             last_name: '2',
             mobile_number: '01877879681',
-            gender_id: 1,
+            gender_id: get_gender[0].id,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: 2,
-            office_id: dhakaOffice.id,
-            country_id: 18,
+            role_id: get_user_role[1].id,
+            office_id: get_office[0].id,
+            country_id: get_countery[17].id,
         },
     });
     await prisma.user.create({
@@ -304,14 +313,14 @@ async function main() {
             first_name: 'queue office',
             last_name: 'chittagong',
             mobile_number: '01677879681',
-            gender_id: 1,
+            gender_id: get_gender[0].id,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: 1,
-            office_id: chittagongOffice.id,
-            country_id: 18,
+            role_id: get_user_role[0].id,
+            office_id: get_office[1].id,
+            country_id: get_countery[17].id,
         },
     });
     await prisma.user.create({
@@ -320,14 +329,14 @@ async function main() {
             first_name: 'Agent',
             last_name: '2',
             mobile_number: '01577879681',
-            gender_id: 1,
+            gender_id: get_gender[0].id,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: 2,
-            office_id: chittagongOffice.id,
-            country_id: 18,
+            role_id: get_user_role[1].id,
+            office_id: get_office[1].id,
+            country_id: get_countery[17].id,
         },
     });
     await prisma.user.create({
@@ -336,14 +345,14 @@ async function main() {
             first_name: 'Agent',
             last_name: '2',
             mobile_number: '01277879681',
-            gender_id: 1,
+            gender_id: get_gender[0].id,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: 2,
-            office_id: chittagongOffice.id,
-            country_id: 18,
+            role_id: get_user_role[1].id,
+            office_id: get_office[1].id,
+            country_id: get_countery[17].id,
         },
     });
     await prisma.user.create({
@@ -352,14 +361,14 @@ async function main() {
             first_name: 'admin',
             last_name: '',
             mobile_number: '01577879681',
-            gender_id: 1,
+            gender_id: get_gender[0].id,
             is_validated: 1,
             password: await hashPassword('12345678'),
             created_at: new Date(),
             updated_at: new Date(),
-            role_id: 3,
-            office_id: 0,
-            country_id: 18,
+            role_id: get_user_role[2].id,
+            office_id: '66d882ad0ca08a7bf6977489',
+            country_id: get_countery[17].id,
         },
     });
     // create wt_news multiple seed

@@ -70,7 +70,7 @@ npm run seed
 - Run Custom Seed File
 
 ```
-npx ts-node ./prisma/seed-custom.js
+npx ts-node ./prisma/seed-country.js
 ```
 
 - Generate the Prisma Client
@@ -104,6 +104,18 @@ npx prisma migrate dev
 
 ```
 npx prisma migrate deploy
+```
+
+## For MongoDB
+
+```
+npx prisma generate
+
+npx prisma db push
+
+npx ts-node ./prisma/seed-country.js
+
+npm run seed
 ```
 
 ## Run the development server
