@@ -26,7 +26,7 @@ module.exports = {
             }
             // If office_id is provided then filter by office_id
             if (office_id) {
-                where_clause.office_id = parseInt(office_id);
+                where_clause.office_id = office_id.toString();
             }
             // If limit and page is not provided then fetch all records
             if (!limit && !page) {
@@ -119,7 +119,7 @@ module.exports = {
                 data: {
                     title,
                     counter_number,
-                    office_id: parseInt(office_id),
+                    office_id: office_id.toString(),
                     status: parseInt(status || 0),
                     created_at: new Date(),
                     updated_at: new Date(),
@@ -168,7 +168,7 @@ module.exports = {
             // check counter found
             const found_counter = await prisma.counter.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_counter) {
@@ -181,12 +181,12 @@ module.exports = {
             // update counter
             const counter = await prisma.counter.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     title,
                     counter_number,
-                    office_id: parseInt(office_id),
+                    office_id: office_id.toString(),
                     status: parseInt(status),
                     updated_at: new Date(),
                 },
@@ -214,7 +214,7 @@ module.exports = {
             // check counter found
             const found_counter = await prisma.counter.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_counter) {
@@ -227,7 +227,7 @@ module.exports = {
             // check counter used
             const check_counter = await prisma.counter.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             // return res.status(200).json({ data: check_counter.user_id });
@@ -252,7 +252,7 @@ module.exports = {
             // delete counter
             await prisma.counter.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({
