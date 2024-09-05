@@ -35,7 +35,7 @@ module.exports = {
         try {
             const counter = await prisma.counter.update({
                 where: {
-                    id: parseInt(counter_id),
+                    id: counter_id.toString(),
                 },
                 data: {
                     user_id: req.auth_user.user.id,
@@ -61,7 +61,7 @@ module.exports = {
         try {
             const counter = await prisma.counter.update({
                 where: {
-                    id: parseInt(counter_id),
+                    id: counter_id.toString(),
                 },
                 data: {
                     user_id: null,
@@ -84,12 +84,13 @@ module.exports = {
         // return res.status(200).json({ data: req.auth_user });
         // return res.status(200).json({ data: parseInt(req.auth_user.queue_counter.id), office_id: req.auth_user.office.id });
         try {
+            const status_waiting = await prisma.status.findFirst({ where: { name: 'Waiting' } });
             const waitingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
                     counter_id: req.auth_user.queue_counter.id,
-                    user_id: null,
-                    status_id: 1,
+                    user_id: null || undefined,
+                    status_id: status_waiting.id,
                     created_at: {
                         gte: limit_hours,
                     },
@@ -123,13 +124,14 @@ module.exports = {
         // return res.status(200).json({ counter_id: req.auth_user.queue_counter.id });
         const { id } = req.body;
         try {
+            const status_serving = await prisma.status.findFirst({ where: { name: 'Serving' } });
             const token = await prisma.token.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     user_id: req.auth_user.user.id,
-                    status_id: 2,
+                    status_id: status_serving.id,
                     counter_id: req.auth_user.queue_counter.id,
                 },
             });
@@ -150,10 +152,11 @@ module.exports = {
     },
     async getReserveQueue(req, res) {
         try {
+            const status_serving = await prisma.status.findFirst({ where: { name: 'Serving' } });
             const token = await prisma.token.findFirst({
                 where: {
                     user_id: req.auth_user.user.id,
-                    status_id: 2,
+                    status_id: status_serving.id,
                     created_at: {
                         gte: limit_hours,
                     },
@@ -179,14 +182,15 @@ module.exports = {
     async completeQueue(req, res) {
         const { id, duration, remarks } = req.body;
         try {
+            const status_completed = await prisma.status.findFirst({ where: { name: 'Completed' } });
             const token = await prisma.token.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     duration: duration,
                     remarks: remarks,
-                    status_id: 3,
+                    status_id: status_completed.id,
                 },
             });
             res.status(200).json({
@@ -206,12 +210,13 @@ module.exports = {
     async cancelQueue(req, res) {
         const { id } = req.body;
         try {
+            const status_cancelled = await prisma.status.findFirst({ where: { name: 'Cancelled' } });
             const token = await prisma.token.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
-                    status_id: 4,
+                    status_id: status_cancelled.id,
                     user_id: null,
                     counter_id: null,
                 },
@@ -259,14 +264,15 @@ module.exports = {
     async transferQueue(req, res) {
         const { id, counter_id } = req.body;
         try {
+            const status_waiting = await prisma.status.findFirst({ where: { name: 'Waiting' } });
             const token = await prisma.token.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
-                    counter_id: parseInt(counter_id),
+                    counter_id: counter_id.toString(),
                     user_id: null,
-                    status_id: 1,
+                    status_id: status_waiting.id,
                 },
             });
             res.status(200).json({

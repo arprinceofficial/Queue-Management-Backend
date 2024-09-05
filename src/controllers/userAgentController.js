@@ -9,6 +9,7 @@ module.exports = {
     async login(req, res) {
         const { loginInput, password } = req.body;
         try {
+            const role = await prisma.role.findFirst({ where: { name: 'Agent' } });
             let user;
             const queryRelations = {
                 include: {
@@ -23,7 +24,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { email: loginInput, role_id: 2 },
+                            { email: loginInput, role_id: role.id },
                         ],
                     },
                 });
@@ -34,7 +35,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { mobile_number: loginInput, role_id: 2 },
+                            { mobile_number: loginInput, role_id: role.id },
                         ],
                     },
                 });
@@ -45,7 +46,7 @@ module.exports = {
                     ...queryRelations,
                     where: {
                         OR: [
-                            { id: parseInt(loginInput), role_id: 2 },
+                            { id: loginInput.toString(), role_id: role.id },
                         ],
                     },
                 });
@@ -86,7 +87,7 @@ module.exports = {
             // get user queue counter
             const queueCounter = await prisma.counter.findFirst({
                 where: {
-                    user_id: user.id,
+                    user_id: user.id
                 },
             });
             // Prepare user data for the payload and response, including role as a nested object
@@ -149,10 +150,11 @@ module.exports = {
     },
     async currentUser(req, res) {
         try {
+            const role = await prisma.role.findFirst({ where: { name: 'Agent' } });
             const user = await prisma.user.findFirst({
                 where: {
                     id: req.auth_user.user.id,
-                    role_id: 2,
+                    role_id: role.id,
                 },
                 include: {
                     office: true,
@@ -197,6 +199,7 @@ module.exports = {
     },
     async logout(req, res) {
         try {
+            const role = await prisma.role.findFirst({ where: { name: 'Agent' } });
             if (req.auth_user) {
                 await prisma.user.update({
                     where: { id: req.auth_user.user.id },
@@ -238,7 +241,8 @@ module.exports = {
         const id = req.auth_user.user.id;
         const { imagepath } = req.params;
         try {
-            const user = await prisma.user.findFirst({ where: { id: parseInt(id), role_id: 2 } });
+            const role = await prisma.role.findFirst({ where: { name: 'Agent' } });
+            const user = await prisma.user.findFirst({ where: { id: id.toString(), role_id: role.id } });
             if (!user) {
                 return res.status(404).json({
                     code: 404,
@@ -248,7 +252,7 @@ module.exports = {
             }
             if (req.file) {
                 const updatedUser = await prisma.user.update({
-                    where: { id: parseInt(id) },
+                    where: { id: id.toString() },
                     data: {
                         [imagepath + '_image']: req.file.filename,
                         updated_at: new Date(),
@@ -282,11 +286,12 @@ module.exports = {
     async otpRequestEmail(req, res) {
         const { email } = req.body;
         try {
+            const role = await prisma.role.findFirst({ where: { name: 'Agent' } });
             // Check if user email exists
             const user = await prisma.user.findFirst({
                 where: {
                     email,
-                    role_id: 2,
+                    role_id: role.id,
                 },
             });
             if (!user) {
@@ -340,8 +345,9 @@ module.exports = {
     async verifyOtp(req, res) {
         const { userid, otp } = req.body;
         try {
+            const role = await prisma.role.findFirst({ where: { name: 'Agent' } });
             // Check if user id exists
-            const user = await prisma.user.findFirst({ where: { id: parseInt(userid), role_id: 2 } });
+            const user = await prisma.user.findFirst({ where: { id: userid.toString(), role_id: role.id } });
             if (!user) {
                 return res.status(404).json({
                     code: 404,
@@ -359,7 +365,7 @@ module.exports = {
             }
             // Update is_validated to Y and otp_verification_code to null
             await prisma.user.update({
-                where: { id: parseInt(userid) },
+                where: { id: userid.toString() },
                 data: {
                     is_validated: 1,
                     // otp_verification_code: null,

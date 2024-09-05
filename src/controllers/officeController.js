@@ -181,9 +181,10 @@ module.exports = {
             body.priority_lane = 1;
         }
         try {
+            const status = await prisma.status.findFirst({ where: { name: 'Waiting' } });
             const priority = await prisma.priority.findFirst({
                 where: {
-                    id: parseInt(body.priority_lane),
+                    id: body.priority_lane.toString(),
                 },
             });
 
@@ -198,7 +199,7 @@ module.exports = {
                     created_at: {
                         gte: limit_hours,
                     },
-                    status_id: 1,
+                    status_id: status.id.toString(),
                 },
                 orderBy: {
                     created_at: 'desc',
@@ -273,15 +274,15 @@ module.exports = {
                     name: body.name,
                     email: body.email,
                     mobile: body.mobile,
-                    gender_id: body.gender ? parseInt(body.gender) : 1,
-                    service_id: body.service ? parseInt(body.service) : 1,
-                    priority_id: body.priority_lane ? parseInt(body.priority_lane) : 1,
+                    gender_id: body.gender ? body.gender.toString() : 1,
+                    service_id: body.service ? body.service.toString() : 1,
+                    priority_id: body.priority_lane ? body.priority_lane.toString() : 1,
                     office_id: req.auth_user.office.id,
                     counter_id: set_counter_id,
                     token: newToken,
                     remarks: body.remarks,
                     duration: body.duration,
-                    status_id: 1,
+                    status_id: status.id.toString(),
                     created_at: new Date(),
                     updated_at: new Date(),
                 },
@@ -306,11 +307,14 @@ module.exports = {
         // return res.status(200).json({ office_id: req.auth_user });
 
         try {
+            const status_waiting = await prisma.status.findFirst({ where: { name: 'Waiting' } });
+            const status_serving = await prisma.status.findFirst({ where: { name: 'Serving' } });
+
             const waitingList = await prisma.token.findMany({
                 where: {
                     office_id: req.auth_user.office.id,
                     // user_id: null,
-                    status_id: 1,
+                    status_id: status_waiting.id.toString(),
                     created_at: {
                         gte: limit_hours,
                     },
@@ -327,7 +331,7 @@ module.exports = {
                     // user_id: {
                     //     not: null,
                     // },
-                    status_id: 2,
+                    status_id: status_serving.id.toString(),
                     created_at: {
                         gte: limit_hours,
                     },
