@@ -131,7 +131,7 @@ module.exports = {
             // check service found
             const found_service = await prisma.services.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_service) {
@@ -144,7 +144,7 @@ module.exports = {
             // update service
             const service = await prisma.services.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     title,
@@ -172,7 +172,7 @@ module.exports = {
             // check service found
             const found_service = await prisma.services.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_service) {
@@ -185,7 +185,7 @@ module.exports = {
             // delete service
             await prisma.services.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({

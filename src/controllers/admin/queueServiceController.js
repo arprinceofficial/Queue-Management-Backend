@@ -86,7 +86,7 @@ module.exports = {
         try {
             const queue_service = await prisma.queue_services.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!queue_service) {
@@ -125,12 +125,13 @@ module.exports = {
         await body('slug').notEmpty().withMessage('Slug is required').run(req);
         await body('route').notEmpty().withMessage('Route is required').run(req);
         await body('icon').notEmpty().withMessage('icon is required').run(req);
-        await body('fields').notEmpty().withMessage('Fields is required').custom(value => {
-            if (!Array.isArray(value) || value.length === 0) {
-                throw new Error('Fields is required');
-            }
-            return true;
-        }).run(req);
+        await body('fields').notEmpty().withMessage('Fields is required a').run(req);
+        // .custom(value => {
+        //     if (!Array.isArray(value) || value.length === 0) {
+        //         throw new Error('Fields is required b');
+        //     }
+        //     return true;
+        // })
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -195,12 +196,7 @@ module.exports = {
         await body('slug').notEmpty().withMessage('Slug is required').run(req);
         await body('route').notEmpty().withMessage('Route is required').run(req);
         await body('icon').notEmpty().withMessage('icon is required').run(req);
-        await body('fields').notEmpty().withMessage('Fields is required').custom(value => {
-            if (!Array.isArray(value) || value.length === 0) {
-                throw new Error('Fields is required');
-            }
-            return true;
-        }).run(req);
+        await body('fields').notEmpty().withMessage('Fields is required').run(req);
         
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -225,7 +221,7 @@ module.exports = {
             // check queue service found
             const found_queue_service = await prisma.queue_services.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_queue_service) {
@@ -238,7 +234,7 @@ module.exports = {
             // update queue service
             const queue_service = await prisma.queue_services.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     name,
@@ -281,7 +277,7 @@ module.exports = {
             // check queue service found
             const found_queue_service = await prisma.queue_services.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_queue_service) {
@@ -294,7 +290,7 @@ module.exports = {
             // delete queue service
             await prisma.queue_services.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({

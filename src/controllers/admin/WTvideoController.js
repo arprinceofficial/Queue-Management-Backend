@@ -140,7 +140,7 @@ module.exports = {
             // check wt_video found
             const found_wt_video = await prisma.wt_video.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_wt_video) {
@@ -153,7 +153,7 @@ module.exports = {
             // update wt_video
             const wt_video = await prisma.wt_video.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     title,
@@ -183,7 +183,7 @@ module.exports = {
             // check wt_video found
             const found_wt_video = await prisma.wt_video.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_wt_video) {
@@ -196,7 +196,7 @@ module.exports = {
             // delete wt_video
             await prisma.wt_video.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({

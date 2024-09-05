@@ -40,13 +40,14 @@ module.exports = {
             }
             // If office_id is provided then filter by office_id
             if (office_id) {
-                where_clause.office_id = parseInt(office_id);
+                where_clause.office_id = office_id.toString();
             }
             // If limit and page is not provided then fetch all records
+            const role = await prisma.role.findFirst({ where: { name: 'Office' } });
             if (!limit && !page) {
                 const office_user = await prisma.user.findMany({
                     where: {
-                        role_id: 1,
+                        role_id: role.id,
                         AND: where_clause,
                     },
                     include: {
@@ -76,7 +77,7 @@ module.exports = {
             }
             const office_user = await prisma.user.findMany({
                 where: {
-                    role_id: 1,
+                    role_id: role.id,
                     AND: where_clause,
                 },
                 take: parseInt(limit) || 10,
@@ -90,7 +91,7 @@ module.exports = {
 
             const totalRecords = await prisma.user.count({
                 where: {
-                    role_id: 1,
+                    role_id: role.id,
                     AND: where_clause,
                 },
             });
@@ -186,16 +187,17 @@ module.exports = {
             // Handle Base64 Image Upload
             const image_file_name = uploadBase64Image(req.body.profile_image, 'profile');
 
+            const role = await prisma.role.findFirst({ where: { name: 'Office' } });
             const create_user = {
                 first_name,
                 last_name,
                 mobile_number,
                 email,
                 password: hashedPassword,
-                gender_id: parseInt(gender_id),
-                role_id: 1,
-                office_id: parseInt(office_id),
-                country_id: parseInt(country_id),
+                gender_id: gender_id.toString(),
+                role_id: role.id,
+                office_id: office_id.toString(),
+                country_id: country_id.toString(),
                 status: parseInt(status || 0),
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -270,11 +272,12 @@ module.exports = {
         
         const { id, first_name, last_name, mobile_number, email, password, gender_id, office_id, country_id, status } = req.body;
         try {
+            const role = await prisma.role.findFirst({ where: { name: 'Office' } });
             // Check if user found
             const found_user = await prisma.user.findFirst({
                 where: {
-                    id: parseInt(id),
-                    role_id: 1,
+                    id: id.toString(),
+                    role_id: role.id,
                 },
             });
             if (!found_user) {
@@ -289,9 +292,9 @@ module.exports = {
                 where: {
                     email,
                     id: {
-                        not: parseInt(id)
+                        not: id.toString()
                     },
-                    role_id: 1,
+                    role_id: role.id,
                 }
             });
             if (userExists) {
@@ -306,9 +309,9 @@ module.exports = {
                 where: {
                     mobile_number,
                     id: {
-                        not: parseInt(id)
+                        not: id.toString()
                     },
-                    role_id: 1,
+                    role_id: role.id,
                 }
             });
             if (phoneNumberExists) {
@@ -331,10 +334,10 @@ module.exports = {
                 last_name,
                 mobile_number,
                 email,
-                gender_id: parseInt(gender_id),
-                role_id: 1,
-                office_id: parseInt(office_id),
-                country_id: parseInt(country_id),
+                gender_id: gender_id.toString(),
+                role_id: role.id,
+                office_id: office_id.toString(),
+                country_id: country_id.toString(),
                 status: parseInt(status),
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -348,7 +351,7 @@ module.exports = {
 
             const user = await prisma.user.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 include: {
                     office: true,
@@ -388,11 +391,12 @@ module.exports = {
     async officeUserDelete(req, res) {
         const { id } = req.body;
         try {
+            const role = await prisma.role.findFirst({ where: { name: 'Office' } });
             // check user found
             const found_user = await prisma.user.findFirst({
                 where: {
-                    id: parseInt(id),
-                    role_id: 1,
+                    id: id.toString(),
+                    role_id: role.id,
                 },
             });
             if (!found_user) {
@@ -405,7 +409,7 @@ module.exports = {
             // delete user
             await prisma.user.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({

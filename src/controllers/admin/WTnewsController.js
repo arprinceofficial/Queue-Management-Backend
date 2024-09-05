@@ -137,7 +137,7 @@ module.exports = {
             // check wt_news found
             const found_wt_news = await prisma.wt_news.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_wt_news) {
@@ -150,7 +150,7 @@ module.exports = {
             // update wt_news
             const wt_news = await prisma.wt_news.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     title,
@@ -179,7 +179,7 @@ module.exports = {
             // check wt_news found
             const found_wt_news = await prisma.wt_news.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_wt_news) {
@@ -192,7 +192,7 @@ module.exports = {
             // delete wt_news
             await prisma.wt_news.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({

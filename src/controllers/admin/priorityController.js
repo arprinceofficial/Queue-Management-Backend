@@ -92,7 +92,7 @@ module.exports = {
             // check priority found
             const found_priority = await prisma.priority.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_priority) {
@@ -105,7 +105,7 @@ module.exports = {
             // update priority
             const priority = await prisma.priority.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     name,
@@ -134,7 +134,7 @@ module.exports = {
             // check priority found
             const found_priority = await prisma.priority.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_priority) {
@@ -147,7 +147,7 @@ module.exports = {
             // delete priority
             await prisma.priority.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({

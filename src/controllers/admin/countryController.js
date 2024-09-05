@@ -147,7 +147,7 @@ module.exports = {
             // check country found
             const found_country = await prisma.country.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_country) {
@@ -160,7 +160,7 @@ module.exports = {
             // update country
             const country = await prisma.country.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     country_name,
@@ -190,7 +190,7 @@ module.exports = {
             // check country found
             const found_country = await prisma.country.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_country) {
@@ -203,7 +203,7 @@ module.exports = {
             // delete country
             await prisma.country.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({

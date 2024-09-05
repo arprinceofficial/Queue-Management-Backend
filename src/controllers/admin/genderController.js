@@ -89,7 +89,7 @@ module.exports = {
             // check gender found
             const found_gender = await prisma.gender.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_gender) {
@@ -102,7 +102,7 @@ module.exports = {
             // update gender
             const gender = await prisma.gender.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     name,
@@ -130,7 +130,7 @@ module.exports = {
             // check gender found
             const found_gender = await prisma.gender.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_gender) {
@@ -143,7 +143,7 @@ module.exports = {
             // delete gender
             await prisma.gender.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({
