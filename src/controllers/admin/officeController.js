@@ -131,7 +131,7 @@ module.exports = {
             // check office found
             const found_office = await prisma.office.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_office) {
@@ -144,7 +144,7 @@ module.exports = {
             // update office
             const office = await prisma.office.update({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
                 data: {
                     office_name,
@@ -172,7 +172,7 @@ module.exports = {
             // check office found
             const found_office = await prisma.office.findFirst({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             if (!found_office) {
@@ -185,7 +185,7 @@ module.exports = {
             // check office used
             const check_office = await prisma.counter.findFirst({
                 where: {
-                    office_id: parseInt(id),
+                    office_id: id.toString(),
                 },
             });
             if (check_office) {
@@ -205,7 +205,7 @@ module.exports = {
             // delete office
             await prisma.office.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id.toString(),
                 },
             });
             res.status(200).json({
