@@ -1,13 +1,13 @@
 ## Node Express Prisma Queue Management System
 
-Starter project for Node.js with Express, Prisma, MySQL, and Queue Management System.
+Starter project for Node.js with Express, Prisma, MongoDB, and Queue Management System.
 
 ## 🍔 Stack Specs
 
 - Node.js
 - Express
 - Prisma
-- MySQL
+- MongoDB
 
 ## 🧬 Dependencies Install
 
@@ -34,7 +34,7 @@ npm install @prisma/client@5.18.0
 
 ```
 
-## Create a Database in MySQL (or) You can use GUI to create a database
+## Create a Database in MongoDB (or) You can use GUI to create a database
 
 ```
 mysql> CREATE DATABASE express;
@@ -49,7 +49,7 @@ cp .env.sample .env
 cp ".env(example)" .env
 ```
 
-- Edit the MySQL Details in the `.env` file
+- Edit the MongoDB Details in the `.env` file
 
 ```
 DATABASE_URL="mysql://USERNAME:PASSWORD@localhost:3306/DBNAME"
