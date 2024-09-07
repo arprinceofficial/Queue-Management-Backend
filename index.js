@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
-const { authOfficeMiddleware, authAgentMiddleware, authAdminMiddleware } = require('./middleware/authMiddleware');
+const { authOfficeMiddleware, authAgentMiddleware, authAdminMiddleware } = require('./src/middleware/authMiddleware');
 
 const app = express();
 
@@ -53,12 +53,12 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '50mb' }));
 
 // Import routes
-const userOfficeRoutes = require('./routes/userOfficeRoutes');
-const officeRoutes = require('./routes/officeRoutes');
-const userAgentRoutes = require('./routes/userAgentRoutes');
-const agentRoutes = require('./routes/agentRoutes');
-const userAdminRoutes = require('./routes/userAdminRoutes');
-const adminRoutes = require('./routes/adminRoutes');
+const userOfficeRoutes = require('./src/routes/userOfficeRoutes');
+const officeRoutes = require('./src/routes/officeRoutes');
+const userAgentRoutes = require('./src/routes/userAgentRoutes');
+const agentRoutes = require('./src/routes/agentRoutes');
+const userAdminRoutes = require('./src/routes/userAdminRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
 
 // Images files path
 app.use('/images', express.static('assets/images'));
