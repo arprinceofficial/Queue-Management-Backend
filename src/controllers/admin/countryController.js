@@ -11,6 +11,7 @@ module.exports = {
                     {
                         country_name: {
                             contains: search || '',
+                            mode: 'insensitive',
                         },
                     },
                     {
@@ -21,6 +22,7 @@ module.exports = {
                     {
                         iso: {
                             contains: search || '',
+                            mode: 'insensitive',
                         },
                     },
                 ],

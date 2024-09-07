@@ -11,6 +11,7 @@ module.exports = {
                     {
                         title: {
                             contains: search || '',
+                            mode: 'insensitive',
                         },
                     },
                     {

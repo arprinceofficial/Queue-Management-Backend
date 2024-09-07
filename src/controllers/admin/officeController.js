@@ -11,6 +11,7 @@ module.exports = {
                     {
                         office_name: {
                             contains: search || '',
+                            mode: 'insensitive',
                         },
                     },
                 ],
