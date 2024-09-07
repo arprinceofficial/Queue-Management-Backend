@@ -300,7 +300,7 @@ module.exports = {
                     id: {
                         not: parseInt(id)
                     },
-                    role_id: 2,
+                    // role_id: 2,
                 }
             });
             if (userExists) {
@@ -320,7 +320,7 @@ module.exports = {
                     id: {
                         not: parseInt(id)
                     },
-                    role_id: 2,
+                    // role_id: 2,
                 }
             });
             if (phoneNumberExists) {
