@@ -299,7 +299,7 @@ module.exports = {
                     id: {
                         not: id.toString()
                     },
-                    role_id: role.id,
+                    // role_id: role.id,
                 }
             });
             if (userExists) {
@@ -317,7 +317,7 @@ module.exports = {
                     id: {
                         not: id.toString()
                     },
-                    role_id: role.id,
+                    // role_id: role.id,
                 }
             });
             if (phoneNumberExists) {
