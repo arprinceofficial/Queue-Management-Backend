@@ -170,7 +170,8 @@ module.exports = {
                 return res.status(409).json({
                     code: 409,
                     status: false,
-                    message: 'This email already exists'
+                    message: 'This email already exists',
+                    error: { email: ['This email already exists'] }
                 });
             }
             // Check if user phone number exists
@@ -179,7 +180,8 @@ module.exports = {
                 return res.status(409).json({
                     code: 409,
                     status: false,
-                    message: 'This phone number already exists'
+                    message: 'This phone number already exists',
+                    error: { mobile_number: ['This phone number already exists'] }
                 });
             }
 
@@ -304,7 +306,8 @@ module.exports = {
                 return res.status(409).json({
                     code: 409,
                     status: false,
-                    message: 'This email already exists'
+                    message: 'This email already exists',
+                    error: { email: ['This email already exists'] }
                 });
             }
             // Check if user phone number exists
@@ -321,7 +324,8 @@ module.exports = {
                 return res.status(409).json({
                     code: 409,
                     status: false,
-                    message: 'This phone number already exists'
+                    message: 'This phone number already exists',
+                    error: { mobile_number: ['This phone number already exists'] }
                 });
             }
             
