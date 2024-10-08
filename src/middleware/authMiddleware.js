@@ -199,7 +199,8 @@ module.exports = {
                 }
                 const user = await prisma.user.findUnique({
                     where: {
-                        id: auth_user.id
+                        id: auth_user.id,
+                        role_id: 3,
                     },
                     include: {
                         role: true,
