@@ -88,9 +88,7 @@ module.exports = {
             };
             // Create payload for JWT token with user data
             const payload = {
-                user: userData.user,
-                role: userData.role,
-                is_login: 1,
+                id: userData.user.id,
             };
             // Create token
             const token = sign(payload, secretKeyAdmin, { expiresIn: '24h' });

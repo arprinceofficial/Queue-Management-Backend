@@ -116,10 +116,7 @@ module.exports = {
             };
             // Create payload for JWT token with user data
             const payload = {
-                user: userData.user,
-                role: userData.role,
-                office: userData.office,
-                is_login: 1,
+                id: userData.user.id,
             };
             // Create token
             const token = sign(payload, secretKeyAgent, { expiresIn: '24h' });
@@ -150,32 +147,6 @@ module.exports = {
     },
     async currentUser(req, res) {
         try {
-            const role = await prisma.role.findFirst({ where: { name: 'Agent' } });
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: req.auth_user.user.id,
-                    role_id: role.id,
-                },
-                include: {
-                    office: true,
-                }
-            });
-            // check user status
-            if (user.status !== 1) {
-                return res.status(401).json({
-                    code: 401,
-                    status: false,
-                    message: 'User is inactive'
-                });
-            }
-            // check office status
-            if (user.office.status !== 1) {
-                return res.status(401).json({
-                    code: 401,
-                    status: false,
-                    message: 'Office is inactive'
-                });
-            }
             if (req.auth_user) {
                 res.status(200).json({
                     code: 200,
@@ -215,7 +186,7 @@ module.exports = {
                         data: { user_id: null },
                     });
                 }
-                
+
                 res.status(200).json({
                     code: 200,
                     status: "success",
