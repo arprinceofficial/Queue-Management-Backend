@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 const { secretKeyOffice } = require('../config/config');
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
+const admin = require('../firebase/firebase-admin');
 const transporter = require('./emailController');
 
 module.exports = {
@@ -344,4 +345,99 @@ module.exports = {
             });
         }
     },
+    // SSO LOGIN
+    async googleLogin(req, res) {
+        const { idToken } = req.body;
+        try {
+            // Verify the Firebase ID token
+            const decodedToken = await admin.auth().verifyIdToken(idToken);
+            const email = decodedToken.email;
+            // console.log('decodedToken', decodedToken);
+
+            // Check if user exists in your database
+            let user = await prisma.user.findFirst({
+                where: { email, role_id: 1 },
+            });
+
+            // Set Hash password
+            const salt = genSaltSync(10);
+            const hashedPassword = hashSync(decodedToken.uid, salt);
+
+            // If the user doesn't exist, create a new user
+            if (!user) {
+                user = await prisma.user.create({
+                    data: {
+                        first_name: decodedToken.name || '',
+                        last_name: '',
+                        email: email,
+                        password: hashedPassword,
+                        profile_image: decodedToken.picture || '',
+                        gender_id: parseInt(1),
+                        role_id: parseInt(1),
+                        office_id: parseInt(1),
+                        country_id: parseInt(18),
+                        status: parseInt(1),
+                        is_validated: 1,
+                        created_at: new Date(),
+                        updated_at: new Date(),
+                    },
+                });
+            }
+
+            // Create a JWT for the user
+            const token = sign({ id: user.id }, secretKeyOffice, { expiresIn: '24h' });
+
+            // Update is_login to 1
+            const get_user = await prisma.user.update({
+                where: { id: user.id },
+                include: {
+                    role: true,
+                    office: true,
+                    gender: true,
+                    country: true,
+                },
+                data: { is_login: 1 },
+            });
+
+            res.status(200).json({
+                code: 200,
+                status: 'success',
+                data: {
+                    access_token: token,
+                    user: {
+                        id: get_user.id,
+                        first_name: get_user.first_name,
+                        last_name: get_user.last_name,
+                        email: get_user.email,
+                        mobile_number: get_user.mobile_number,
+                        profile_image: get_user.profile_image,
+                        is_validated: user.is_validated,
+                        created_at: user.created_at,
+                        updated_at: user.updated_at,
+                    },
+                    role: {
+                        id: get_user.role.id,
+                        name: get_user.role.name,
+                    },
+                    office: {
+                        id: get_user.office.id,
+                        office_name: get_user.office.office_name,
+                    },
+                    country: {
+                        id: get_user.country.id,
+                        country_name: get_user.country.country_name,
+                        country_code: get_user.country.country_code,
+                        iso: get_user.country.iso,
+                    },
+                    country_code: get_user.country.country_code,
+                },
+            });
+        } catch (error) {
+            res.status(500).json({
+                code: 500,
+                status: false,
+                message: error.message,
+            });
+        }
+    }
 };

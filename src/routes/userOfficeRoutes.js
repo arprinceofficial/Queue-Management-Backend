@@ -9,5 +9,6 @@ router.get('/logout', authOfficeMiddleware, userOfficeController.logout);
 router.post('/:imagepath/upload', authOfficeMiddleware, imageController.singleImageUpload, userOfficeController.uploadUserImage);
 router.put('/otp-request', userOfficeController.otpRequestEmail);
 router.put('/otp-verify', userOfficeController.verifyOtp);
+router.post('/google-login', userOfficeController.googleLogin);
 
 module.exports = router;
