@@ -346,7 +346,7 @@ module.exports = {
         }
     },
     // SSO LOGIN
-    async googleLogin(req, res) {
+    async ssoFirebaseLogin(req, res) {
         const { idToken } = req.body;
         try {
             // Verify the Firebase ID token
