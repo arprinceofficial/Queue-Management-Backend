@@ -14,7 +14,7 @@ model user {
   id                       Int                  @id @default(autoincrement())
   email                    String?              @db.VarChar(255)
   first_name               String               @db.VarChar(255)
-  last_name                String               @db.VarChar(255)
+  last_name                String?              @db.VarChar(255)
   mobile_number            String?              @db.VarChar(11)
   profile_image            String?              @db.VarChar(255)
   is_login                 Int                  @default(0)
