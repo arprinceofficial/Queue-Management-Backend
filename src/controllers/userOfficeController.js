@@ -353,6 +353,7 @@ module.exports = {
             const decodedToken = await admin.auth().verifyIdToken(idToken);
             const email = decodedToken.email;
             // console.log('decodedToken', decodedToken);
+            // console.log('sign_in_as', decodedToken.firebase.sign_in_provider);
 
             // Check if user exists in your database
             let user = await prisma.user.findFirst({
