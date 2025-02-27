@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const { authOfficeMiddleware, authAgentMiddleware, authAdminMiddleware } = require('./src/middleware/authMiddleware');
-
+require('dotenv').config();
 const app = express();
 
 // Set up CORS
