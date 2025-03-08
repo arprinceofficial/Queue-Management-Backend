@@ -37,7 +37,7 @@ npm install @prisma/client@5.18.0
 ## Create a Database in MySQL (or) You can use GUI to create a database
 
 ```
-mysql> CREATE DATABASE express;
+mysql> CREATE DATABASE queue_management;
 ```
 
 - Copy the `.env.sample` file as `.env`
@@ -45,6 +45,7 @@ mysql> CREATE DATABASE express;
 ```
 cp .env.sample .env
 ```
+
 ```
 cp ".env(example)" .env
 ```
@@ -90,16 +91,19 @@ npx prisma migrate deploy
 ## Update/Add New Column the Prisma Schema
 
 ```
-npx prisma migrate dev updateDB or 
+npx prisma migrate dev updateDB or
 ```
+
 ```
-npx prisma migrate dev addNewColoumn 
+npx prisma migrate dev addNewColoumn
 ```
+
 ## Executed the Migration Command if you make relation (table) changes in the Prisma Schema
 
 ```
 npx prisma migrate dev
 ```
+
 ## Apply the changes to the database without generating a migration file(if needed)
 
 ```
@@ -127,5 +131,7 @@ npm run start
 
 - /assets/images
 - /assets/images/profile_images
+
+```
 
 ```
